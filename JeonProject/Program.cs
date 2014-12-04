@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using SharpDX.Direct3D9;
 #endregion
 
 namespace JeonProject
@@ -15,17 +14,9 @@ namespace JeonProject
     class Program
     {
         private static Menu baseMenu;
-
+        private static String Champion_name;
         public static SpellSlot smiteSlot = SpellSlot.Unknown;
         public static Spell smite;
-
-
-
-        public static int X = 0;
-        public static int Y = 0;
-
-        public static SpellSlot[] SummonerSpellSlots = { ((SpellSlot)4), ((SpellSlot)5) };
-        public static SpellSlot[] SpellSlots = { SpellSlot.Q, SpellSlot.W, SpellSlot.E,SpellSlot.R };
 
         private static void Main(string[] args)
         {
@@ -45,41 +36,36 @@ namespace JeonProject
 
             //메인메뉴
             baseMenu = new Menu("ProjectJ", "ProjectJ", true);
-            baseMenu.AddToMainMenu();
-
             var menu_smite = new Menu("Jsmite", "Jsmite");
-            var menu_tracker = new Menu("tracker", "tracker");
-
-            #region 스마이트 메뉴
             baseMenu.AddSubMenu(menu_smite);
+
+            /* 
+             스마이트 세부 메뉴
+             */
+
             menu_smite.AddItem(new MenuItem("AutoSmite", "AutoSmite").SetValue(true));
             menu_smite.AddItem(new MenuItem("smite_holdkey", "Key:").SetValue(new KeyBind("N".ToCharArray()[0], KeyBindType.Press)));
-            #endregion
-
-            #region 트랙커 메뉴
-            baseMenu.AddSubMenu(menu_tracker);
-            menu_tracker.AddItem(new MenuItem("tracker_enemyspells", "EnemyStat").SetValue(true));
-            #endregion
+            baseMenu.AddToMainMenu();
+            Champion_name = ObjectManager.Player.BaseSkinName;
+            
             //ObjectManager.Player.BaseSkinName <ㅡ 현재 사용하고 있는 챔피언의 기본 스킨 이름
    
         }
         private static void OnGameUpdate(EventArgs args)
         {
-            #region 오토스마이트
             if (baseMenu.Item("AutoSmite").GetValue<bool>() && baseMenu.Item("smite_holdkey").GetValue<KeyBind>().Active)
             {
                 double smitedamage;
-                bool smiteReady = false;
+                bool smiteReady=false;
                 smitedamage = setSmiteDamage();
                 Drawing.DrawText(ObjectManager.Player.HPBarPosition.X + 10, ObjectManager.Player.HPBarPosition.Y + 36, System.Drawing.Color.Gold, "AutoSmite!");
                 Drawing.DrawText(ObjectManager.Player.HPBarPosition.X + 10, ObjectManager.Player.HPBarPosition.Y + 46, System.Drawing.Color.Gold, smiteSlot.ToString());
                 Obj_AI_Base mob = GetNearest(ObjectManager.Player.ServerPosition);
-                /*테스트
                 testFind(ObjectManager.Player.ServerPosition);
+
                 Game.PrintChat(smiteSlot.ToString() + "<damage>" + smitedamage);
                 Game.PrintChat(ObjectManager.Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner2).Name);
-                */
-
+                
                 if (ObjectManager.Player.SummonerSpellbook.CanUseSpell(smiteSlot) == SpellState.Ready && Vector3.Distance(ObjectManager.Player.ServerPosition, mob.ServerPosition) < smite.Range)
                 {
                     smiteReady = true;
@@ -90,64 +76,15 @@ namespace JeonProject
                     setSmiteSlot();
                     ObjectManager.Player.SummonerSpellbook.CastSpell(smiteSlot, mob);
                 }
+
+
+                
             }
-            #endregion
 
-            #region 트랙커
-            if (baseMenu.Item("tracker_enemyspells").GetValue<bool>())
-            {
-                try
-                {
 
-                    foreach (var hero in
-                        ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero != null && hero.IsValid && (hero.IsMe && hero.IsHPBarRendered)))
-                    {
-
-                        Y = 30;
-                        X = 25;
-                        foreach (var sSlot in SummonerSpellSlots)
-                        {
-                            var spell = hero.SummonerSpellbook.GetSpell(sSlot);
-                            var t = spell.CooldownExpires - Game.Time;
-                            if (t < 0)
-                            {
-                                Drawing.DrawText(hero.HPBarPosition.X + 110, hero.HPBarPosition.Y + Y, System.Drawing.Color.FromArgb(255,0,255,0), spell.Name.Replace("summoner","").Replace("dot","ignite"));
-                            }
-                            else
-                            {
-                                Drawing.DrawText(hero.HPBarPosition.X + 110, hero.HPBarPosition.Y + Y, System.Drawing.Color.Red, spell.Name.Replace("summoner", "").Replace("dot", "ignite"));
-                            }
-
-                            Y += 15;
-
-                        }
-                        foreach (var slot in SpellSlots)
-                        {
-                            var spell = hero.Spellbook.GetSpell(slot);
-                            var t = spell.CooldownExpires - Game.Time;
-                            if (t < 0)
-                            {
-                                Drawing.DrawText(hero.HPBarPosition.X + X, hero.HPBarPosition.Y+36, System.Drawing.Color.FromArgb(255, 0, 255, 0), Convert.ToString(spell.Level));
-                            }
-                            else
-                            {
-                                Drawing.DrawText(hero.HPBarPosition.X + X, hero.HPBarPosition.Y+36 , System.Drawing.Color.Red, Convert.ToString(spell.Level));
-                            }
-                            X += 20;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(@"/ff can't draw sprites: " + e);
-                }
-            }
         }
-      
-            #endregion
 
-
-        #region 스마이트설정
+        #region 스마이트
         /* 
          * 스마이트 설정 
          * 
