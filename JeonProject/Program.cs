@@ -21,10 +21,10 @@ namespace JeonProject
         public static SpellSlot igniteSlot = SpellSlot.Unknown;
         public static Spell smite;
         public static Spell ignite;
+        public static int req_ignitelevel { get {  return baseMenu.Item("igniteLv").GetValue<Slider>().Value;}}
 
         public static int X = 0;
         public static int Y = 0;
-
 
 
         public static SpellSlot[] SSpellSlots = { ((SpellSlot)4), ((SpellSlot)5) };
@@ -52,21 +52,22 @@ namespace JeonProject
             baseMenu = new Menu("ProjectJ", "ProjectJ", true);
             baseMenu.AddToMainMenu();
 
-            var menu_smite = new Menu("AutoSmite", "AutoSmite");
-            var menu_ignite = new Menu("AutoIgnite", "AutoIgnite");
+            var menu_smite = new Menu("Smite", "Smite");
+            var menu_ignite = new Menu("Ignite", "Ignite");
             var menu_tracker = new Menu("Tracker", "Tracker");
 
 
             #region 스마이트 메뉴 - menu for smite
-            baseMenu.AddSubMenu(menu_smite);
-            menu_smite.AddItem(new MenuItem("AutoSmite", "AutoSmite").SetValue(true));
-            menu_smite.AddItem(new MenuItem("smite_enablekey", "enableKey:").SetValue(new KeyBind('K', KeyBindType.Toggle)));// 32 - Space
-            menu_smite.AddItem(new MenuItem("smite_holdkey", "HoldKey:").SetValue(new KeyBind(32, KeyBindType.Press)));// 32 - Space
+                baseMenu.AddSubMenu(menu_smite);
+                menu_smite.AddItem(new MenuItem("AutoSmite", "AutoSmite").SetValue(true));
+                menu_smite.AddItem(new MenuItem("smite_enablekey", "enableKey:").SetValue(new KeyBind('K', KeyBindType.Toggle)));// 32 - Space
+                menu_smite.AddItem(new MenuItem("smite_holdkey", "HoldKey:").SetValue(new KeyBind(32, KeyBindType.Press)));// 32 - Space
             #endregion
 
             #region 점화 메뉴 - menu for ignite
-            baseMenu.AddSubMenu(menu_ignite);
-            menu_ignite.AddItem(new MenuItem("AutoIgnite", "AutoIgnite").SetValue(true));
+                baseMenu.AddSubMenu(menu_ignite);
+                menu_ignite.AddItem(new MenuItem("AutoIgnite", "AutoIgnite").SetValue(true));
+                menu_ignite.AddItem(new MenuItem("igniteLv", "Req Level :").SetValue(new Slider(1,1,18)));
             #endregion
 
             #region 트래커 메뉴 - menu for tracker
@@ -81,8 +82,10 @@ namespace JeonProject
         }
         private static void OnGameUpdate(EventArgs args)
         {
+
             #region 오토스마이트-AutoSmite
-            if (baseMenu.Item("AutoSmite").GetValue<bool>() && (baseMenu.Item("smite_holdkey").GetValue<KeyBind>().Active || baseMenu.Item("smite_enablekey").GetValue<KeyBind>().Active))
+            if (baseMenu.Item("AutoSmite").GetValue<bool>() && (baseMenu.Item("smite_holdkey").GetValue<KeyBind>().Active || baseMenu.Item("smite_enablekey").GetValue<KeyBind>().Active)
+                && smiteSlot != SpellSlot.Unknown)
             {
                 double smitedamage;
                 bool smiteReady = false;
@@ -107,25 +110,29 @@ namespace JeonProject
                 }
             }
             #endregion
-            
+
             #region 오토이그나이트-AutoIgnite
-            if (baseMenu.Item("AutoIgnite").GetValue<bool>())
+            if (baseMenu.Item("AutoIgnite").GetValue<bool>() && igniteSlot != SpellSlot.Unknown &&
+                ObjectManager.Player.Level >= req_ignitelevel)
             {
-                double ignitedamage;
+                float ignitedamage;
                 bool IgniteReady = false;
                 ignitedamage = setigniteDamage();
                 foreach (var hero in ObjectManager.Get<Obj_AI_Hero>()
-                    .Where(hero => hero != null && hero.IsValid && hero.Health < ignitedamage && !hero.IsDead && ObjectManager.Player.ServerPosition.Distance(hero.ServerPosition) < ignite.Range))
+                    .Where(hero => hero != null && hero.IsValid && !hero.IsDead && ObjectManager.Player.ServerPosition.Distance(hero.ServerPosition) < ignite.Range
+                    && !hero.IsMe && !hero.IsAlly && (hero.Health + hero.HPRegenRate * 2) <= ignitedamage))
                 {
-                    if (ObjectManager.Player.SummonerSpellbook.CanUseSpell(smiteSlot) == SpellState.Ready && Vector3.Distance(ObjectManager.Player.ServerPosition, hero.ServerPosition) < ignite.Range)
-                    {
-                        IgniteReady = true;
-                    }
-                    if (IgniteReady)
-                    {
-                        setIgniteSlot();
-                        ObjectManager.Player.SummonerSpellbook.CastSpell(igniteSlot, hero);
-                    }
+
+                        if (ObjectManager.Player.SummonerSpellbook.CanUseSpell(igniteSlot) == SpellState.Ready)
+                        {
+                            IgniteReady = true;
+                        }
+                        if (IgniteReady)
+                        {
+                            setIgniteSlot();
+                            ObjectManager.Player.SummonerSpellbook.CastSpell(igniteSlot, hero);
+                            Game.PrintChat("Can!! HP:" + hero.Health + " " + hero.HPRegenRate);
+                        }
                 }
             }
             #endregion
@@ -296,9 +303,9 @@ namespace JeonProject
             }
         }
 
-        public static double setigniteDamage()
+        public static float setigniteDamage()
         {
-            double dmg = 50 + 20 * ObjectManager.Player.Level;
+            float dmg = 50 + 20 * ObjectManager.Player.Level;
             return dmg;
         }
         #endregion
