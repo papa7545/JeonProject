@@ -25,19 +25,16 @@ namespace JeonProject
 
         public static SpellSlot[] SSpellSlots = { ((SpellSlot)4), ((SpellSlot)5) };
         public static SpellSlot[] SpellSlots = { SpellSlot.Q, SpellSlot.W, SpellSlot.E,SpellSlot.R };
-        public static Spell Q, W, E, R;
 
         private static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
             Game.OnGameUpdate += OnGameUpdate;
             Drawing.OnEndScene += OnDraw_EndScene;
-            TwistedFate.AttachMenu();
         }
 
         private static void OnGameLoad(EventArgs args)
         {
-
             Game.PrintChat("J Project was Activited");
             Game.PrintChat("Champion : " + ObjectManager.Player.BaseSkinName);
             Game.PrintChat("Spells : " + filterspellname(ObjectManager.Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner1).Name) + "," +
@@ -51,8 +48,7 @@ namespace JeonProject
             baseMenu.AddToMainMenu();
 
             var menu_smite = new Menu("Jsmite", "Jsmite");
-            var menu_seer = new Menu("Seener", "Seener");
-            var menu_draw = new Menu("Draw", "Draw");
+            var menu_tracker = new Menu("Tracker", "Tracker");
 
             #region 스마이트 메뉴 - menu for smite
             baseMenu.AddSubMenu(menu_smite);
@@ -60,26 +56,12 @@ namespace JeonProject
             menu_smite.AddItem(new MenuItem("smite_holdkey", "HoldKey:").SetValue(new KeyBind(32, KeyBindType.Press)));// 32 - Space
             #endregion
 
-            #region 시어 메뉴 - menu for seer
-            baseMenu.AddSubMenu(menu_seer);
-            menu_seer.AddItem(new MenuItem("seer_enemyspells", "EnemyStat").SetValue(true));
+            #region 트래커 메뉴 - menu for tracker
+            baseMenu.AddSubMenu(menu_tracker);
+            menu_tracker.AddItem(new MenuItem("tracker_enemyspells", "EnemyStat").SetValue(true));
             #endregion
 
-            #region draw 메뉴 - menu for draw
-            baseMenu.AddSubMenu(menu_draw);
-            menu_draw.AddItem(new MenuItem("draw_attackrange", "Attack Range").SetValue(true));
-            menu_draw.AddItem(new MenuItem("draw_qrange", "Q_Range").SetValue(true));
-            menu_draw.AddItem(new MenuItem("draw_wrange", "W_Range").SetValue(true));
-            menu_draw.AddItem(new MenuItem("draw_erange", "E_Range").SetValue(true));
-            menu_draw.AddItem(new MenuItem("draw_rrange", "R_Range").SetValue(true));
-            #endregion
 
-            #region 챔피언 메뉴 - menu for champion
-            if (ObjectManager.Player.BaseSkinName == "TwistedFate")
-            {
-                TwistedFate.AttachMenu();
-            }
-            #endregion
         }
         private static void OnGameUpdate(EventArgs args)
         {
@@ -110,8 +92,8 @@ namespace JeonProject
             }
             #endregion
 
-            #region 스펠시어-SpellSeer
-            if (baseMenu.Item("seer_enemyspells").GetValue<bool>())
+            #region 스펠트레커-Spelltracker
+            if (baseMenu.Item("tracker_enemyspells").GetValue<bool>())
             {
                 try
                 {
@@ -163,11 +145,6 @@ namespace JeonProject
 
             #endregion
 
-            // Champion Function //
-            if (ObjectManager.Player.BaseSkinName == "TwistedFate")
-            {
-                TwistedFate.Update();
-            }
         }
         public static void OnDraw_EndScene(EventArgs args)
         {
@@ -270,7 +247,7 @@ namespace JeonProject
         }
         #endregion
 
-        #region 시어함수 - Seer 
+        #region 트래커함수 - Seer 
         public static string filterspellname(String a)
         {
             switch (a)

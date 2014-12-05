@@ -11,49 +11,54 @@ using SharpDX;
 using Color = System.Drawing.Color;
 #endregion
 
-namespace JeonProject
+namespace JeonTF
 {
-
-
-    class TwistedFate
+    class Program
     {
 
-
-        public static String cards="none";
-        public static void AttachMenu(){
-
-                var menu_TF = new Menu("menu_TF", "TwistedFate");
-                var drawing = new Menu("drawing", "drawing");
-                Program.baseMenu.AddSubMenu(menu_TF);
-                menu_TF.AddSubMenu(drawing);
-                menu_TF.AddItem(new MenuItem("TF_Cardpicker", "Cardpicker").SetValue(true));
-                menu_TF.AddItem(new MenuItem("TF_Goldkey", "GoldKey:").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
-                menu_TF.AddItem(new MenuItem("TF_Bluekey", "BlueKey:").SetValue(new KeyBind("E".ToCharArray()[0], KeyBindType.Press)));
-                menu_TF.AddItem(new MenuItem("TF_Redkey", "RedKey").SetValue(new KeyBind("W".ToCharArray()[0], KeyBindType.Press)));
-             
-                drawing.AddItem(new MenuItem("TF_qRange", "Q-Range").SetValue(true));
-                drawing.AddItem(new MenuItem("TF_rRange", "R-Range").SetValue(true));
-                Drawing.OnEndScene += OnDraw_EndScene;
-                
+        public static Menu menu_TF;
+        public static String cards = "none";
+        private static void Main(string[] args)
+        {
+            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game.OnGameUpdate += Update;
+            Drawing.OnEndScene += OnDraw_EndScene;
         }
 
-        public static void Update()
+        public static void OnGameLoad(EventArgs args)
+        {
+
+            menu_TF = new Menu("JeonTF", "JeonTF");
+            menu_TF.AddToMainMenu();
+            var drawing = new Menu("drawing", "drawing");
+            menu_TF.AddSubMenu(drawing);
+            menu_TF.AddItem(new MenuItem("TF_Cardpicker", "Cardpicker").SetValue(true));
+            menu_TF.AddItem(new MenuItem("TF_Goldkey", "GoldKey:").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
+            menu_TF.AddItem(new MenuItem("TF_Bluekey", "BlueKey:").SetValue(new KeyBind("E".ToCharArray()[0], KeyBindType.Press)));
+            menu_TF.AddItem(new MenuItem("TF_Redkey", "RedKey").SetValue(new KeyBind("W".ToCharArray()[0], KeyBindType.Press)));
+
+            drawing.AddItem(new MenuItem("TF_qRange", "Q-Range").SetValue(true));
+            drawing.AddItem(new MenuItem("TF_rRange", "R-Range").SetValue(true));
+
+        }
+
+        public static void Update(EventArgs args)
         {
             //Game.PrintChat(cards + "," + Convert.ToString(ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).State));
-            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard" && cards == "none" 
-                && Convert.ToString(ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).State) == "Ready")
+            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard" && cards == "none"
+                && Convert.ToString(ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W)) == "Ready")
             {
-                if (Program.baseMenu.Item("TF_Goldkey").GetValue<KeyBind>().Active)
+                if (menu_TF.Item("TF_Goldkey").GetValue<KeyBind>().Active)
                 {
                     cards = "gold";
                     ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W);
                 }
-                if (Program.baseMenu.Item("TF_Bluekey").GetValue<KeyBind>().Active)
+                if (menu_TF.Item("TF_Bluekey").GetValue<KeyBind>().Active)
                 {
                     cards = "blue";
                     ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W);
                 }
-                if (Program.baseMenu.Item("TF_Redkey").GetValue<KeyBind>().Active)
+                if (menu_TF.Item("TF_Redkey").GetValue<KeyBind>().Active)
                 {
                     cards = "red";
                     ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W);
@@ -79,16 +84,16 @@ namespace JeonProject
         }
         public static void OnDraw_EndScene(EventArgs args)
         {
-            if (Program.baseMenu.Item("TF_rRange").GetValue<bool>())
+            if (menu_TF.Item("TF_rRange").GetValue<bool>())
             {
                 Utility.DrawCircle(ObjectManager.Player.Position, 5500, Color.White, 1, 20, true);
                 Utility.DrawCircle(ObjectManager.Player.Position, 5500, Color.White, 1, 20);
             }
-            if (Program.baseMenu.Item("TF_qRange").GetValue<bool>())
+            if (menu_TF.Item("TF_qRange").GetValue<bool>())
             {
                 Utility.DrawCircle(ObjectManager.Player.Position, 1450, Color.White, 1, 20, true);
             }
-           
+
         }
     }
 }
