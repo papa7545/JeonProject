@@ -17,7 +17,8 @@ namespace JeonTF
     {
 
         public static Menu menu_TF;
-        public static String cards = "none";
+        public static String cards= "none";
+        public static int stack=0;
         private static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
@@ -28,7 +29,7 @@ namespace JeonTF
         public static void OnGameLoad(EventArgs args)
         {
 
-            menu_TF = new Menu("JeonTF", "JeonTF");
+            menu_TF = new Menu("JeonTF", "JeonTF",true);
             menu_TF.AddToMainMenu();
             var drawing = new Menu("drawing", "drawing");
             menu_TF.AddSubMenu(drawing);
@@ -39,15 +40,23 @@ namespace JeonTF
 
             drawing.AddItem(new MenuItem("TF_qRange", "Q-Range").SetValue(true));
             drawing.AddItem(new MenuItem("TF_rRange", "R-Range").SetValue(true));
-
         }
 
         public static void Update(EventArgs args)
         {
-            //Game.PrintChat(cards + "," + Convert.ToString(ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).State));
-            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard" && cards == "none"
-                && Convert.ToString(ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W)) == "Ready")
+            if (stack >= 3)
             {
+                cards = "none";
+                stack = 0;
+            }
+            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).State.ToString() == "Cooldown")
+            {
+                stack++;
+                Game.PrintChat("cool");
+            }
+           if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard" && cards == "none"
+               && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).State.ToString() == "Ready")
+           {
                 if (menu_TF.Item("TF_Goldkey").GetValue<KeyBind>().Active)
                 {
                     cards = "gold";
@@ -63,7 +72,6 @@ namespace JeonTF
                     cards = "red";
                     ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W);
                 }
-
             }
 
             if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "goldcardlock" && cards == "gold")
@@ -91,7 +99,7 @@ namespace JeonTF
             }
             if (menu_TF.Item("TF_qRange").GetValue<bool>())
             {
-                Utility.DrawCircle(ObjectManager.Player.Position, 1450, Color.White, 1, 20, true);
+                Utility.DrawCircle(ObjectManager.Player.Position, 1450, Color.White, 1, 20);
             }
 
         }
