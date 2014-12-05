@@ -1,12 +1,14 @@
 ﻿#region
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Remoting.Messaging;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using Color = System.Drawing.Color;
 #endregion
 
 namespace JeonProject
@@ -23,11 +25,13 @@ namespace JeonProject
 
         public static SpellSlot[] SSpellSlots = { ((SpellSlot)4), ((SpellSlot)5) };
         public static SpellSlot[] SpellSlots = { SpellSlot.Q, SpellSlot.W, SpellSlot.E,SpellSlot.R };
+        public static Spell Q, W, E, R;
 
         private static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
             Game.OnGameUpdate += OnGameUpdate;
+            Drawing.OnEndScene += OnDraw_EndScene;
             TwistedFate.AttachMenu();
         }
 
@@ -48,6 +52,7 @@ namespace JeonProject
 
             var menu_smite = new Menu("Jsmite", "Jsmite");
             var menu_seer = new Menu("Seener", "Seener");
+            var menu_draw = new Menu("Draw", "Draw");
 
             #region 스마이트 메뉴 - menu for smite
             baseMenu.AddSubMenu(menu_smite);
@@ -58,6 +63,15 @@ namespace JeonProject
             #region 시어 메뉴 - menu for seer
             baseMenu.AddSubMenu(menu_seer);
             menu_seer.AddItem(new MenuItem("seer_enemyspells", "EnemyStat").SetValue(true));
+            #endregion
+
+            #region draw 메뉴 - menu for draw
+            baseMenu.AddSubMenu(menu_draw);
+            menu_draw.AddItem(new MenuItem("draw_attackrange", "Attack Range").SetValue(true));
+            menu_draw.AddItem(new MenuItem("draw_qrange", "Q_Range").SetValue(true));
+            menu_draw.AddItem(new MenuItem("draw_wrange", "W_Range").SetValue(true));
+            menu_draw.AddItem(new MenuItem("draw_erange", "E_Range").SetValue(true));
+            menu_draw.AddItem(new MenuItem("draw_rrange", "R_Range").SetValue(true));
             #endregion
 
             #region 챔피언 메뉴 - menu for champion
@@ -103,7 +117,7 @@ namespace JeonProject
                 {
 
                     foreach (var target in
-                        ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero != null && hero.IsValid && (hero.IsMe && hero.IsHPBarRendered)))
+                        ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero != null && hero.IsValid && (!hero.IsMe && hero.IsHPBarRendered)))
                     {
 
                         Y = 30;
@@ -155,7 +169,10 @@ namespace JeonProject
                 TwistedFate.Update();
             }
         }
-      
+        public static void OnDraw_EndScene(EventArgs args)
+        {
+
+        }
 
         // Addional Function //
         #region 스마이트함수 - Smite Function
