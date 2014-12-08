@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Windows;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using LeagueSharp;
@@ -17,10 +18,14 @@ namespace JeonProject
     {
         public static Menu baseMenu;
         public static Obj_AI_Hero Player = ObjectManager.Player;
+        public static System.Drawing.Rectangle Monitor = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+
         public static SpellSlot smiteSlot = SpellSlot.Unknown;
         public static SpellSlot igniteSlot = SpellSlot.Unknown;
+        public static SpellSlot defslot = SpellSlot.Unknown;
         public static Spell smite;
         public static Spell ignite;
+        public static Spell defspell;
         public static Spell jumpspell;
 
         public static bool canw2j = false;
@@ -33,8 +38,11 @@ namespace JeonProject
         public static int Y = 0;
 
 
-        public static SpellSlot[] SSpellSlots = { ((SpellSlot)4), ((SpellSlot)5) };
+        public static SpellSlot[] SSpellSlots = { SpellSlot.Summoner1, SpellSlot.Summoner2 };
         public static SpellSlot[] SpellSlots = { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
+
+        public static String[] DefSpell = {"barrier","heal"};
+        public static List<String> textlist = new List<String>();
 
         private static void Main(string[] args)
         {
@@ -45,24 +53,24 @@ namespace JeonProject
 
         private static void OnGameLoad(EventArgs args)
         {
-            Game.PrintChat("J Project was Activited");
-            Game.PrintChat("Champion : " + Player.BaseSkinName);
-            Game.PrintChat("Spells : " + filterspellname(Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner1).Name) + "," +
-                filterspellname(Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner2).Name));
+            Game.PrintChat("J Project v1.0 Loaded!");
             setSmiteSlot();
             setIgniteSlot();
+            setDefSpellSlot();
 
-
-
-            //메인메뉴
+            //메인메뉴 - Main Menu
             baseMenu = new Menu("ProjectJ", "ProjectJ", true);
             baseMenu.AddToMainMenu();
+            baseMenu.AddItem(new MenuItem("base_stat", "Status on hud").SetValue(true));
+            //baseMenu.AddItem(new MenuItem("x", "x").SetValue(new Slider(0, 0, 2000)));
+            //baseMenu.AddItem(new MenuItem("y", "y").SetValue(new Slider(0, 0, 2000)));
 
             var menu_smite = new Menu("Smite", "Smite");
             var menu_ignite = new Menu("Ignite", "Ignite");
             var menu_tracker = new Menu("Tracker", "Tracker");
             var menu_j2w = new Menu("Jump2Ward", "Jump2Ward");
             var menu_st = new Menu("Stacks", "Stacks");
+            var menu_ins = new Menu("Item&Spell", "Item & Spell");
 
 
             #region 스마이트 메뉴 - menu for smite
@@ -97,10 +105,25 @@ namespace JeonProject
             menu_st.AddItem(new MenuItem("st_twitch", "Auto Twitch(E)").SetValue(false));
             menu_st.AddItem(new MenuItem("st_kalista", "Auto Kalista(E)").SetValue(false));
             #endregion
+
+            #region 아이템사용 메뉴 - menu for UseItem&Spell
+            baseMenu.AddSubMenu(menu_ins);
+
+            var menu_jhonya = new Menu("zhonya", "zhonya");
+            menu_ins.AddSubMenu(menu_jhonya);
+            menu_jhonya.AddItem(new MenuItem("useitem_zhonya", "UseZhonya").SetValue(true));
+            menu_jhonya.AddItem(new MenuItem("useitem_z_hp", "Use On Hp(%)").SetValue(new Slider(15, 0, 100)));
+
+            var menu_spell = new Menu("Spell", "Spell");
+            menu_ins.AddSubMenu(menu_spell);
+            menu_spell.AddItem(new MenuItem("usespell", "CastSpell").SetValue(true));
+            menu_spell.AddItem(new MenuItem("usespell_hp", "Cast On Hp(%)").SetValue(new Slider(10, 0, 100)));
+
+            #endregion
+
         }
         private static void OnGameUpdate(EventArgs args)
         {
-
             #region 오토스마이트-AutoSmite
             if (baseMenu.Item("AutoSmite").GetValue<bool>() && (baseMenu.Item("smite_holdkey").GetValue<KeyBind>().Active || baseMenu.Item("smite_enablekey").GetValue<KeyBind>().Active)
                 && smiteSlot != SpellSlot.Unknown)
@@ -227,9 +250,7 @@ namespace JeonProject
                             Vector3.DistanceSquared(cursor, ward.ServerPosition) <= 200 * 200 &&
                             ward.Distance(Player) <= 700 && ward.Name.IndexOf("Turret") == -1))
                         {
-                            Game.PrintChat("event!");
                             jumpspell.CastOnUnit(target);
-                            Game.PrintChat(target.Name + "," + Vector3.DistanceSquared(cursor, target.ServerPosition));
                         }
 
                         if (rdyward)
@@ -304,6 +325,75 @@ namespace JeonProject
             {
                 Game.PrintChat("You are not Kalista!");
                 baseMenu.Item("st_kalista").SetValue<bool>(false);
+            }
+            #endregion
+
+            #region Items&spells
+            if (baseMenu.Item("useitem_zhonya").GetValue<bool>()&&Items.HasItem(3157))
+            {
+                foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Zhonyas_Hourglass))
+                {
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_z_hp").GetValue<Slider>().Value && Items.CanUseItem(3157))
+                    {
+                        p_item.UseItem();
+                    }
+                }
+            }
+            if (baseMenu.Item("usespell").GetValue<bool>()&& defslot != SpellSlot.Unknown)
+            {
+                if (Player.HealthPercentage() <= (float)baseMenu.Item("usespell_hp").GetValue<Slider>().Value)
+                {
+                    if (Player.SummonerSpellbook.CanUseSpell(defslot) == SpellState.Ready)
+                        Player.SummonerSpellbook.CastSpell(defslot);
+                }
+            }
+
+            #endregion
+
+            #region Status
+            if (baseMenu.Item("base_stat").GetValue<bool>())
+            {
+                /*
+                 * 오토스마이트
+                 * 오토이그나이트
+                 * 점프와드
+                 * 스택
+                 * Items
+                 * Spell
+                 */
+
+                int x = Monitor.Width - 600;
+                int y = Monitor.Height - 250;
+                int interval = 20;
+                int i = 0;
+                Color text_color = Color.Red;
+
+                Drawing.DrawText(x, y + (interval * i), Color.Wheat, "Champion : " + Player.BaseSkinName);
+                i++; 
+                Drawing.DrawText(x, y + (interval * i), Color.Wheat, "Spells : " + filterspellname(Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner1).Name) + "," +
+            filterspellname(Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner2).Name));
+                i++;
+                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("AutoSmite").GetValue<bool>() && smiteSlot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
+                    "AutoSmite(" + bool2string(baseMenu.Item("AutoSmite").GetValue<bool>() && smiteSlot != SpellSlot.Unknown) + ")");
+                i++;
+                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("AutoIgnite").GetValue<bool>() && igniteSlot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
+                    "AutoIgnite(" + bool2string(baseMenu.Item("AutoIgnite").GetValue<bool>() && igniteSlot != SpellSlot.Unknown) + ")");
+                i++;
+                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell.Slot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
+                    "Jump2Ward(" + bool2string(baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell.Slot != SpellSlot.Unknown) + ")");
+                i++;
+                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("st_twitch").GetValue<bool>()) ? Color.FromArgb(0, 255, 0) : Color.Red,
+                    "CastTwitch(E)(" + bool2string(baseMenu.Item("st_twitch").GetValue<bool>()) + ")");
+                i++;
+                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("st_kalista").GetValue<bool>()) ? Color.FromArgb(0, 255, 0) : Color.Red,
+                    "CastKalista(E)(" + bool2string(baseMenu.Item("st_kalista").GetValue<bool>()) + ")");
+                i++;
+                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("useitem_zhonya").GetValue<bool>()) ? Color.FromArgb(0, 255, 0) : Color.Red,
+                    "CastZhonya(" + bool2string(baseMenu.Item("useitem_zhonya").GetValue<bool>()) + ")");
+                i++;
+                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
+                    "SummurSpell(" + bool2string(baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown) + ")");
+                i++;
             }
             #endregion
         }
@@ -492,5 +582,31 @@ namespace JeonProject
 
         #endregion
 
+        #region 스펠함수 - Item & Spell
+        public static void setDefSpellSlot()
+        {
+            foreach (var spell in Player.SummonerSpellbook.Spells.Where(spell => spell.Name != null))
+            {
+                defslot = spell.Slot;
+                defspell = new Spell(defslot);
+                return;
+            }
+        }
+        #endregion
+
+        // common function //
+        public static string bool2string(bool a)
+        {
+            String total;
+            if(a)
+            {
+                total = "ON";
+            }
+            else
+            {
+                total = "OFF";
+            }
+            return total;
+        }
     }
 }
