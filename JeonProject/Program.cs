@@ -379,8 +379,8 @@ namespace JeonProject
                 Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("AutoIgnite").GetValue<bool>() && igniteSlot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
                     "AutoIgnite(" + bool2string(baseMenu.Item("AutoIgnite").GetValue<bool>() && igniteSlot != SpellSlot.Unknown) + ")");
                 i++;
-                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell.Slot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
-                    "Jump2Ward(" + bool2string(baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell.Slot != SpellSlot.Unknown) + ")");
+                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell != null) ? Color.FromArgb(0, 255, 0) : Color.Red,
+                    "Jump2Ward(" + bool2string(baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell != null) + ")");
                 i++;
                 Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("st_twitch").GetValue<bool>()) ? Color.FromArgb(0, 255, 0) : Color.Red,
                     "CastTwitch(E)(" + bool2string(baseMenu.Item("st_twitch").GetValue<bool>()) + ")");
@@ -394,6 +394,7 @@ namespace JeonProject
                 Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
                     "SummurSpell(" + bool2string(baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown) + ")");
                 i++;
+
             }
             #endregion
         }
