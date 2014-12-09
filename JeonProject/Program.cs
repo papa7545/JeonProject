@@ -20,6 +20,8 @@ namespace JeonProject
         public static Obj_AI_Hero Player = ObjectManager.Player;
         public static System.Drawing.Rectangle Monitor = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
 
+        public static SpellSlot[] SSpellSlots = { SpellSlot.Summoner1, SpellSlot.Summoner2 };
+        public static SpellSlot[] SpellSlots = { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
         public static SpellSlot smiteSlot = SpellSlot.Unknown;
         public static SpellSlot igniteSlot = SpellSlot.Unknown;
         public static SpellSlot defslot = SpellSlot.Unknown;
@@ -31,24 +33,27 @@ namespace JeonProject
         public static bool canw2j = false;
         public static bool rdyw2j = false;
         public static bool rdyward = false;
+        public static bool text_Isrender = false;
 
         public static int req_ignitelevel { get { return baseMenu.Item("igniteLv").GetValue<Slider>().Value; } }
 
         public static int X = 0;
         public static int Y = 0;
+        public static int pastTime = 0;
 
 
-        public static SpellSlot[] SSpellSlots = { SpellSlot.Summoner1, SpellSlot.Summoner2 };
-        public static SpellSlot[] SpellSlots = { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
 
         public static String[] DefSpell = {"barrier","heal"};
-        public static List<String> textlist = new List<String>();
+
+        public static Render.Text text = new Render.Text("Can Ult to kill!", Player, new Vector2(0, 50), (int)32, SharpDX.ColorBGRA.FromRgba(0xFF00FFBB));
+        public static Render.Text text_help = new Render.Text("Somebody Need Help!", Player, new Vector2(0, 50), (int)32, SharpDX.ColorBGRA.FromRgba(0xFF00FFBB));
 
         private static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
             Game.OnGameUpdate += OnGameUpdate;
             Drawing.OnEndScene += OnDraw_EndScene;
+            Drawing.OnDraw += OnDraw;
         }
 
         private static void OnGameLoad(EventArgs args)
@@ -71,6 +76,7 @@ namespace JeonProject
             var menu_j2w = new Menu("Jump2Ward", "Jump2Ward");
             var menu_st = new Menu("Stacks", "Stacks");
             var menu_ins = new Menu("Item&Spell", "Item & Spell");
+            var menu_noti = new Menu("Notifier", "Notifier");
 
 
             #region 스마이트 메뉴 - menu for smite
@@ -121,6 +127,14 @@ namespace JeonProject
 
             #endregion
 
+            #region 알림 메뉴 - menu for notifier
+            baseMenu.AddSubMenu(menu_noti);
+            menu_noti.AddItem(new MenuItem("noti_karthus", "KarthusUlt").SetValue(true));
+            menu_noti.AddItem(new MenuItem("noti_ez", "EzrealUlt").SetValue(true));
+            menu_noti.AddItem(new MenuItem("noti_cait", "CaitUlt").SetValue(true));
+            menu_noti.AddItem(new MenuItem("noti_shen", "ShenUlt").SetValue(true));
+            menu_noti.AddItem(new MenuItem("noti_shenhp", "Notice On Hp(%)").SetValue(new Slider(10, 0, 100)));
+            #endregion
         }
         private static void OnGameUpdate(EventArgs args)
         {
@@ -350,6 +364,112 @@ namespace JeonProject
 
             #endregion
 
+            #region ultnotifier
+            //Karthus
+            if (Player.BaseSkinName == "Karthus")
+            {
+                if (baseMenu.Item("noti_karthus").GetValue<bool>() && Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready)
+                {
+                    Spell R = new Spell(SpellSlot.R, 100000);
+                    var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
+                    var damage = R.GetDamage(target);
+
+
+                    if (target.IsValidTarget(R.Range) && target.IsVisible && damage >= target.Health + target.HPRegenRate * 3)
+                    {
+                        if (!text_Isrender)
+                            text.Add();
+                        text_Isrender = true;
+                    }
+                }
+                else
+                {
+                    text.Remove();
+                    text_Isrender = false;
+                }
+            }
+            //cait
+            if (Player.BaseSkinName == "Caitlyn")
+            {
+                if (baseMenu.Item("noti_cait").GetValue<bool>() && Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready)
+                {
+                    Spell R = new Spell(SpellSlot.R, 1500 + (500 * Player.Spellbook.GetSpell(SpellSlot.R).Level));
+                    var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Physical);
+                    var damage = R.GetDamage(target);
+
+
+                    if (target.IsValidTarget(R.Range) && target.IsVisible && damage >= target.Health + target.HPRegenRate)
+                    {
+                        if (!text_Isrender)
+                            text.Add();
+                        text_Isrender = true;
+                        targetPing(target.Position.To2D());
+
+
+                    }
+                }
+                else
+                {
+                    text.Remove();
+                    text_Isrender = false;
+                }
+            }
+            //ez
+            if (Player.BaseSkinName == "Ezreal")
+            {
+                if (baseMenu.Item("noti_ez").GetValue<bool>() && Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready)
+                {
+                    Spell R = new Spell(SpellSlot.R, 100000);
+                    var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
+                    var damage = R.GetDamage(target);
+
+
+                    if (target.IsValidTarget(R.Range) && target.IsVisible && damage >= target.Health + target.HPRegenRate * (2000f / Vector3.Distance(Player.ServerPosition, target.ServerPosition))) // time=speed/distance
+                    {
+                        if (!text_Isrender)
+                            text.Add();
+                        text_Isrender = true;
+                        targetPing(target.Position.To2D());
+                    }
+                }
+                else
+                {
+                    text.Remove();
+                    text_Isrender = false;
+                }
+            }
+            //shen
+            if (Player.BaseSkinName == "Shen")
+            {
+                if (baseMenu.Item("noti_shen").GetValue<bool>() && Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready)
+                {
+
+                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly && !hero.IsMe && !hero.IsDead && hero.IsValid))
+                    {
+                        if (hero.HealthPercentage() <= baseMenu.Item("noti_shenhp").GetValue<Slider>().Value)
+                        {
+                            if (!text_Isrender)
+                                text_help.Add();
+                            text_Isrender = true;
+
+                            targetPing(hero.Position.To2D(), Packet.PingType.AssistMe);
+                            Game.PrintChat("print!");
+                        }
+                        else
+                        {
+                            text_help.Remove();
+                            text_Isrender = false;
+                        }
+                    }
+                }
+                else
+                {
+                    text_help.Remove();
+                    text_Isrender = false;
+                }
+            }
+            #endregion
+
             #region Status
             if (baseMenu.Item("base_stat").GetValue<bool>())
             {
@@ -370,35 +490,76 @@ namespace JeonProject
 
                 Drawing.DrawText(x, y + (interval * i), Color.Wheat, "Champion : " + Player.BaseSkinName);
                 i++; 
+
                 Drawing.DrawText(x, y + (interval * i), Color.Wheat, "Spells : " + filterspellname(Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner1).Name) + "," +
             filterspellname(Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner2).Name));
                 i++;
-                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("AutoSmite").GetValue<bool>() && smiteSlot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
-                    "AutoSmite(" + bool2string(baseMenu.Item("AutoSmite").GetValue<bool>() && smiteSlot != SpellSlot.Unknown) + ")");
-                i++;
-                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("AutoIgnite").GetValue<bool>() && igniteSlot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
-                    "AutoIgnite(" + bool2string(baseMenu.Item("AutoIgnite").GetValue<bool>() && igniteSlot != SpellSlot.Unknown) + ")");
-                i++;
-                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell != null) ? Color.FromArgb(0, 255, 0) : Color.Red,
-                    "Jump2Ward(" + bool2string(baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell != null) + ")");
-                i++;
-                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("st_twitch").GetValue<bool>()) ? Color.FromArgb(0, 255, 0) : Color.Red,
-                    "CastTwitch(E)(" + bool2string(baseMenu.Item("st_twitch").GetValue<bool>()) + ")");
-                i++;
-                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("st_kalista").GetValue<bool>()) ? Color.FromArgb(0, 255, 0) : Color.Red,
-                    "CastKalista(E)(" + bool2string(baseMenu.Item("st_kalista").GetValue<bool>()) + ")");
-                i++;
-                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("useitem_zhonya").GetValue<bool>()) ? Color.FromArgb(0, 255, 0) : Color.Red,
-                    "CastZhonya(" + bool2string(baseMenu.Item("useitem_zhonya").GetValue<bool>()) + ")");
-                i++;
-                Drawing.DrawText(x, y + (interval * i), (baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown) ? Color.FromArgb(0, 255, 0) : Color.Red,
-                    "SummurSpell(" + bool2string(baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown) + ")");
+
+                if (smiteSlot != SpellSlot.Unknown)
+                {
+                    addText(y + (interval * i), (baseMenu.Item("AutoSmite").GetValue<bool>() && smiteSlot != SpellSlot.Unknown), "AutoSmite");
+                    i++;
+                }
+
+                if (igniteSlot != SpellSlot.Unknown)
+                {
+                    addText(y + (interval * i), (baseMenu.Item("AutoIgnite").GetValue<bool>() && igniteSlot != SpellSlot.Unknown), "AutoIgnite");
+                    i++;
+                }
+
+                if (jumpspell != null)
+                {
+                    addText(y + (interval * i), (baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell != null), "Jump2Ward");
+                    i++;
+                }
+
+                addText(y + (interval * i), (baseMenu.Item("useitem_zhonya").GetValue<bool>()), "CastZhonya");
                 i++;
 
+                if (defslot != SpellSlot.Unknown)
+                {
+                    addText(y + (interval * i), (baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown), "SummurSpell");
+                    i++;
+                }
+                //champ
+                #region stack
+                if (Player.BaseSkinName == "Twitch")
+                {
+                    addText(y + (interval * i), (baseMenu.Item("st_twitch").GetValue<bool>()), "CastTwitchE");
+                    i++;
+                }
+                if (Player.BaseSkinName == "Kalista")
+                {
+                    addText(y + (interval * i), (baseMenu.Item("st_kalista").GetValue<bool>()), "CastKalistaE");
+                    i++;
+                }
+                #endregion
+                #region notifier
+                if (Player.BaseSkinName == "Karthus")
+                {
+                    addText(y + (interval * i), (baseMenu.Item("noti_karthus").GetValue<bool>()), "UltNotifiler");
+                }
+                if (Player.BaseSkinName == "Ezreal")
+                {
+                    addText(y + (interval * i), (baseMenu.Item("noti_ez").GetValue<bool>()), "UltNotifiler");
+                }
+                if (Player.BaseSkinName == "Caitlyn")
+                {
+                    addText(y + (interval * i), (baseMenu.Item("noti_cait").GetValue<bool>()), "UltNotifiler");
+                }
+                if (Player.BaseSkinName == "Shen")
+                {
+                    addText(y + (interval * i), (baseMenu.Item("noti_shen").GetValue<bool>()), "UltNotifiler");
+                }
+                #endregion
             }
             #endregion
         }
         public static void OnDraw_EndScene(EventArgs args)
+        {
+
+        }
+        public static void OnDraw(EventArgs args)
         {
 
         }
@@ -595,6 +756,13 @@ namespace JeonProject
         }
         #endregion
 
+        #region status 함수 - Status
+        public static void addText(float y,bool a,String b)
+        {
+            Drawing.DrawText(Monitor.Width - 600, y, a ? Color.FromArgb(0, 255, 0) : Color.Red,
+                    b+"(" + bool2string(a) + ")");
+        }
+        #endregion
         // common function //
         public static string bool2string(bool a)
         {
@@ -609,5 +777,22 @@ namespace JeonProject
             }
             return total;
         }
+
+        public static void targetPing(Vector2 Position)
+        {
+            if (Environment.TickCount - pastTime < 2000)
+                return;
+            pastTime = Environment.TickCount;
+            Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y,0,0,Packet.PingType.Danger)).Process();
+        }
+        public static void targetPing(Vector2 Position, Packet.PingType ptype)
+        {
+            if (Environment.TickCount - pastTime < 2000)
+                return;
+            pastTime = Environment.TickCount;
+            Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y, 0, 0, ptype)).Process();
+        }
     }
 }
+
+

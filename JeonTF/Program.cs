@@ -44,7 +44,7 @@ namespace JeonTF
 
         public static void Update(EventArgs args)
         {
-            if (stack >= 3)
+            if (stack >= 20)
             {
                 cards = "none";
                 stack = 0;
@@ -52,7 +52,6 @@ namespace JeonTF
             if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).State.ToString() == "Cooldown")
             {
                 stack++;
-                Game.PrintChat("cool");
             }
            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard" && cards == "none"
                && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).State.ToString() == "Ready")
