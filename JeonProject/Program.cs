@@ -58,7 +58,7 @@ namespace JeonProject
 
         private static void OnGameLoad(EventArgs args)
         {
-            Game.PrintChat("J Project v1.0 Loaded!");
+            Game.PrintChat("<font color=red>J Project v1.0 Loaded!");
             setSmiteSlot();
             setIgniteSlot();
             setDefSpellSlot();
@@ -67,8 +67,8 @@ namespace JeonProject
             baseMenu = new Menu("ProjectJ", "ProjectJ", true);
             baseMenu.AddToMainMenu();
             baseMenu.AddItem(new MenuItem("base_stat", "Status on hud").SetValue(true));
-            //baseMenu.AddItem(new MenuItem("x", "x").SetValue(new Slider(0, 0, 2000)));
-            //baseMenu.AddItem(new MenuItem("y", "y").SetValue(new Slider(0, 0, 2000)));
+            baseMenu.AddItem(new MenuItem("x", "x").SetValue(new Slider(600, 0, Monitor.Width)));
+            baseMenu.AddItem(new MenuItem("y", "y").SetValue(new Slider(250, 0, Monitor.Height)));
 
             var menu_smite = new Menu("Smite", "Smite");
             var menu_ignite = new Menu("Ignite", "Ignite");
@@ -482,8 +482,8 @@ namespace JeonProject
                  * Spell
                  */
 
-                int x = Monitor.Width - 600;
-                int y = Monitor.Height - 250;
+                int x = Monitor.Width - baseMenu.Item("x").GetValue<Slider>().Value;
+                int y = Monitor.Height - baseMenu.Item("y").GetValue<Slider>().Value;
                 int interval = 20;
                 int i = 0;
                 Color text_color = Color.Red;
@@ -759,7 +759,7 @@ namespace JeonProject
         #region status 함수 - Status
         public static void addText(float y,bool a,String b)
         {
-            Drawing.DrawText(Monitor.Width - 600, y, a ? Color.FromArgb(0, 255, 0) : Color.Red,
+            Drawing.DrawText(Monitor.Width - baseMenu.Item("x").GetValue<Slider>().Value, y, a ? Color.FromArgb(0, 255, 0) : Color.Red,
                     b+"(" + bool2string(a) + ")");
         }
         #endregion
