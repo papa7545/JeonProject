@@ -135,7 +135,7 @@ namespace JeonProject
             var menu_Potion = new Menu("Potion", "Potion");
             menu_ins.AddSubMenu(menu_Potion);
             menu_Potion.AddItem(new MenuItem("useitem_flask", "UseFlask-").SetValue(true));
-            menu_Potion.AddItem(new MenuItem("useitem_p_fla", "Use On Mana(%)").SetValue(new Slider(50, 0, 100)));
+            menu_Potion.AddItem(new MenuItem("useitem_p_fla", "Use On Hp(%)").SetValue(new Slider(50, 0, 100)));
             menu_Potion.AddItem(new MenuItem("useitem_hppotion", "UseHP-").SetValue(true));
             menu_Potion.AddItem(new MenuItem("useitem_p_hp", "Use On Hp(%)").SetValue(new Slider(50, 0, 100)));
             menu_Potion.AddItem(new MenuItem("useitem_manapotion", "UseMana-").SetValue(true));
