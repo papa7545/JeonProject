@@ -58,7 +58,7 @@ namespace JeonProject
 
         private static void OnGameLoad(EventArgs args)
         {
-            Game.PrintChat("<font color=red>J Project v1.0 Loaded!");
+            Game.PrintChat("<font color ='#33FFFF'>J Project v1.0 </font>Loaded!");
             setSmiteSlot();
             setIgniteSlot();
             setDefSpellSlot();
