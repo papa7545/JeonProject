@@ -34,19 +34,30 @@ namespace JeonProject
         public static bool rdyw2j = false;
         public static bool rdyward = false;
         public static bool text_Isrender = false;
+        public static bool textsmite_Isrender = false;
 
         public static int req_ignitelevel { get { return baseMenu.Item("igniteLv").GetValue<Slider>().Value; } }
 
         public static int X = 0;
         public static int Y = 0;
         public static int pastTime = 0;
+        public static int tempItemid;
 
 
 
-        public static String[] DefSpell = {"barrier","heal"};
+        public static String[] DefSpellstr = { "barrier", "heal" };
 
-        public static Render.Text text = new Render.Text("Can Ult to kill!", Player, new Vector2(0, 50), (int)32, SharpDX.ColorBGRA.FromRgba(0xFF00FFBB));
+        public static Render.Text text_notifier = new Render.Text("Can Ult to kill!", Player, new Vector2(0, 50), (int)32, SharpDX.ColorBGRA.FromRgba(0xFF00FFBB));
         public static Render.Text text_help = new Render.Text("Somebody Need Help!", Player, new Vector2(0, 50), (int)32, SharpDX.ColorBGRA.FromRgba(0xFF00FFBB));
+        public static Render.Text text_smite = new Render.Text("AutoSmite!", Player, new Vector2(55, 50), (int)30, SharpDX.ColorBGRA.FromRgba(0xFF0000FF));
+
+        public enum test
+        {
+            show_inventory,
+            show_enemybuff,
+            show_allybuff,
+            show_mebuff
+        }
 
         private static void Main(string[] args)
         {
@@ -69,6 +80,7 @@ namespace JeonProject
             baseMenu.AddItem(new MenuItem("base_stat", "Status on hud").SetValue(true));
             baseMenu.AddItem(new MenuItem("x", "x").SetValue(new Slider(600, 0, Monitor.Width)));
             baseMenu.AddItem(new MenuItem("y", "y").SetValue(new Slider(250, 0, Monitor.Height)));
+            //baseMenu.AddItem(new MenuItem("test", "test").SetValue(false));
 
             var menu_smite = new Menu("Smite", "Smite");
             var menu_ignite = new Menu("Ignite", "Ignite");
@@ -120,6 +132,15 @@ namespace JeonProject
             menu_jhonya.AddItem(new MenuItem("useitem_zhonya", "UseZhonya").SetValue(true));
             menu_jhonya.AddItem(new MenuItem("useitem_z_hp", "Use On Hp(%)").SetValue(new Slider(15, 0, 100)));
 
+            var menu_Potion = new Menu("Potion", "Potion");
+            menu_ins.AddSubMenu(menu_Potion);
+            menu_Potion.AddItem(new MenuItem("useitem_flask", "UseFlask-").SetValue(true));
+            menu_Potion.AddItem(new MenuItem("useitem_p_fla", "Use On Mana(%)").SetValue(new Slider(50, 0, 100)));
+            menu_Potion.AddItem(new MenuItem("useitem_hppotion", "UseHP-").SetValue(true));
+            menu_Potion.AddItem(new MenuItem("useitem_p_hp", "Use On Hp(%)").SetValue(new Slider(50, 0, 100)));
+            menu_Potion.AddItem(new MenuItem("useitem_manapotion", "UseMana-").SetValue(true));
+            menu_Potion.AddItem(new MenuItem("useitem_p_mana", "Use On Mana(%)").SetValue(new Slider(50, 0, 100)));
+
             var menu_spell = new Menu("Spell", "Spell");
             menu_ins.AddSubMenu(menu_spell);
             menu_spell.AddItem(new MenuItem("usespell", "CastSpell").SetValue(true));
@@ -138,30 +159,38 @@ namespace JeonProject
         }
         private static void OnGameUpdate(EventArgs args)
         {
+            #region get info
+            float Player_bAD = Player.BaseAttackDamage;
+            float Player_aAD = Player.FlatPhysicalDamageMod;
+            float Player_totalAD = Player_bAD + Player_aAD;
+            float Player_bAP = Player.BaseAbilityDamage;
+            float Player_aAP = Player.FlatMagicDamageMod;
+            float Player_totalAP = Player_bAP + Player_aAP;
+
+            #endregion
+
             #region 오토스마이트-AutoSmite
-            if (baseMenu.Item("AutoSmite").GetValue<bool>() && (baseMenu.Item("smite_holdkey").GetValue<KeyBind>().Active || baseMenu.Item("smite_enablekey").GetValue<KeyBind>().Active)
-                && smiteSlot != SpellSlot.Unknown)
+            if (baseMenu.Item("AutoSmite").GetValue<bool>() && smiteSlot != SpellSlot.Unknown)
             {
-                double smitedamage;
-                bool smiteReady = false;
-                smitedamage = setSmiteDamage();
-                Drawing.DrawText(Player.HPBarPosition.X + 55, Player.HPBarPosition.Y + 25, System.Drawing.Color.Red, "AutoSmite!");
-                Obj_AI_Base mob = GetNearest(Player.ServerPosition);
-                /*테스트
-                testFind(Player.ServerPosition);
-                Game.PrintChat(smiteSlot.ToString() + "<damage>" + smitedamage);
-                Game.PrintChat(Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner2).Name);
-                */
-
-                if (Player.SummonerSpellbook.CanUseSpell(smiteSlot) == SpellState.Ready && Vector3.Distance(Player.ServerPosition, mob.ServerPosition) < smite.Range)
+                if ((baseMenu.Item("smite_holdkey").GetValue<KeyBind>().Active || baseMenu.Item("smite_enablekey").GetValue<KeyBind>().Active))
                 {
-                    smiteReady = true;
-                }
+                    double smitedamage;
+                    bool smiteReady = false;
+                    smitedamage = setSmiteDamage();
+                    Drawing.DrawText(Player.HPBarPosition.X + 55, Player.HPBarPosition.Y + 25, System.Drawing.Color.Red, "AutoSmite!");
 
-                if (smiteReady && mob.Health < smitedamage)
-                {
-                    setIgniteSlot();
-                    Player.SummonerSpellbook.CastSpell(smiteSlot, mob);
+                    Obj_AI_Base mob = GetNearest(Player.ServerPosition);
+
+                    if (Player.SummonerSpellbook.CanUseSpell(smiteSlot) == SpellState.Ready && Vector3.Distance(Player.ServerPosition, mob.ServerPosition) < smite.Range)
+                    {
+                        smiteReady = true;
+                    }
+
+                    if (smiteReady && mob.Health < smitedamage)
+                    {
+                        setIgniteSlot();
+                        Player.SummonerSpellbook.CastSpell(smiteSlot, mob);
+                    }
                 }
             }
             #endregion
@@ -299,7 +328,7 @@ namespace JeonProject
                         {
                             var damage = E.GetDamage(target);
                             //Game.PrintChat("d:{0} hp:{1}",damage,target.Health);
-                            if (damage >= target.Health)
+                            if (damage >= target.Health && E.IsReady())
                                 E.Cast();
 
                             if (baseMenu.Item("st_bool").GetValue<bool>())
@@ -310,49 +339,96 @@ namespace JeonProject
                         }
                     }
             }
-            else if (baseMenu.Item("st_twitch").GetValue<bool>() && Player.BaseSkinName != "Twitch")
-            {
-                    Game.PrintChat("You are not twitch!");
-                    baseMenu.Item("st_twitch").SetValue<bool>(false);
-            }
 
             if (baseMenu.Item("st_kalista").GetValue<bool>() && Player.BaseSkinName == "Kalista")
             {
-                Spell E = new Spell(SpellSlot.E, 1200);
-                var target = SimpleTs.GetTarget(E.Range, SimpleTs.DamageType.Physical);
-                if (target.IsValidTarget(E.Range))
+                Spell E = new Spell(SpellSlot.E, 900);
+                if (E.IsReady())
                 {
-                    foreach (var venoms in target.Buffs.Where(venoms => venoms.DisplayName == "KalistaExpungeMarker"))
+                    var target = SimpleTs.GetTarget(E.Range, SimpleTs.DamageType.Physical);
+                    if (target.IsValidTarget(E.Range))
                     {
-                        var damage = E.GetDamage(target);
-                        if (damage >= target.Health)
+                        foreach (var venoms in target.Buffs.Where(venoms => venoms.DisplayName == "KalistaExpungeMarker"))
+                        {
+                            var damage = E.GetDamage(target);
+                            if (damage >= target.Health)
+                                E.Cast();
+                            if (baseMenu.Item("st_bool").GetValue<bool>())
+                            {
+                                String t_damage = Convert.ToInt64(damage).ToString() + "(" + venoms.Count + ")";
+                                Drawing.DrawText(target.HPBarPosition.X, target.HPBarPosition.Y - 5, Color.Red, t_damage);
+                            }
+                        }
+                    }
+
+                    Obj_AI_Base mob = GetNearest(Player.ServerPosition);
+                    foreach (var venoms in mob.Buffs.Where(venoms => venoms.DisplayName == "KalistaExpungeMarker"))
+                    {
+                        var damage = getKaliDmg(mob, venoms.Count, Player_totalAD, E.Level);
+                        if (damage >= mob.Health && Vector3.Distance(mob.Position, Player.Position) <= 900
+                            && (mob.Name.Contains("SRU_Dragon") || mob.Name.Contains("SRU_Baron")))
                             E.Cast();
+
                         if (baseMenu.Item("st_bool").GetValue<bool>())
                         {
-                            String t_damage = Convert.ToInt64(damage).ToString() + "(" + venoms.Count +")";
-                            Drawing.DrawText(target.HPBarPosition.X, target.HPBarPosition.Y - 5, Color.Red,t_damage);
+                            String t_damage = Convert.ToInt64(damage).ToString() + "(" + venoms.Count + ")";
+                            Drawing.DrawText(mob.HPBarPosition.X, mob.HPBarPosition.Y - 5, Color.Red, t_damage);
                         }
                     }
                 }
             }
-            else if (baseMenu.Item("st_kalista").GetValue<bool>() && Player.BaseSkinName != "Kalista")
-            {
-                Game.PrintChat("You are not Kalista!");
-                baseMenu.Item("st_kalista").SetValue<bool>(false);
-            }
             #endregion
 
             #region Items&spells
-            if (baseMenu.Item("useitem_zhonya").GetValue<bool>()&&Items.HasItem(3157))
+            //item
+            tempItemid = 3157;
+            if (baseMenu.Item("useitem_zhonya").GetValue<bool>()&&Items.HasItem(tempItemid))
             {
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Zhonyas_Hourglass))
                 {
-                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_z_hp").GetValue<Slider>().Value && Items.CanUseItem(3157))
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_z_hp").GetValue<Slider>().Value && Items.CanUseItem(tempItemid))
                     {
                         p_item.UseItem();
                     }
                 }
             }
+            tempItemid = Convert.ToInt32(ItemId.Crystalline_Flask);
+            if (baseMenu.Item("useitem_flask").GetValue<bool>() && Items.HasItem(tempItemid))
+            {
+                foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Crystalline_Flask && !Player.HasBuff("ItemCrystalFlask")))
+                {
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_fla").GetValue<Slider>().Value && Items.CanUseItem(tempItemid))
+                    {
+                        p_item.UseItem();
+                    }
+                }
+            }
+            tempItemid = Convert.ToInt32(ItemId.Health_Potion);
+            if (baseMenu.Item("useitem_hppotion").GetValue<bool>() && Items.HasItem(tempItemid))
+            {
+                foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Health_Potion && !Player.HasBuff("Health Potion") && !Player.HasBuff("ItemCrystalFlask")))
+                {
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_hp").GetValue<Slider>().Value && Items.CanUseItem(Convert.ToInt32(ItemId.Health_Potion)))
+                    {
+                        p_item.UseItem();
+                    }
+                }
+            }
+
+            tempItemid = Convert.ToInt32(ItemId.Mana_Potion);
+            if (baseMenu.Item("useitem_manapotion").GetValue<bool>() && Items.HasItem(tempItemid))
+            {
+                foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Mana_Potion && !Player.HasBuff("Mana Potion") && !Player.HasBuff("ItemCrystalFlask")))
+                {
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_mana").GetValue<Slider>().Value && Items.CanUseItem(tempItemid))
+                    {
+                        p_item.UseItem();
+                    }
+                }
+            }
+
+
+            //spell
             if (baseMenu.Item("usespell").GetValue<bool>()&& defslot != SpellSlot.Unknown)
             {
                 if (Player.HealthPercentage() <= (float)baseMenu.Item("usespell_hp").GetValue<Slider>().Value)
@@ -378,13 +454,13 @@ namespace JeonProject
                     if (target.IsValidTarget(R.Range) && target.IsVisible && damage >= target.Health + target.HPRegenRate * 3)
                     {
                         if (!text_Isrender)
-                            text.Add();
+                            text_notifier.Add();
                         text_Isrender = true;
                     }
                 }
                 else
                 {
-                    text.Remove();
+                    text_notifier.Remove();
                     text_Isrender = false;
                 }
             }
@@ -401,7 +477,7 @@ namespace JeonProject
                     if (target.IsValidTarget(R.Range) && target.IsVisible && damage >= target.Health + target.HPRegenRate)
                     {
                         if (!text_Isrender)
-                            text.Add();
+                            text_notifier.Add();
                         text_Isrender = true;
                         targetPing(target.Position.To2D());
 
@@ -410,7 +486,7 @@ namespace JeonProject
                 }
                 else
                 {
-                    text.Remove();
+                    text_notifier.Remove();
                     text_Isrender = false;
                 }
             }
@@ -427,14 +503,14 @@ namespace JeonProject
                     if (target.IsValidTarget(R.Range) && target.IsVisible && damage >= target.Health + target.HPRegenRate * (2000f / Vector3.Distance(Player.ServerPosition, target.ServerPosition))) // time=speed/distance
                     {
                         if (!text_Isrender)
-                            text.Add();
+                            text_notifier.Add();
                         text_Isrender = true;
                         targetPing(target.Position.To2D());
                     }
                 }
                 else
                 {
-                    text.Remove();
+                    text_notifier.Remove();
                     text_Isrender = false;
                 }
             }
@@ -470,7 +546,7 @@ namespace JeonProject
             }
             #endregion
 
-            #region Status
+            #region Status on hud
             if (baseMenu.Item("base_stat").GetValue<bool>())
             {
                 /*
@@ -518,9 +594,18 @@ namespace JeonProject
 
                 if (defslot != SpellSlot.Unknown)
                 {
-                    addText(y + (interval * i), (baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown), "SummurSpell");
+                    addText(y + (interval * i), (baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown), string.Format("SpellCast{0}", filterspellname(Player.SummonerSpellbook.GetSpell(defslot).Name).ToUpper()));
                     i++;
                 }
+
+                addText(y + (interval * i), (baseMenu.Item("useitem_flask").GetValue<bool>()), "Use Flask");
+                i++;
+
+                addText(y + (interval * i), (baseMenu.Item("useitem_hppotion").GetValue<bool>()), "Use HP Potion");
+                i++;
+
+                addText(y + (interval * i), (baseMenu.Item("useitem_hppotion").GetValue<bool>()), "Use Mana Potion");
+                i++;
                 //champ
                 #region stack
                 if (Player.BaseSkinName == "Twitch")
@@ -554,6 +639,18 @@ namespace JeonProject
                 #endregion
             }
             #endregion
+
+            #region test
+
+            /*
+            if (baseMenu.Item("test").GetValue<bool>()){
+
+                testf(test.show_mebuff);
+
+                baseMenu.Item("test").SetValue<bool>(false);
+            }
+             */
+            #endregion
         }
         public static void OnDraw_EndScene(EventArgs args)
         {
@@ -573,8 +670,8 @@ namespace JeonProject
         public static readonly int[] SmiteBlue = { 3706, 3710, 3709, 3708, 3707 };
         private static readonly string[] MinionNames =
         {
-            "TT_Spiderboss", "TTNGolem", "TTNWolf", "TTNWraith",
-            "SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon", "SRU_Baron","SRU_Crab"
+        "TT_Spiderboss", "TTNGolem", "TTNWolf", "TTNWraith",
+            "SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon", "SRU_BaronSpawn", "Sru_Crab"
         };
 
 
@@ -747,13 +844,26 @@ namespace JeonProject
         #region 스펠함수 - Item & Spell
         public static void setDefSpellSlot()
         {
-            foreach (var spell in Player.SummonerSpellbook.Spells.Where(spell => spell.Name != null))
+            foreach (var spell in Player.SummonerSpellbook.Spells.Where(spell => spell.Name.Contains(DefSpellstr[0]) || spell.Name.Contains(DefSpellstr[1])))
             {
                 defslot = spell.Slot;
                 defspell = new Spell(defslot);
                 return;
             }
         }
+        #endregion
+
+        #region 스택함수 - Stack
+        public static double getKaliDmg(Obj_AI_Base target,int count,double AD,int s_level)
+        {
+            double[] spell_basedamage ={0,20,30,40,50,60};
+            double[] spell_perdamage ={0,0.25,0.30,0.35,0.40,0.45};
+            double eDmg = AD * 0.60 + spell_basedamage[s_level];
+            count -= 1;
+            eDmg = eDmg + count*(eDmg * spell_perdamage[s_level]);
+            return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical,eDmg);
+        }
+
         #endregion
 
         #region status 함수 - Status
@@ -792,7 +902,62 @@ namespace JeonProject
             pastTime = Environment.TickCount;
             Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y, 0, 0, ptype)).Process();
         }
+
+
+        public static void testf(test a)
+        {
+            switch(a)
+            {
+                case test.show_inventory:
+                    
+                        foreach (var temp in Player.InventoryItems)
+                                    {
+                                        Game.PrintChat("Slot : {0} || id : {1} || name {2}", temp.Slot, Convert.ToInt32(temp.Id), temp.Name);
+                                    }
+                        return;
+
+                case test.show_allybuff:
+                        foreach (var target in ObjectManager.Get<Obj_AI_Hero>().Where(hero => !hero.IsMe && hero.IsValid && hero.IsAlly))
+                        {
+                            String temptext="";
+                            foreach (var venoms in target.Buffs)
+                            {
+                                temptext = temptext + " " + venoms.DisplayName;
+                            }
+                            Game.PrintChat("Name: {0} || Buff: {1}", target.BaseSkinName, temptext);
+                        }
+                        return;
+
+                case test.show_enemybuff:
+                    
+                        foreach (var target in ObjectManager.Get<Obj_AI_Hero>().Where(hero => !hero.IsMe && hero.IsValid && !hero.IsAlly))
+                        {
+                            String temptext="";
+                            foreach (var venoms in target.Buffs)
+                            {
+                                temptext = temptext + " " + venoms.DisplayName;
+                            }
+                            Game.PrintChat("Name: {0} || Buff: {1}", target.BaseSkinName, temptext);
+                        }
+                        return;
+
+                case test.show_mebuff:
+                    
+                        foreach (var target in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsMe && hero.IsValid))
+                        {
+                            String temptext="";
+                            foreach (var venoms in target.Buffs)
+                            {
+                                temptext = temptext + " " + venoms.DisplayName;
+                            }
+                            Game.PrintChat("Name: {0} || Buff: {1}", target.BaseSkinName, temptext);
+                        }
+                        return;
+            }
+        }
+
     }
 }
+
 
 
