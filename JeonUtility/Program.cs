@@ -12,10 +12,11 @@ using SharpDX;
 using Color = System.Drawing.Color;
 #endregion
 
-namespace JeonProject
+namespace JeonUtility
 {
     class Program
     {
+        #region variable declaration
         public static Menu baseMenu;
         public static Obj_AI_Hero Player = ObjectManager.Player;
         public static System.Drawing.Rectangle Monitor = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
@@ -50,7 +51,7 @@ namespace JeonProject
         public static Render.Text text_notifier = new Render.Text("Can Ult to kill!", Player, new Vector2(0, 50), (int)32, SharpDX.ColorBGRA.FromRgba(0xFF00FFBB));
         public static Render.Text text_help = new Render.Text("Somebody Need Help!", Player, new Vector2(0, 50), (int)32, SharpDX.ColorBGRA.FromRgba(0xFF00FFBB));
         public static Render.Text text_smite = new Render.Text("AutoSmite!", Player, new Vector2(55, 50), (int)30, SharpDX.ColorBGRA.FromRgba(0xFF0000FF));
-
+        
         public enum test
         {
             show_inventory,
@@ -58,13 +59,11 @@ namespace JeonProject
             show_allybuff,
             show_mebuff
         }
+        #endregion
 
         private static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
-            Game.OnGameUpdate += OnGameUpdate;
-            Drawing.OnEndScene += OnDraw_EndScene;
-            Drawing.OnDraw += OnDraw;
         }
 
         private static void OnGameLoad(EventArgs args)
@@ -127,19 +126,28 @@ namespace JeonProject
             #region 아이템사용 메뉴 - menu for UseItem&Spell
             baseMenu.AddSubMenu(menu_ins);
 
-            var menu_jhonya = new Menu("zhonya", "zhonya");
-            menu_ins.AddSubMenu(menu_jhonya);
-            menu_jhonya.AddItem(new MenuItem("useitem_zhonya", "UseZhonya").SetValue(true));
-            menu_jhonya.AddItem(new MenuItem("useitem_z_hp", "Use On Hp(%)").SetValue(new Slider(15, 0, 100)));
 
             var menu_Potion = new Menu("Potion", "Potion");
             menu_ins.AddSubMenu(menu_Potion);
-            menu_Potion.AddItem(new MenuItem("useitem_flask", "UseFlask-").SetValue(true));
+            menu_Potion.AddItem(new MenuItem("useitem_flask", "Flask").SetValue(true));
             menu_Potion.AddItem(new MenuItem("useitem_p_fla", "Use On Hp(%)").SetValue(new Slider(50, 0, 100)));
-            menu_Potion.AddItem(new MenuItem("useitem_hppotion", "UseHP-").SetValue(true));
+            menu_Potion.AddItem(new MenuItem("useitem_hppotion", "HP-potion").SetValue(true));
             menu_Potion.AddItem(new MenuItem("useitem_p_hp", "Use On Hp(%)").SetValue(new Slider(50, 0, 100)));
-            menu_Potion.AddItem(new MenuItem("useitem_manapotion", "UseMana-").SetValue(true));
+            menu_Potion.AddItem(new MenuItem("useitem_manapotion", "Mana-potion").SetValue(true));
             menu_Potion.AddItem(new MenuItem("useitem_p_mana", "Use On Mana(%)").SetValue(new Slider(50, 0, 100)));
+
+            var menu_items = new Menu("Items", "Items");
+            menu_ins.AddSubMenu(menu_items);
+            menu_items.AddItem(new MenuItem("useitem_zhonya", "UseZhonya").SetValue(true));
+            menu_items.AddItem(new MenuItem("useitem_z_hp", "Use On Hp(%)").SetValue(new Slider(15, 0, 100)));
+            menu_items.AddItem(new MenuItem("useitem_line1", "------------"));
+            menu_items.AddItem(new MenuItem("useitem_botrk", "UseBOTRK(killable)").SetValue(true));
+            menu_items.AddItem(new MenuItem("useitem_line2", "------------"));
+            menu_items.AddItem(new MenuItem("useitem_mikaels", "Mikaels-").SetValue(true));
+            menu_items.AddItem(new MenuItem("useitem_p_mikaels", "Use On Hp(%)").SetValue(new Slider(15, 15, 100)));
+            menu_items.AddItem(new MenuItem("useitem_p_mikaels_cc", "Use On AllyhasCC").SetValue(true));
+            menu_items.AddItem(new MenuItem("useitem_p_mikaels_delay", "Mikaels Delay(ms)").SetValue(new Slider(100, 0, 1000)));
+
 
             var menu_spell = new Menu("Spell", "Spell");
             menu_ins.AddSubMenu(menu_spell);
@@ -156,6 +164,10 @@ namespace JeonProject
             menu_noti.AddItem(new MenuItem("noti_shen", "ShenUlt").SetValue(true));
             menu_noti.AddItem(new MenuItem("noti_shenhp", "Notice On Hp(%)").SetValue(new Slider(10, 0, 100)));
             #endregion
+
+            Game.OnGameUpdate += OnGameUpdate;
+            Drawing.OnEndScene += OnDraw_EndScene;
+            Drawing.OnDraw += OnDraw;
         }
         private static void OnGameUpdate(EventArgs args)
         {
@@ -382,33 +394,58 @@ namespace JeonProject
             #region Items&spells
             //item
             tempItemid = 3157;
-            if (baseMenu.Item("useitem_zhonya").GetValue<bool>()&&Items.HasItem(tempItemid))
+            if (baseMenu.Item("useitem_zhonya").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
             {
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Zhonyas_Hourglass))
                 {
-                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_z_hp").GetValue<Slider>().Value && Items.CanUseItem(tempItemid))
-                    {
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_z_hp").GetValue<Slider>().Value)
                         p_item.UseItem();
+                }
+            }
+            tempItemid = Convert.ToInt32(ItemId.Blade_of_the_Ruined_King);
+            if (baseMenu.Item("useitem_botrk").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
+            {
+                foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Blade_of_the_Ruined_King))
+                {
+                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy && h.IsValid && h.IsVisible && Vector3.Distance(h.Position, Player.Position) <= 450))
+                    {
+                        var dmg = hero.MaxHealth*0.1;
+                        if (hero.Health <= Player.CalcDamage(hero,Damage.DamageType.Physical,dmg))
+                            p_item.UseItem(hero);
                     }
                 }
             }
+            tempItemid = Convert.ToInt32(ItemId.Mikaels_Crucible);
+            if (baseMenu.Item("useitem_p_mikaels").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
+            {
+                foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Mikaels_Crucible))
+                {
+                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly && h.IsMe && h.IsValid && h.IsVisible && Vector3.Distance(h.Position, Player.Position) <= 750))
+                    {
+                        if (hero.HealthPercentage() <= (float)baseMenu.Item("useitem_p_mikaels").GetValue<Slider>().Value)
+                            p_item.UseItem(hero);
+
+                        if (baseMenu.Item("useitem_p_mikaels_cc").GetValue<bool>() && hero.IsStunned)
+                            p_item.UseItem(hero);
+                    }
+                }
+            }
+            //potions
             tempItemid = Convert.ToInt32(ItemId.Crystalline_Flask);
-            if (baseMenu.Item("useitem_flask").GetValue<bool>() && Items.HasItem(tempItemid))
+            if (baseMenu.Item("useitem_flask").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
             {
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Crystalline_Flask && !Player.HasBuff("ItemCrystalFlask")))
                 {
-                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_fla").GetValue<Slider>().Value && Items.CanUseItem(tempItemid))
-                    {
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_fla").GetValue<Slider>().Value)
                         p_item.UseItem();
-                    }
                 }
             }
             tempItemid = Convert.ToInt32(ItemId.Health_Potion);
-            if (baseMenu.Item("useitem_hppotion").GetValue<bool>() && Items.HasItem(tempItemid))
+            if (baseMenu.Item("useitem_hppotion").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
             {
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Health_Potion && !Player.HasBuff("Health Potion") && !Player.HasBuff("ItemCrystalFlask")))
                 {
-                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_hp").GetValue<Slider>().Value && Items.CanUseItem(Convert.ToInt32(ItemId.Health_Potion)))
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_hp").GetValue<Slider>().Value)
                     {
                         p_item.UseItem();
                     }
@@ -416,16 +453,18 @@ namespace JeonProject
             }
 
             tempItemid = Convert.ToInt32(ItemId.Mana_Potion);
-            if (baseMenu.Item("useitem_manapotion").GetValue<bool>() && Items.HasItem(tempItemid))
+            if (baseMenu.Item("useitem_manapotion").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
             {
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Mana_Potion && !Player.HasBuff("Mana Potion") && !Player.HasBuff("ItemCrystalFlask")))
                 {
-                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_mana").GetValue<Slider>().Value && Items.CanUseItem(tempItemid))
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_mana").GetValue<Slider>().Value)
                     {
                         p_item.UseItem();
                     }
                 }
             }
+
+
 
 
             //spell
@@ -861,7 +900,7 @@ namespace JeonProject
             double eDmg = AD * 0.60 + spell_basedamage[s_level];
             count -= 1;
             eDmg = eDmg + count*(eDmg * spell_perdamage[s_level]);
-            return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical,eDmg);
+            return Player.CalcDamage(target, Damage.DamageType.Physical,eDmg);
         }
 
         #endregion
@@ -955,6 +994,7 @@ namespace JeonProject
                         return;
             }
         }
+
 
     }
 }
