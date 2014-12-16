@@ -39,10 +39,7 @@ namespace JeonUtility
 
         public static int req_ignitelevel { get { return baseMenu.Item("igniteLv").GetValue<Slider>().Value; } }
 
-        public static int X = 0;
-        public static int Y = 0;
         public static int pastTime = 0;
-        public static int tempItemid;
 
 
 
@@ -59,6 +56,7 @@ namespace JeonUtility
             show_allybuff,
             show_mebuff
         }
+
         #endregion
 
         private static void Main(string[] args)
@@ -79,7 +77,6 @@ namespace JeonUtility
             baseMenu.AddItem(new MenuItem("base_stat", "Status on hud").SetValue(true));
             baseMenu.AddItem(new MenuItem("x", "x").SetValue(new Slider(600, 0, Monitor.Width)));
             baseMenu.AddItem(new MenuItem("y", "y").SetValue(new Slider(250, 0, Monitor.Height)));
-            //baseMenu.AddItem(new MenuItem("test", "test").SetValue(false));
 
             var menu_smite = new Menu("Smite", "Smite");
             var menu_ignite = new Menu("Ignite", "Ignite");
@@ -138,16 +135,55 @@ namespace JeonUtility
 
             var menu_items = new Menu("Items", "Items");
             menu_ins.AddSubMenu(menu_items);
-            menu_items.AddItem(new MenuItem("useitem_zhonya", "UseZhonya").SetValue(true));
-            menu_items.AddItem(new MenuItem("useitem_z_hp", "Use On Hp(%)").SetValue(new Slider(15, 0, 100)));
-            menu_items.AddItem(new MenuItem("useitem_line1", "------------"));
-            menu_items.AddItem(new MenuItem("useitem_botrk", "UseBOTRK(killable)").SetValue(true));
-            menu_items.AddItem(new MenuItem("useitem_line2", "------------"));
-            menu_items.AddItem(new MenuItem("useitem_mikaels", "Mikaels-").SetValue(true));
-            menu_items.AddItem(new MenuItem("useitem_p_mikaels", "Use On Hp(%)").SetValue(new Slider(15, 15, 100)));
-            menu_items.AddItem(new MenuItem("useitem_p_mikaels_cc", "Use On AllyhasCC").SetValue(true));
-            menu_items.AddItem(new MenuItem("useitem_p_mikaels_delay", "Mikaels Delay(ms)").SetValue(new Slider(100, 0, 1000)));
+            var item_zhonya = new Menu("Zhonya", "Zhonya");
+            menu_items.AddSubMenu(item_zhonya);
+            item_zhonya.AddItem(new MenuItem("useitem_zhonya", "UseZhonya").SetValue(true));
+            item_zhonya.AddItem(new MenuItem("useitem_p_zhonya", "Use On Hp(%)").SetValue(new Slider(15, 0, 100)));
 
+            var item_botrk = new Menu("BOTRK", "BOTRK");
+            menu_items.AddSubMenu(item_botrk);
+            item_botrk.AddItem(new MenuItem("useitem_botrk", "UseBOTRK").SetValue(true));
+            item_botrk.AddItem(new MenuItem("useitem_p_botrk", "Use On Hp(%)").SetValue(new Slider(20, 0, 100)));
+            item_botrk.AddItem(new MenuItem("useitem_botrk_atg", "Anti-Gap-Closer").SetValue(true));
+            item_botrk.AddItem(new MenuItem("useitem_botrk_atg_p", "Gap :").SetValue(new Slider(150, 100, 450)));
+
+            var item_mikaels = new Menu("Mikaels", "Mikaels");
+            menu_items.AddSubMenu(item_mikaels);
+            item_mikaels.AddItem(new MenuItem("useitem_mikaels", "ON?").SetValue(true));
+            item_mikaels.AddItem(new MenuItem("useitem_p_mikaels", "Use On Hp(%)").SetValue(new Slider(15, 0, 100)));
+            item_mikaels.AddItem(new MenuItem("useitem_p_mikaels_delay", "Mikaels Delay(ms)").SetValue(new Slider(100, 0, 1000)));
+
+            #region mikaels_cc
+            var menu_mikaels_cc = new Menu("mikael_cc", "Use On CC");
+            item_mikaels.AddSubMenu(menu_mikaels_cc);
+            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_bool", "On CC?").SetValue(true));
+            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_stun", "Stun").SetValue(true));
+            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_fear", "Fear(Flee)").SetValue(true));
+            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_charm", "Charm").SetValue(true));
+            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_taunt", "Taunt").SetValue(true));
+            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_snare", "Snare").SetValue(true));
+            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_silence", "Slience").SetValue(false));
+            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_polymorph", "Polymorph").SetValue(true));
+            #endregion
+
+
+            var item_qs = new Menu("QuickSilver", "QuickSilver");
+            menu_items.AddSubMenu(item_qs);
+            item_qs.AddItem(new MenuItem("useitem_qs", "UseQS").SetValue(true));
+            item_qs.AddItem(new MenuItem("useitem_p_qs_delay", "QuickSilver Delay(ms)").SetValue(new Slider(100, 0, 1000)));
+            #region qs_cc
+            var menu_quicksilver_cc = new Menu("Use On CC", "Use On CC");
+            item_qs.AddSubMenu(menu_quicksilver_cc);
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_stun", "Stun").SetValue(true));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_fear", "Fear(Flee)").SetValue(true));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_charm", "Charm").SetValue(true));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_taunt", "Taunt").SetValue(true));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_snare", "Snare").SetValue(true));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_silence", "Slience").SetValue(false));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_polymorph", "Polymorph").SetValue(true));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_suppression", "Suppression").SetValue(true));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_zedutl", "ZedUtl").SetValue(true));
+            #endregion
 
             var menu_spell = new Menu("Spell", "Spell");
             menu_ins.AddSubMenu(menu_spell);
@@ -171,6 +207,8 @@ namespace JeonUtility
         }
         private static void OnGameUpdate(EventArgs args)
         {
+
+
             #region get info
             float Player_bAD = Player.BaseAttackDamage;
             float Player_aAD = Player.FlatPhysicalDamageMod;
@@ -178,7 +216,6 @@ namespace JeonUtility
             float Player_bAP = Player.BaseAbilityDamage;
             float Player_aAP = Player.FlatMagicDamageMod;
             float Player_totalAP = Player_bAP + Player_aAP;
-
             #endregion
 
             #region 오토스마이트-AutoSmite
@@ -193,7 +230,7 @@ namespace JeonUtility
 
                     Obj_AI_Base mob = GetNearest(Player.ServerPosition);
 
-                    if (Player.SummonerSpellbook.CanUseSpell(smiteSlot) == SpellState.Ready && Vector3.Distance(Player.ServerPosition, mob.ServerPosition) < smite.Range)
+                    if (Player.Spellbook.CanUseSpell(smiteSlot) == SpellState.Ready && Vector3.Distance(Player.ServerPosition, mob.ServerPosition) < smite.Range)
                     {
                         smiteReady = true;
                     }
@@ -201,7 +238,7 @@ namespace JeonUtility
                     if (smiteReady && mob.Health < smitedamage)
                     {
                         setIgniteSlot();
-                        Player.SummonerSpellbook.CastSpell(smiteSlot, mob);
+                        Player.Spellbook.CastSpell(smiteSlot, mob);
                     }
                 }
             }
@@ -219,14 +256,14 @@ namespace JeonUtility
                     && !hero.IsMe && !hero.IsAlly && (hero.Health + hero.HPRegenRate * 2) <= ignitedamage))
                 {
 
-                    if (Player.SummonerSpellbook.CanUseSpell(igniteSlot) == SpellState.Ready)
+                    if (Player.Spellbook.CanUseSpell(igniteSlot) == SpellState.Ready)
                     {
                         IgniteReady = true;
                     }
                     if (IgniteReady)
                     {
                         setIgniteSlot();
-                        Player.SummonerSpellbook.CastSpell(igniteSlot, hero);
+                        Player.Spellbook.CastSpell(igniteSlot, hero);
                     }
                 }
             }
@@ -242,11 +279,11 @@ namespace JeonUtility
                         ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero != null && hero.IsValid && (!hero.IsMe && hero.IsHPBarRendered)))
                     {
 
-                        X = 10;
-                        Y = 40;
+                        int X = 10;
+                        int Y = 40;
                         foreach (var sSlot in SSpellSlots)
                         {
-                            var spell = target.SummonerSpellbook.GetSpell(sSlot);
+                            var spell = target.Spellbook.GetSpell(sSlot);
                             var t = spell.CooldownExpires - Game.Time;
                             if (t < 0)
                             {
@@ -393,40 +430,84 @@ namespace JeonUtility
 
             #region Items&spells
             //item
-            tempItemid = 3157;
+            int tempItemid = 3157;
             if (baseMenu.Item("useitem_zhonya").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
             {
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Zhonyas_Hourglass))
                 {
-                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_z_hp").GetValue<Slider>().Value)
+                    if (Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_zhonya").GetValue<Slider>().Value)
                         p_item.UseItem();
                 }
             }
             tempItemid = Convert.ToInt32(ItemId.Blade_of_the_Ruined_King);
-            if (baseMenu.Item("useitem_botrk").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
+            if (baseMenu.Item("useitem_botrk").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid) 
+                                                        && Player.HealthPercentage() <= (float)baseMenu.Item("useitem_p_botrk").GetValue<Slider>().Value)
             {
+                Obj_AI_Hero target = null;
+                Double max_healpoint = 0;
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Blade_of_the_Ruined_King))
                 {
+                    if (ObjectManager.Get<Obj_AI_Hero>().Any(h=>h.IsEnemy && !h.IsDead && h.IsVisible &&
+                        Vector3.Distance(h.Position, Player.Position) <= baseMenu.Item("useitem_botrk_atg_p").GetValue<Slider>().Value) && baseMenu.Item("useitem_botrk_atg").GetValue<bool>())
+                        p_item.UseItem(target); ;
+
                     foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy && h.IsValid && h.IsVisible && Vector3.Distance(h.Position, Player.Position) <= 450))
                     {
-                        var dmg = hero.MaxHealth*0.1;
-                        if (hero.Health <= Player.CalcDamage(hero,Damage.DamageType.Physical,dmg))
-                            p_item.UseItem(hero);
+                        var healpoint = Player.CalcDamage(hero, Damage.DamageType.Physical, hero.MaxHealth * 0.1);
+                        if(max_healpoint < healpoint)
+                        {
+                            max_healpoint = healpoint;
+                            target = hero;
+                        }
                     }
+                    p_item.UseItem(target);
                 }
             }
+
             tempItemid = Convert.ToInt32(ItemId.Mikaels_Crucible);
-            if (baseMenu.Item("useitem_p_mikaels").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
+            if (baseMenu.Item("useitem_mikaels").GetValue<bool>() && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
             {
+                List<BuffType> bufflist = new List<BuffType>();
+                getbufflist(bufflist,ItemId.Mikaels_Crucible);
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Mikaels_Crucible))
                 {
-                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly && h.IsMe && h.IsValid && h.IsVisible && Vector3.Distance(h.Position, Player.Position) <= 750))
+                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly && !h.IsMe && h.IsValid && h.IsVisible && Vector3.Distance(h.Position, Player.Position) <= 800))
                     {
                         if (hero.HealthPercentage() <= (float)baseMenu.Item("useitem_p_mikaels").GetValue<Slider>().Value)
                             p_item.UseItem(hero);
 
-                        if (baseMenu.Item("useitem_p_mikaels_cc").GetValue<bool>() && hero.IsStunned)
-                            p_item.UseItem(hero);
+                        if (baseMenu.Item("mikaels_cc_bool").GetValue<bool>())
+                        {
+                            foreach(var buff in hero.Buffs)
+                            {
+                                if (bufflist.Any(b => b == buff.Type))
+                                    Utility.DelayAction.Add(baseMenu.Item("useitem_p_mikaels_delay").GetValue<Slider>().Value, () => { p_item.UseItem(hero); }); 
+                            }
+                        }
+                    }
+                }
+            }
+            tempItemid = Convert.ToInt32(ItemId.Quicksilver_Sash);
+            int tempItemid2 = Convert.ToInt32(ItemId.Mercurial_Scimitar);
+            if (baseMenu.Item("useitem_qs").GetValue<bool>() && (Items.HasItem(tempItemid) || Items.HasItem(tempItemid2))  && (Items.CanUseItem(tempItemid) || Items.CanUseItem(tempItemid2)))
+            {
+                List<BuffType> bufflist = new List<BuffType>();
+                getbufflist(bufflist,ItemId.Quicksilver_Sash);
+                foreach (var p_item in Player.InventoryItems.Where(item => (item.Id == ItemId.Quicksilver_Sash || item.Id == ItemId.Mercurial_Scimitar)))
+                {
+                    foreach (var buff in Player.Buffs)
+                    {
+                        Utility.DelayAction.Add(baseMenu.Item("useitem_p_qs_delay").GetValue<Slider>().Value, () =>
+                        { 
+                        if (bufflist.Any(b => b == buff.Type))
+                            p_item.UseItem();
+                        if (buff.DisplayName == "zedulttargetmark")
+                            Game.PrintChat("zed! {0}", buff.Type.ToString());
+                        if (buff.DisplayName == "fizzmarinerdoombomb")
+                            Game.PrintChat("fizz! {0}", buff.Type.ToString());
+                        if (buff.DisplayName == "SoulShackles")
+                            Game.PrintChat("fizz! {0}", buff.Type.ToString());
+                        }); 
                     }
                 }
             }
@@ -463,17 +544,13 @@ namespace JeonUtility
                     }
                 }
             }
-
-
-
-
             //spell
             if (baseMenu.Item("usespell").GetValue<bool>()&& defslot != SpellSlot.Unknown)
             {
                 if (Player.HealthPercentage() <= (float)baseMenu.Item("usespell_hp").GetValue<Slider>().Value)
                 {
-                    if (Player.SummonerSpellbook.CanUseSpell(defslot) == SpellState.Ready)
-                        Player.SummonerSpellbook.CastSpell(defslot);
+                    if (Player.Spellbook.CanUseSpell(defslot) == SpellState.Ready)
+                        Player.Spellbook.CastSpell(defslot);
                 }
             }
 
@@ -568,7 +645,7 @@ namespace JeonUtility
                             text_Isrender = true;
 
                             targetPing(hero.Position.To2D(), Packet.PingType.AssistMe);
-                            Game.PrintChat("print!");
+
                         }
                         else
                         {
@@ -601,14 +678,13 @@ namespace JeonUtility
                 int y = Monitor.Height - baseMenu.Item("y").GetValue<Slider>().Value;
                 int interval = 20;
                 int i = 0;
-                Color text_color = Color.Red;
 
                 Drawing.DrawText(x, y + (interval * i), Color.Wheat, "Champion : " + Player.BaseSkinName);
                 i++; 
 
-                Drawing.DrawText(x, y + (interval * i), Color.Wheat, "Spells : " + filterspellname(Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner1).Name) + "," +
-            filterspellname(Player.SummonerSpellbook.GetSpell(SpellSlot.Summoner2).Name));
-                i++;
+            //    Drawing.DrawText(x, y + (interval * i), Color.Wheat, "Spells : " + filterspellname(Player.Spellbook.GetSpell(SpellSlot.Summoner1).Name) + "," +
+            //filterspellname(Player.Spellbook.GetSpell(SpellSlot.Summoner2).Name));
+            //    i++;
 
                 if (smiteSlot != SpellSlot.Unknown)
                 {
@@ -627,24 +703,52 @@ namespace JeonUtility
                     addText(y + (interval * i), (baseMenu.Item("j2w_bool").GetValue<bool>() && jumpspell != null), "Jump2Ward");
                     i++;
                 }
-
-                addText(y + (interval * i), (baseMenu.Item("useitem_zhonya").GetValue<bool>()), "CastZhonya");
-                i++;
-
                 if (defslot != SpellSlot.Unknown)
                 {
-                    addText(y + (interval * i), (baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown), string.Format("SpellCast{0}", filterspellname(Player.SummonerSpellbook.GetSpell(defslot).Name).ToUpper()));
+                    addText(y + (interval * i), (baseMenu.Item("usespell").GetValue<bool>() && defslot != SpellSlot.Unknown), string.Format("SpellCast{0}", filterspellname(Player.Spellbook.GetSpell(defslot).Name).ToUpper()));
                     i++;
                 }
-
-                addText(y + (interval * i), (baseMenu.Item("useitem_flask").GetValue<bool>()), "Use Flask");
-                i++;
-
-                addText(y + (interval * i), (baseMenu.Item("useitem_hppotion").GetValue<bool>()), "Use HP Potion");
-                i++;
-
-                addText(y + (interval * i), (baseMenu.Item("useitem_hppotion").GetValue<bool>()), "Use Mana Potion");
-                i++;
+                if (Items.HasItem(Convert.ToInt32(ItemId.Crystalline_Flask)))
+                {
+                    addText(y + (interval * i), (baseMenu.Item("useitem_flask").GetValue<bool>()), string.Format("Use Flask({0}%)",baseMenu.Item("useitem_p_flask").GetValue<Slider>().Value));
+                    i++;
+                }
+                if (Items.HasItem(Convert.ToInt32(ItemId.Health_Potion)))
+                {
+                    addText(y + (interval * i), (baseMenu.Item("useitem_hppotion").GetValue<bool>()), string.Format("Use HP Potion({0}%)", baseMenu.Item("useitem_p_hp").GetValue<Slider>().Value));
+                    i++;
+                }
+                if (Items.HasItem(Convert.ToInt32(ItemId.Mana_Potion)))
+                {
+                    addText(y + (interval * i), (baseMenu.Item("useitem_manapotion").GetValue<bool>()), string.Format("Use Mana Potion({0}%)", baseMenu.Item("useitem_p_mana").GetValue<Slider>().Value));
+                    i++;
+                }
+                if (Items.HasItem(Convert.ToInt32(ItemId.Zhonyas_Hourglass)))
+                {
+                    addText(y + (interval * i), (baseMenu.Item("useitem_zhonya").GetValue<bool>()), string.Format("UseZhonya({0}%)", baseMenu.Item("useitem_p_zhonya").GetValue<Slider>().Value));
+                    i++;
+                }
+                if (Items.HasItem(Convert.ToInt32(ItemId.Blade_of_the_Ruined_King)))
+                {
+                    addText(y + (interval * i), (baseMenu.Item("useitem_botrk").GetValue<bool>()), string.Format("UseBOTRK({0}%)", baseMenu.Item("useitem_p_botrk").GetValue<Slider>().Value));
+                    i++;
+                }
+                if (Items.HasItem(Convert.ToInt32(ItemId.Mikaels_Crucible)))
+                {
+                    addText(y + (interval * i), (baseMenu.Item("useitem_mikaels").GetValue<bool>()), string.Format("Use Mikaels({0}%{1}", baseMenu.Item("useitem_p_mikaels").GetValue<Slider>().Value,
+                        baseMenu.Item("mikaels_cc_bool").GetValue<bool>()? ",CC)":")"));
+                    i++;
+                }
+                if (Items.HasItem(Convert.ToInt32(ItemId.Quicksilver_Sash)))
+                {
+                    addText(y + (interval * i), (baseMenu.Item("useitem_qs").GetValue<bool>()), string.Format("Use QS(delay:{0})", baseMenu.Item("useitem_p_qs_delay").GetValue<Slider>().Value));
+                    i++;
+                }
+                if (Items.HasItem(Convert.ToInt32(ItemId.Mercurial_Scimitar)))
+                {
+                    addText(y + (interval * i), (baseMenu.Item("useitem_qs").GetValue<bool>()), string.Format("Use Scimitar(delay:{0})", baseMenu.Item("useitem_p_qs_delay").GetValue<Slider>().Value));
+                    i++;
+                }
                 //champ
                 #region stack
                 if (Player.BaseSkinName == "Twitch")
@@ -716,7 +820,7 @@ namespace JeonUtility
 
         public static void setSmiteSlot()
         {
-            foreach (var spell in Player.SummonerSpellbook.Spells.Where(spell => String.Equals(spell.Name, smitetype(), StringComparison.CurrentCultureIgnoreCase)))
+            foreach (var spell in Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, smitetype(), StringComparison.CurrentCultureIgnoreCase)))
             {
 
                 smiteSlot = spell.Slot;
@@ -799,7 +903,7 @@ namespace JeonUtility
         #region 이그나이트 함수 - Ignite
         public static void setIgniteSlot()
         {
-            foreach (var spell in Player.SummonerSpellbook.Spells.Where(spell => String.Equals(spell.Name, "summonerdot", StringComparison.CurrentCultureIgnoreCase)))
+            foreach (var spell in Player.Spellbook.Spells.Where(spell => String.Equals(spell.Name, "summonerdot", StringComparison.CurrentCultureIgnoreCase)))
             {
                 igniteSlot = spell.Slot;
                 ignite = new Spell(smiteSlot, 600);
@@ -881,9 +985,55 @@ namespace JeonUtility
         #endregion
 
         #region 스펠함수 - Item & Spell
+        public static void getbufflist(List<BuffType> list,ItemId whatitem)
+        {
+            if (whatitem == ItemId.Mikaels_Crucible)
+            {
+                if (baseMenu.Item("mikaels_cc_stun").GetValue<bool>())
+                    list.Add(BuffType.Stun);
+                if (baseMenu.Item("mikaels_cc_fear").GetValue<bool>())
+                {
+                    list.Add(BuffType.Fear);
+                    list.Add(BuffType.Flee);
+                }
+                if (baseMenu.Item("mikaels_cc_charm").GetValue<bool>())
+                    list.Add(BuffType.Charm);
+                if (baseMenu.Item("mikaels_cc_taunt").GetValue<bool>())
+                    list.Add(BuffType.Taunt);
+                if (baseMenu.Item("mikaels_cc_snare").GetValue<bool>())
+                    list.Add(BuffType.Snare);
+                if (baseMenu.Item("mikaels_cc_silence").GetValue<bool>())
+                    list.Add(BuffType.Silence);
+                if (baseMenu.Item("mikaels_cc_polymorph").GetValue<bool>())
+                    list.Add(BuffType.Polymorph);
+            }
+            if (whatitem == ItemId.Quicksilver_Sash)
+            {
+                if (baseMenu.Item("qs_cc_stun").GetValue<bool>())
+                    list.Add(BuffType.Stun);
+                if (baseMenu.Item("qs_cc_fear").GetValue<bool>())
+                {
+                    list.Add(BuffType.Fear);
+                    list.Add(BuffType.Flee);
+                }
+                if (baseMenu.Item("qs_cc_charm").GetValue<bool>())
+                    list.Add(BuffType.Charm);
+                if (baseMenu.Item("qs_cc_taunt").GetValue<bool>())
+                    list.Add(BuffType.Taunt);
+                if (baseMenu.Item("qs_cc_snare").GetValue<bool>())
+                    list.Add(BuffType.Snare);
+                if (baseMenu.Item("qs_cc_silence").GetValue<bool>())
+                    list.Add(BuffType.Silence);
+                if (baseMenu.Item("qs_cc_polymorph").GetValue<bool>())
+                    list.Add(BuffType.Polymorph);
+                if (baseMenu.Item("qs_cc_suppression").GetValue<bool>())
+                    list.Add(BuffType.Suppression);
+            }
+           
+        }
         public static void setDefSpellSlot()
         {
-            foreach (var spell in Player.SummonerSpellbook.Spells.Where(spell => spell.Name.Contains(DefSpellstr[0]) || spell.Name.Contains(DefSpellstr[1])))
+            foreach (var spell in Player.Spellbook.Spells.Where(spell => spell.Name.Contains(DefSpellstr[0]) || spell.Name.Contains(DefSpellstr[1])))
             {
                 defslot = spell.Slot;
                 defspell = new Spell(defslot);
@@ -909,7 +1059,7 @@ namespace JeonUtility
         public static void addText(float y,bool a,String b)
         {
             Drawing.DrawText(Monitor.Width - baseMenu.Item("x").GetValue<Slider>().Value, y, a ? Color.FromArgb(0, 255, 0) : Color.Red,
-                    b+"(" + bool2string(a) + ")");
+                    b+"[" + bool2string(a) + "]");
         }
         #endregion
         // common function //
@@ -926,7 +1076,6 @@ namespace JeonUtility
             }
             return total;
         }
-
         public static void targetPing(Vector2 Position)
         {
             if (Environment.TickCount - pastTime < 2000)
@@ -941,8 +1090,6 @@ namespace JeonUtility
             pastTime = Environment.TickCount;
             Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y, 0, 0, ptype)).Process();
         }
-
-
         public static void testf(test a)
         {
             switch(a)
@@ -994,8 +1141,6 @@ namespace JeonUtility
                         return;
             }
         }
-
-
     }
 }
 

@@ -10,7 +10,6 @@ using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
-
 #endregion
 
 namespace JeonTF
@@ -38,6 +37,7 @@ namespace JeonTF
 
 
 
+
         private static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
@@ -57,8 +57,9 @@ namespace JeonTF
             baseMenu = new Menu("JeonTF", "JeonTF",true);
             baseMenu.AddToMainMenu();
 
-            var menu_drawing = new Menu("drawing", "drawing");
             var menu_autopicker = new Menu("Pick A Card", "Pick A Card");
+            var menu_drawing = new Menu("drawing", "drawing");
+            var menu_notifier = new Menu("Ult Notifier", "Ult Notifier");
 
 
             baseMenu.AddSubMenu(menu_autopicker);
@@ -77,6 +78,9 @@ namespace JeonTF
             menu_drawing.AddItem(new MenuItem("TF_killable", "KillableMark(W+Q)").SetValue(true));
             menu_drawing.AddItem(new MenuItem("TF_damage", "Q+WDamage").SetValue(true));
 
+            baseMenu.AddSubMenu(menu_notifier);
+            menu_notifier.AddItem(new MenuItem("TF_notifier", "UltNotifier").SetValue(true));
+            menu_notifier.AddItem(new MenuItem("TF_notifier_HP", "Notice On HP(%)").SetValue(new Slider(10, 0, 100)));
 
             Game.OnGameUpdate += Update;
             Drawing.OnEndScene += OnDraw_EndScene;
@@ -151,6 +155,19 @@ namespace JeonTF
                 }
             }
             #endregion
+            #region notifier
+            if (baseMenu.Item("TF_notifier").GetValue<bool>())
+            {
+                foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly && !hero.IsMe && !hero.IsDead && hero.IsValid))
+                {
+                    if (hero.HealthPercentage() <= baseMenu.Item("TF_notifier_HP").GetValue<Slider>().Value)
+                    {
+                        targetPing(hero.Position.To2D(), Packet.PingType.AssistMe);
+                    }
+                }
+            }
+            #endregion
+
         }
         public static void OnDraw_EndScene(EventArgs args)
         {
@@ -169,7 +186,6 @@ namespace JeonTF
                 }
                 if (baseMenu.Item("TF_killable").GetValue<bool>() || baseMenu.Item("TF_damage").GetValue<bool>())
                     drawtarget();
-
         }
 
 
@@ -207,11 +223,12 @@ namespace JeonTF
 
             return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, eDmg) + ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical,AD);
         }
+
         public static void drawtarget()
         {
             foreach (var target in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsEnemy && hero.IsValid && !hero.IsDead && hero.IsVisible))
             {
-                    #region get info
+                #region get info
                 float Player_bAD = Player.BaseAttackDamage;
                 float Player_aAD = Player.FlatPhysicalDamageMod;
                 float Player_totalAD = Player_bAD + Player_aAD;
@@ -251,5 +268,13 @@ namespace JeonTF
         }
        
         #endregion
+
+        public static void targetPing(Vector2 Position, Packet.PingType ptype)
+        {
+            if (Environment.TickCount - pastTime < 2000)
+                return;
+            pastTime = Environment.TickCount;
+            Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y, 0, 0, ptype)).Process();
+        }
     }
 }
