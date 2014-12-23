@@ -57,19 +57,27 @@ namespace JeonTF
             baseMenu = new Menu("JeonTF", "JeonTF",true);
             baseMenu.AddToMainMenu();
 
-            var menu_autopicker = new Menu("Pick A Card", "Pick A Card");
-            var menu_drawing = new Menu("drawing", "drawing");
+            var menu_q = new Menu("Q-Wild Cards", "Q-Wild Cards");
+            var menu_autopicker = new Menu("W-Pick A Card", "W-Pick A Card");
             var menu_notifier = new Menu("Ult Notifier", "Ult Notifier");
+            var menu_drawing = new Menu("drawing", "drawing");
 
-
+            baseMenu.AddSubMenu(menu_q);
+            menu_q.AddItem(new MenuItem("TF_q_enable", "Enable").SetValue(true));
+            menu_q.AddItem(new MenuItem("TF_q_key", "Key:").SetValue(new KeyBind('T', KeyBindType.Press)));
+            
             baseMenu.AddSubMenu(menu_autopicker);
             menu_autopicker.AddItem(new MenuItem("TF_Cardpicker", "Pick").SetValue(true));
-            menu_autopicker.AddItem(new MenuItem("TF_Goldkey", "GoldKey:").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
-            menu_autopicker.AddItem(new MenuItem("TF_Bluekey", "BlueKey:").SetValue(new KeyBind("E".ToCharArray()[0], KeyBindType.Press)));
-            menu_autopicker.AddItem(new MenuItem("TF_Redkey", "RedKey").SetValue(new KeyBind("W".ToCharArray()[0], KeyBindType.Press)));
+            menu_autopicker.AddItem(new MenuItem("TF_Goldkey", "GoldKey:").SetValue(new KeyBind('T', KeyBindType.Press)));
+            menu_autopicker.AddItem(new MenuItem("TF_Bluekey", "BlueKey:").SetValue(new KeyBind('E', KeyBindType.Press)));
+            menu_autopicker.AddItem(new MenuItem("TF_Redkey", "RedKey").SetValue(new KeyBind('W', KeyBindType.Press)));
             menu_autopicker.AddItem(new MenuItem("TF_delay", "Delay X(ms)").SetValue(new Slider(100, 0, 400)));
             menu_autopicker.AddItem(new MenuItem("TF_delayrnd", "Random Delay(0~Xms)").SetValue(false));
 
+
+            baseMenu.AddSubMenu(menu_notifier);
+            menu_notifier.AddItem(new MenuItem("TF_notifier", "UltNotifier").SetValue(true));
+            menu_notifier.AddItem(new MenuItem("TF_notifier_HP", "Notice On HP(%)").SetValue(new Slider(10, 0, 100)));
 
             baseMenu.AddSubMenu(menu_drawing);
             menu_drawing.AddItem(new MenuItem("TF_qRange", "Q-Range").SetValue(true));
@@ -78,96 +86,105 @@ namespace JeonTF
             menu_drawing.AddItem(new MenuItem("TF_killable", "KillableMark(W+Q)").SetValue(true));
             menu_drawing.AddItem(new MenuItem("TF_damage", "Q+WDamage").SetValue(true));
 
-            baseMenu.AddSubMenu(menu_notifier);
-            menu_notifier.AddItem(new MenuItem("TF_notifier", "UltNotifier").SetValue(true));
-            menu_notifier.AddItem(new MenuItem("TF_notifier_HP", "Notice On HP(%)").SetValue(new Slider(10, 0, 100)));
-
-            Game.OnGameUpdate += Update;
-            Drawing.OnEndScene += OnDraw_EndScene;
+            if (Player.BaseSkinName == "TwistedFate")
+            {
+                Game.OnGameUpdate += Update;
+                Drawing.OnEndScene += OnDraw_EndScene;
+            }
+            else
+                Game.PrintChat("<font color ='#FF1010'>[Disable] You are not TwistedFate</font>");
             
         }
 
         public static void Update(EventArgs args)
         {
-            #region get info
-            float Player_bAD = Player.BaseAttackDamage;
-            float Player_aAD = Player.FlatPhysicalDamageMod;
-            float Player_totalAD = Player_bAD + Player_aAD;
-            float Player_bAP = Player.BaseAbilityDamage;
-            float Player_aAP = Player.FlatMagicDamageMod;
-            float Player_totalAP = Player_bAP + Player_aAP;
-            #endregion
 
-            #region pick a card
-            if (baseMenu.Item("TF_Cardpicker").GetValue<bool>())
-            {
-                Random delayt = new Random(DateTime.Now.Millisecond);
-                delayi = baseMenu.Item("TF_delay").GetValue<Slider>().Value;
-                if (baseMenu.Item("TF_delayrnd").GetValue<bool>())
-                    delayi = delayt.Next(0, baseMenu.Item("TF_delay").GetValue<Slider>().Value);
-
-                if (stack >= 20)
+                #region get info
+                float Player_bAD = Player.BaseAttackDamage;
+                float Player_aAD = Player.FlatPhysicalDamageMod;
+                float Player_totalAD = Player_bAD + Player_aAD;
+                float Player_bAP = Player.BaseAbilityDamage;
+                float Player_aAP = Player.FlatMagicDamageMod;
+                float Player_totalAP = Player_bAP + Player_aAP;
+                #endregion
+                #region wildcards
+                if (baseMenu.Item("TF_q_enable").GetValue<bool>() && baseMenu.Item("TF_q_key").GetValue<bool>())
                 {
-                    cards = card.none;
-                    stack = 0;
-                }
-                if (Player.Spellbook.GetSpell(SpellSlot.W).State == SpellState.Cooldown)
-                {
-                    stack++;
-                }
-                if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard" && cards == card.none
-                    && Player.Spellbook.GetSpell(SpellSlot.W).State == SpellState.Ready)
-                {
-                    if (baseMenu.Item("TF_Goldkey").GetValue<KeyBind>().Active)
+                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsEnemy && !hero.IsDead && hero.IsValid && Vector3.Distance(Player.Position, hero.Position) <= 1450))
                     {
-                        cards = card.gold;
+                        Player.Spellbook.CastSpell(SpellSlot.Q, hero);
+                    }
+                }
+                #endregion
+                #region pick a card
+                if (baseMenu.Item("TF_Cardpicker").GetValue<bool>())
+                {
+                    Random delayt = new Random(DateTime.Now.Millisecond);
+                    delayi = baseMenu.Item("TF_delay").GetValue<Slider>().Value;
+                    if (baseMenu.Item("TF_delayrnd").GetValue<bool>())
+                        delayi = delayt.Next(0, baseMenu.Item("TF_delay").GetValue<Slider>().Value);
+
+                    if (stack >= 20)
+                    {
+                        cards = card.none;
                         stack = 0;
-                        Player.Spellbook.CastSpell(SpellSlot.W);
                     }
-                    if (baseMenu.Item("TF_Bluekey").GetValue<KeyBind>().Active)
+                    if (Player.Spellbook.GetSpell(SpellSlot.W).State == SpellState.Cooldown)
                     {
-                        cards = card.blue;
-                        stack = 0;
-                        Player.Spellbook.CastSpell(SpellSlot.W);
+                        stack++;
                     }
-                    if (baseMenu.Item("TF_Redkey").GetValue<KeyBind>().Active)
+                    if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard" && cards == card.none
+                        && Player.Spellbook.GetSpell(SpellSlot.W).State == SpellState.Ready)
                     {
-                        cards = card.red;
-                        stack = 0;
-                        Player.Spellbook.CastSpell(SpellSlot.W);
+                        if (baseMenu.Item("TF_Goldkey").GetValue<KeyBind>().Active)
+                        {
+                            cards = card.gold;
+                            stack = 0;
+                            Player.Spellbook.CastSpell(SpellSlot.W);
+                        }
+                        if (baseMenu.Item("TF_Bluekey").GetValue<KeyBind>().Active)
+                        {
+                            cards = card.blue;
+                            stack = 0;
+                            Player.Spellbook.CastSpell(SpellSlot.W);
+                        }
+                        if (baseMenu.Item("TF_Redkey").GetValue<KeyBind>().Active)
+                        {
+                            cards = card.red;
+                            stack = 0;
+                            Player.Spellbook.CastSpell(SpellSlot.W);
+                        }
                     }
-                }
-                if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "goldcardlock" && cards == card.gold)
-                {
+                    if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "goldcardlock" && cards == card.gold)
+                    {
 
-                    Utility.DelayAction.Add(delayi, () => { Player.Spellbook.CastSpell(SpellSlot.W); });
-                    cards = card.none;
-                }
-                if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "bluecardlock" && cards == card.blue)
-                {
-                    Utility.DelayAction.Add(delayi, () => { Player.Spellbook.CastSpell(SpellSlot.W); });
-                    cards = card.none;
-                }
-                if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "redcardlock" && cards == card.red)
-                {
-                    Utility.DelayAction.Add(delayi, () => { Player.Spellbook.CastSpell(SpellSlot.W); });
-                    cards = card.none;
-                }
-            }
-            #endregion
-            #region notifier
-            if (baseMenu.Item("TF_notifier").GetValue<bool>())
-            {
-                foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly && !hero.IsMe && !hero.IsDead && hero.IsValid))
-                {
-                    if (hero.HealthPercentage() <= baseMenu.Item("TF_notifier_HP").GetValue<Slider>().Value)
+                        Utility.DelayAction.Add(delayi, () => { Player.Spellbook.CastSpell(SpellSlot.W); });
+                        cards = card.none;
+                    }
+                    if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "bluecardlock" && cards == card.blue)
                     {
-                        targetPing(hero.Position.To2D(), Packet.PingType.AssistMe);
+                        Utility.DelayAction.Add(delayi, () => { Player.Spellbook.CastSpell(SpellSlot.W); });
+                        cards = card.none;
+                    }
+                    if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "redcardlock" && cards == card.red)
+                    {
+                        Utility.DelayAction.Add(delayi, () => { Player.Spellbook.CastSpell(SpellSlot.W); });
+                        cards = card.none;
                     }
                 }
-            }
-            #endregion
-
+                #endregion
+                #region notifier
+                if (baseMenu.Item("TF_notifier").GetValue<bool>())
+                {
+                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly && !hero.IsMe && !hero.IsDead && hero.IsValid))
+                    {
+                        if (hero.HealthPercentage() <= baseMenu.Item("TF_notifier_HP").GetValue<Slider>().Value)
+                        {
+                            targetPing(hero.Position.To2D(), Packet.PingType.AssistMe);
+                        }
+                    }
+                }
+                #endregion
         }
         public static void OnDraw_EndScene(EventArgs args)
         {
@@ -239,16 +256,15 @@ namespace JeonTF
 
                     double dmg = 0;
                     if (Player.Spellbook.GetSpell(SpellSlot.Q).State == SpellState.Ready || Player.Spellbook.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
-                    {
                         dmg = getQDmg(target, Player_totalAP, Player.Spellbook.GetSpell(SpellSlot.Q).Level);
-                    }
+
                     if (Player.Spellbook.GetSpell(SpellSlot.W).State == SpellState.Ready || Player.Spellbook.GetSpell(SpellSlot.W).State == SpellState.Surpressed)
-                    {
                         dmg = dmg + getWDmg(target, Player_totalAP, Player_totalAD, Player.Spellbook.GetSpell(SpellSlot.W).Level, Player.Spellbook.GetSpell(SpellSlot.W).Name);
-                    }
 
                     if (Player.HasBuff("CardMasterStackParticle"))
                         dmg = dmg + getEDmg(target, Player_totalAP, Player_totalAD, Player.Spellbook.GetSpell(SpellSlot.Q).Level);
+
+                    
 
 
                    
