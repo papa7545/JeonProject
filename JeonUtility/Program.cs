@@ -356,7 +356,7 @@ namespace JeonUtility
                     {
                         foreach (var venoms in target.Buffs.Where(venoms => venoms.DisplayName == "TwitchDeadlyVenom"))
                         {
-                            var damage = E.GetDamage(target);
+                            var damage = E.GetDamage(target)*venoms.Count;
                             //Game.PrintChat("d:{0} hp:{1}",damage,target.Health);
                             if (damage >= target.Health && E.IsReady())
                                 E.Cast();
@@ -380,7 +380,7 @@ namespace JeonUtility
                     {
                         foreach (var venoms in target.Buffs.Where(venoms => venoms.DisplayName == "KalistaExpungeMarker"))
                         {
-                            var damage = E.GetDamage(target);
+                            var damage = getKaliDmg(target, venoms.Count, Player_totalAD, E.Level);
                             if (damage >= target.Health)
                                 E.Cast();
                             if (Jlib.getm_bool("st_bool"))
