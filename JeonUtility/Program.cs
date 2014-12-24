@@ -199,12 +199,10 @@ namespace JeonUtility
         private static void OnGameUpdate(EventArgs args)
         {
             #region get info
-            float Player_bAD = Player.BaseAttackDamage;
-            float Player_aAD = Player.FlatPhysicalDamageMod;
-            float Player_totalAD = Player_bAD + Player_aAD;
-            float Player_bAP = Player.BaseAbilityDamage;
-            float Player_aAP = Player.FlatMagicDamageMod;
-            float Player_totalAP = Player_bAP + Player_aAP;
+            float Player_baseAD = Player.BaseAttackDamage;
+            float Player_addAD = Player.FlatPhysicalDamageMod;
+            float Player_totalAD = Player_baseAD + Player_addAD;
+            float Player_totalAP = Player.FlatMagicDamageMod;
             #endregion
 
             #region 오토스마이트-AutoSmite
@@ -356,7 +354,7 @@ namespace JeonUtility
                     {
                         foreach (var venoms in target.Buffs.Where(venoms => venoms.DisplayName == "TwitchDeadlyVenom"))
                         {
-                            var damage = E.GetDamage(target)*venoms.Count;
+                            var damage = getTwitEDmg(target, venoms.Count, Player_addAD, Player_totalAP, E.Level);
                             //Game.PrintChat("d:{0} hp:{1}",damage,target.Health);
                             if (damage >= target.Health && E.IsReady())
                                 E.Cast();
@@ -1024,7 +1022,13 @@ namespace JeonUtility
             eDmg = eDmg + count*(eDmg * spell_perdamage[s_level]);
             return Player.CalcDamage(target, Damage.DamageType.Physical,eDmg);
         }
-
+        public static double getTwitEDmg(Obj_AI_Base target, int count, double AD,double AP, int s_level)
+        {
+            double[] spell_basedamage = { 0, 20, 35, 50, 65, 80 };
+            double[] spell_stackdamage = { 0, 15, 20, 25, 30, 35 };
+            double eDmg = spell_basedamage[s_level] + count * (spell_stackdamage[s_level] + (AP * 0.2) + (AD * 0.25));
+            return Player.CalcDamage(target, Damage.DamageType.Physical, eDmg);
+        }
         #endregion
 
         #region status 함수 - Status

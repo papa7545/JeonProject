@@ -1,11 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 using System;
-using LeagueSharp;
 
 namespace JeonComboScriptor
 {
-    class Capture
+    class CaptureLib
     {
         [DllImport("kernel32")]
         public static extern int GetPrivateProfileString(string section,

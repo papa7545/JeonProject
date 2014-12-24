@@ -100,7 +100,7 @@
       <HintPath>..\..\..\ee\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\godo\System\SharpDX.dll</HintPath>
+      <HintPath>..\..\..\ee\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -112,9 +112,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Capture.cs" />
+    <Compile Include="CaptureLib.cs" />
+    <Compile Include="dmgCalculator.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Readini.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
