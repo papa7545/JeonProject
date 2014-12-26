@@ -3457,7 +3457,7 @@ MissileSpellName_ZyraGraspingRoots
 _
 ChampionName_Zyra
 SpellName_zyrapassivedeathmanager
-Slot_SpellSlot.E
+Slot_SpellSlot.Passive
 Type_SkillShotType.SkillshotMissileLine
 Delay_700
 Range_1474

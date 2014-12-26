@@ -14,8 +14,8 @@ namespace Jeon_MissileDB
 {
     public partial class Form1 : Form
     {
-        public static List<string> Champions = new List<string>();
-        public static List<string> SpellSlots = new List<string>();
+        public static BindingList<string> Champions = new BindingList<string>();
+        public static BindingList<string> SpellSlots = new BindingList<string>();
         public static bool Isinit = false;
 
         public Form1()
@@ -40,7 +40,6 @@ namespace Jeon_MissileDB
             if (Isinit)
             {
                 SpellSlots.Clear();
-                comboBox2.DataSource = null;
                 foreach (var t in Program.Infos)
                 {
                     if (t.cName == comboBox1.SelectedValue.ToString())
@@ -48,8 +47,18 @@ namespace Jeon_MissileDB
                         SpellSlots.Add(t.SlotName);
                     }
                 }
-
-                comboBox2.DataSource = SpellSlots;
+                foreach (var t in Program.Infos)
+                {
+                    if (t.cName == comboBox1.SelectedValue.ToString()
+                        && t.SlotName == comboBox2.SelectedValue.ToString())
+                    {
+                        textBox1.Text = t.Type.ToString();
+                        textBox2.Text = t.Delay.ToString();
+                        textBox3.Text = t.Range.ToString();
+                        textBox4.Text = t.Width.ToString();
+                        textBox5.Text = t.Speed.ToString();
+                    }
+                }
             }
         }
 
@@ -60,11 +69,11 @@ namespace Jeon_MissileDB
                if(t.cName == comboBox1.SelectedValue.ToString()
                    && t.SlotName == comboBox2.SelectedValue.ToString())
                {
-                   textBox1.Text = t.Type;
-                   textBox2.Text = t.Delay;
-                   textBox3.Text = t.Range;
-                   textBox4.Text = t.Width;
-                   textBox5.Text = t.Speed;
+                   textBox1.Text = t.Type.ToString();
+                   textBox2.Text = t.Delay.ToString();
+                   textBox3.Text = t.Range.ToString();
+                   textBox4.Text = t.Width.ToString();
+                   textBox5.Text = t.Speed.ToString();
                }
            }
         }

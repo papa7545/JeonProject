@@ -35,7 +35,7 @@ namespace Jeon_MissileDB
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            string Getdown = Path.GetTempPath() + "temp2.txt";
+            string Getdown = Path.GetTempPath() + Environment.TickCount +".txt";
 
 
             WebClient TxtClient = new WebClient();
@@ -43,31 +43,31 @@ namespace Jeon_MissileDB
 
             var text = File.ReadLines(Getdown);
 
-            foreach (var t in text.Where(tx => tx.Contains("ChampionName")))
+            foreach (var t in text.Where(tx => tx.StartsWith("ChampionName")))
             {
                 ChampionNames.Add(t.Replace("ChampionName_", ""));
             }
-            foreach (var t in text.Where(tx => tx.Contains("Slot_SpellSlot.")))
+            foreach (var t in text.Where(tx => tx.StartsWith("Slot_SpellSlot.")))
             {
                 SpellSlots.Add(t.Replace("Slot_SpellSlot.", ""));
             }
-            foreach (var t in text.Where(tx => tx.Contains("Type_")))
+            foreach (var t in text.Where(tx => tx.StartsWith("Type_")))
             {
                 Types.Add(t.Replace("Type_SkillShotType.", ""));
             }
-            foreach (var t in text.Where(tx => tx.Contains("Delay_")))
+            foreach (var t in text.Where(tx => tx.StartsWith("Delay_")))
             {
                 Delays.Add(t.Replace("Delay_", ""));
             }
-            foreach (var t in text.Where(tx => tx.Contains("Range_")))
+            foreach (var t in text.Where(tx => tx.StartsWith("Range_")))
             {
                 Ranges.Add(t.Replace("Range_", ""));
             }
-            foreach (var t in text.Where(tx => tx.Contains("Radius_")))
+            foreach (var t in text.Where(tx => tx.StartsWith("Radius_")))
             {
                 Widths.Add(t.Replace("Radius_", ""));
             }
-            foreach (var t in text.Where(tx => tx.Contains("MissileSpeed_")))
+            foreach (var t in text.Where(tx => tx.StartsWith("MissileSpeed_")))
             {
                 Speeds.Add(t.Replace("MissileSpeed_", ""));
             }

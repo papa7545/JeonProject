@@ -43,23 +43,24 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("굴림", 30F);
-            this.label1.Location = new System.Drawing.Point(12, 23);
+            this.label1.Font = new System.Drawing.Font("Impact", 25F);
+            this.label1.Location = new System.Drawing.Point(25, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(368, 40);
+            this.label1.Size = new System.Drawing.Size(203, 42);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Missile DB Ver4.21";
+            this.label1.Text = "JeonMisileDB";
             // 
             // comboBox1
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(99, 95);
+            this.comboBox1.Location = new System.Drawing.Point(77, 65);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(111, 20);
             this.comboBox1.TabIndex = 1;
@@ -68,7 +69,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(30, 98);
+            this.label2.Location = new System.Drawing.Point(8, 68);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 12);
             this.label2.TabIndex = 3;
@@ -77,7 +78,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(100, 134);
+            this.label4.Location = new System.Drawing.Point(78, 104);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(34, 12);
             this.label4.TabIndex = 6;
@@ -86,7 +87,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(97, 161);
+            this.label5.Location = new System.Drawing.Point(75, 131);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 12);
             this.label5.TabIndex = 7;
@@ -95,7 +96,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(93, 188);
+            this.label6.Location = new System.Drawing.Point(71, 158);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(41, 12);
             this.label6.TabIndex = 8;
@@ -104,7 +105,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(99, 215);
+            this.label7.Location = new System.Drawing.Point(77, 185);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(35, 12);
             this.label7.TabIndex = 9;
@@ -113,7 +114,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(52, 242);
+            this.label8.Location = new System.Drawing.Point(30, 212);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(82, 12);
             this.label8.TabIndex = 10;
@@ -121,7 +122,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(140, 131);
+            this.textBox1.Location = new System.Drawing.Point(118, 101);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(130, 21);
@@ -129,7 +130,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(140, 158);
+            this.textBox2.Location = new System.Drawing.Point(118, 128);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(130, 21);
@@ -137,7 +138,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(140, 185);
+            this.textBox3.Location = new System.Drawing.Point(118, 155);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(130, 21);
@@ -145,7 +146,7 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(140, 212);
+            this.textBox4.Location = new System.Drawing.Point(118, 182);
             this.textBox4.Name = "textBox4";
             this.textBox4.ReadOnly = true;
             this.textBox4.Size = new System.Drawing.Size(130, 21);
@@ -153,7 +154,7 @@
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(140, 239);
+            this.textBox5.Location = new System.Drawing.Point(118, 209);
             this.textBox5.Name = "textBox5";
             this.textBox5.ReadOnly = true;
             this.textBox5.Size = new System.Drawing.Size(130, 21);
@@ -162,27 +163,39 @@
             // comboBox2
             // 
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(276, 95);
+            this.comboBox2.Location = new System.Drawing.Point(254, 65);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(88, 20);
+            this.comboBox2.Size = new System.Drawing.Size(39, 20);
             this.comboBox2.TabIndex = 5;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(216, 98);
+            this.label3.Location = new System.Drawing.Point(194, 68);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(54, 12);
             this.label3.TabIndex = 4;
             this.label3.Text = "SpellSlot";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("굴림", 10F);
+            this.label9.Location = new System.Drawing.Point(225, 32);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(61, 14);
+            this.label9.TabIndex = 16;
+            this.label9.Text = "Ver 4.21";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(376, 264);
+            this.ClientSize = new System.Drawing.Size(305, 240);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.textBox3);
@@ -198,6 +211,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
+            this.MaximumSize = new System.Drawing.Size(321, 278);
+            this.MinimumSize = new System.Drawing.Size(321, 278);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -222,6 +237,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Label label9;
     }
 }
 
