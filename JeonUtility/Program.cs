@@ -159,7 +159,7 @@ namespace JeonUtility
 
             var item_qs = new Menu("QuickSilver", "QuickSilver");
             menu_items.AddSubMenu(item_qs);
-            item_qs.AddItem(new MenuItem("useitem_qs", "UseQS").SetValue(true));
+            item_qs.AddItem(new MenuItem("useitem_qs_bool", "UseQS").SetValue(true));
             item_qs.AddItem(new MenuItem("useitem_p_qs_delay", "QuickSilver Delay(ms)").SetValue(new Slider(100, 0, 1000)));
             #region qs_cc
             var menu_quicksilver_cc = new Menu("Use On CC", "Use On CC");
@@ -198,6 +198,7 @@ namespace JeonUtility
         }
         private static void OnGameUpdate(EventArgs args)
         {
+
             #region get info
             float Player_baseAD = Player.BaseAttackDamage;
             float Player_addAD = Player.FlatPhysicalDamageMod;
@@ -467,28 +468,32 @@ namespace JeonUtility
             }
             tempItemid = Convert.ToInt32(ItemId.Quicksilver_Sash);
             int tempItemid2 = Convert.ToInt32(ItemId.Mercurial_Scimitar);
-            if (Jlib.getm_bool("useitem_qs") && (Items.HasItem(tempItemid) || Items.HasItem(tempItemid2))  && (Items.CanUseItem(tempItemid) || Items.CanUseItem(tempItemid2)))
+            if (Jlib.getm_bool("useitem_qs_bool"))
             {
-                List<BuffType> bufflist = new List<BuffType>();
-                getbufflist(bufflist,ItemId.Quicksilver_Sash);
-                foreach (var p_item in Player.InventoryItems.Where(item => (item.Id == ItemId.Quicksilver_Sash || item.Id == ItemId.Mercurial_Scimitar)))
+                if ((Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid)) || ((Items.HasItem(tempItemid2) && Items.CanUseItem(tempItemid2))))
                 {
-                    foreach (var buff in Player.Buffs)
+                    List<BuffType> bufflist = new List<BuffType>();
+                    getbufflist(bufflist, ItemId.Quicksilver_Sash);
+                    foreach (var p_item in Player.InventoryItems.Where(item => (item.Id == ItemId.Quicksilver_Sash || item.Id == ItemId.Mercurial_Scimitar)))
                     {
-                        Utility.DelayAction.Add(Jlib.getm_value("useitem_p_qs_delay"), () =>
-                        { 
-                        if (bufflist.Any(b => b == buff.Type))
-                            p_item.UseItem();
-                        if (buff.DisplayName == "zedulttargetmark")
-                            Game.PrintChat("zed! {0}", buff.Type.ToString());
-                        if (buff.DisplayName == "fizzmarinerdoombomb")
-                            Game.PrintChat("fizz! {0}", buff.Type.ToString());
-                        if (buff.DisplayName == "SoulShackles")
-                            Game.PrintChat("fizz! {0}", buff.Type.ToString());
-                        }); 
+                        foreach (var buff in Player.Buffs)
+                        {
+                            Utility.DelayAction.Add(Jlib.getm_value("useitem_p_qs_delay"), () =>
+                            {
+                                if (bufflist.Any(b => b == buff.Type))
+                                    p_item.UseItem();
+                                if (buff.DisplayName == "zedulttargetmark")
+                                    Game.PrintChat("zed! {0}", buff.Type.ToString());
+                                if (buff.DisplayName == "fizzmarinerdoombomb")
+                                    Game.PrintChat("fizz! {0}", buff.Type.ToString());
+                                if (buff.DisplayName == "SoulShackles")
+                                    Game.PrintChat("fizz! {0}", buff.Type.ToString());
+                            });
+                        }
                     }
                 }
             }
+                
             //potions
             tempItemid = Convert.ToInt32(ItemId.Crystalline_Flask);
             if (Jlib.getm_bool("useitem_flask") && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
@@ -639,6 +644,7 @@ namespace JeonUtility
             }
             #endregion
 
+
             #region Status on hud
             if (Jlib.getm_bool("base_stat"))
             {
@@ -656,12 +662,10 @@ namespace JeonUtility
                 int interval = 20;
                 int i = 0;
 
-                Drawing.DrawText(x, y + (interval * i), Color.Wheat, "Champion : " + Player.BaseSkinName);
-                i++; 
+                Game.PrintChat(x + "," + y);
+                Drawing.DrawText(x, y, Color.Wheat, "Champion : " + Player.BaseSkinName);
+                i++;
 
-            //    Drawing.DrawText(x, y + (interval * i), Color.Wheat, "Spells : " + filterspellname(Player.Spellbook.GetSpell(SpellSlot.Summoner1).Name) + "," +
-            //filterspellname(Player.Spellbook.GetSpell(SpellSlot.Summoner2).Name));
-            //    i++;
 
                 if (smiteSlot != SpellSlot.Unknown)
                 {
@@ -687,12 +691,12 @@ namespace JeonUtility
                 }
                 if (Items.HasItem(Convert.ToInt32(ItemId.Crystalline_Flask)))
                 {
-                    addText(y + (interval * i), (Jlib.getm_bool("useitem_flask")), string.Format("Use Flask({0}%)",Jlib.getm_value("useitem_p_flask")));
+                    addText(y + (interval * i), (Jlib.getm_bool("useitem_flask")), string.Format("Use Flask({0}%)", Jlib.getm_value("useitem_p_flask")));
                     i++;
                 }
                 if (Items.HasItem(Convert.ToInt32(ItemId.Health_Potion)))
                 {
-                    addText(y + (interval * i), (Jlib.getm_bool("useitem_hppotion")), string.Format("Use HP Potion({0}%)",Jlib.getm_value("useitem_p_hp")));
+                    addText(y + (interval * i), (Jlib.getm_bool("useitem_hppotion")), string.Format("Use HP Potion({0}%)", Jlib.getm_value("useitem_p_hp")));
                     i++;
                 }
                 if (Items.HasItem(Convert.ToInt32(ItemId.Mana_Potion)))
@@ -713,17 +717,17 @@ namespace JeonUtility
                 if (Items.HasItem(Convert.ToInt32(ItemId.Mikaels_Crucible)))
                 {
                     addText(y + (interval * i), (Jlib.getm_bool("useitem_mikaels")), string.Format("Use Mikaels({0}%{1}", Jlib.getm_value("useitem_p_mikaels"),
-                        Jlib.getm_bool("mikaels_cc_bool") ? ",CC)":")"));
+                        Jlib.getm_bool("mikaels_cc_bool") ? ",CC)" : ")"));
                     i++;
                 }
                 if (Items.HasItem(Convert.ToInt32(ItemId.Quicksilver_Sash)))
                 {
-                    addText(y + (interval * i), (Jlib.getm_bool("useitem_qs")), string.Format("Use QS(delay:{0})", Jlib.getm_value("useitem_p_qs_delay")));
+                    addText(y + (interval * i), (Jlib.getm_bool("useitem_qs_bool")), string.Format("Use QS(delay:{0})", Jlib.getm_value("useitem_p_qs_delay")));
                     i++;
                 }
                 if (Items.HasItem(Convert.ToInt32(ItemId.Mercurial_Scimitar)))
                 {
-                    addText(y + (interval * i), (Jlib.getm_bool("useitem_qs")), string.Format("Use Scimitar(delay:{0})", Jlib.getm_value("useitem_p_qs_delay")));
+                    addText(y + (interval * i), (Jlib.getm_bool("useitem_qs_bool")), string.Format("Use Scimitar(delay:{0})", Jlib.getm_value("useitem_p_qs_delay")));
                     i++;
                 }
                 //champ

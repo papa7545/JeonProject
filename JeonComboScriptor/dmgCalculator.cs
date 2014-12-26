@@ -78,15 +78,36 @@ namespace JeonComboScriptor
                     }
                     return Player.CalcDamage(target, Damage.DamageType.True, eDmg);
                 }
-                else if (Player.BaseSkinName == "Darius" && Spell.slot == SpellSlot.R) // Nasus Q
+                else if (Player.BaseSkinName == "Nasus" && Spell.slot == SpellSlot.Q) // Nasus Q
                 {
                     double eDmg = 0;
-                    foreach (var venoms in Player.Buffs.Where(venoms => venoms.DisplayName == "NasusSiphoningStrike")) 
+                    foreach (var buff in Player.Buffs.Where(venoms => venoms.DisplayName == "NasusSiphoningStrike")) 
                     {
-                        eDmg = spell_basedamage[Spell.level] + venoms.Count;
+                        eDmg = spell_basedamage[Spell.level] + buff.Count;
                     }
                     return Player.CalcDamage(target, Damage.DamageType.Physical, eDmg);
                 }
+                else if (Player.BaseSkinName == "Vladimir" && Spell.slot == SpellSlot.E) // Vlad E
+                {
+                    double eDmg = 0;
+                    foreach (var buff in Player.Buffs.Where(venoms => venoms.DisplayName == "VladimirEmpowered"))
+                    {
+                        eDmg = spell_basedamage[Spell.level] + ((buff.Count * 0.25) *  spell_basedamage[Spell.level]);
+                    }
+                    return Player.CalcDamage(target, Damage.DamageType.Magical, eDmg);
+                }
+                else if (Player.BaseSkinName == "Syndra" && Spell.slot == SpellSlot.R) // Syndra R -- need test
+                {
+                    double eDmg = 0;
+                    foreach (var buff in Player.Buffs.Where(venoms => venoms.DisplayName == "SyndraDarkSphere"))
+                    {
+                        eDmg = spell_basedamage[Spell.level] * buff.Count;
+                    }
+                    return Player.CalcDamage(target, Damage.DamageType.Magical, eDmg);
+                }
+
+
+
                 return 0;
             }
             

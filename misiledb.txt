@@ -1,0 +1,3506 @@
+ChampionName	"Aatrox",
+SpellName	"AatroxQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	600,
+Range	650,
+Radius	250,
+MissileSpeed	2000,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"",
+	
+ChampionName	"Aatrox",
+SpellName	"AatroxE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1075,
+Radius	35,
+MissileSpeed	1250,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	false,
+MissileSpellName	"AatroxEConeMissile",
+	
+	
+	
+	
+ChampionName	"Ahri",
+SpellName	"AhriOrbofDeception",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+Radius	100,
+MissileSpeed	2500,
+MissileAccel	-3200,
+MissileMaxSpeed	2500,
+MissileMinSpeed	400,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"AhriOrbMissile",
+CanBeRemoved	true,
+ForceRemove	true,
+	
+	
+	
+	
+	
+	
+ChampionName	"Ahri",
+SpellName	"AhriOrbReturn",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+Radius	100,
+MissileSpeed	60,
+MissileAccel	1900,
+MissileMinSpeed	60,
+MissileMaxSpeed	2600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileFollowsUnit	true,
+CanBeRemoved	true,
+ForceRemove	true,
+MissileSpellName	"AhriOrbReturn",
+	
+	
+	
+	
+	
+	
+ChampionName	"Ahri",
+SpellName	"AhriSeduce",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+Radius	60,
+MissileSpeed	1500,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"AhriSeduceMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+Ahri	
+	
+Amumu	
+	
+	
+	
+	
+ChampionName	"Amumu",
+SpellName	"BandageToss",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	90,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"SadMummyBandageToss",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Amumu",
+SpellName	"CurseoftheSadMummy",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	0,
+Radius	550,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	false,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"",
+	
+	
+Amumu	
+	
+Anivia	
+	
+	
+	
+	
+ChampionName	"Anivia",
+SpellName	"FlashFrost",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	110,
+MissileSpeed	850,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"FlashFrostSpell",
+CanBeRemoved	true,
+	
+	
+	
+Anivia	
+	
+Annie	
+	
+	
+	
+	
+ChampionName	"Annie",
+SpellName	"Incinerate",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCone,
+Delay	250,
+Range	825,
+Radius	80,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	false,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"",
+	
+	
+	
+	
+	
+ChampionName	"Annie",
+SpellName	"InfernalGuardian",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	600,
+Radius	251,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"",
+	
+	
+Annie	
+	
+Ashe	
+	
+	
+	
+	
+ChampionName	"Ashe",
+SpellName	"VolleyAttack",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1200,
+Radius	60,
+MissileSpeed	1500,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"VolleyAttack",
+MultipleNumber	7,
+MultipleAngle	9.58f*(float)Math.PI/180,
+CanBeRemoved	false,
+	
+	
+	
+	
+	
+ChampionName	"Ashe",
+SpellName	"EnchantedCrystalArrow",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	20000,
+Radius	130,
+MissileSpeed	1600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"EnchantedCrystalArrow",
+CanBeRemoved	true,
+	
+	
+	
+Ashe	
+	
+Blitzcrank	
+	
+	
+	
+	
+ChampionName	"Blitzcrank",
+SpellName	"RocketGrab",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1050,
+Radius	70,
+MissileSpeed	1800,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	4,
+IsDangerous	true,
+MissileSpellName	"RocketGrabMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Blitzcrank",
+SpellName	"StaticField",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	0,
+Radius	600,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	false,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"",
+	
+	
+Blitzcrank	
+	
+Brand	
+	
+	
+	
+	
+ChampionName	"Brand",
+SpellName	"BrandBlaze",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	60,
+MissileSpeed	1600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"BrandBlazeMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Brand",
+SpellName	"BrandFissure",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	850,
+Range	900,
+Radius	240,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"",
+	
+	
+Brand	
+	
+Braum	
+	
+	
+	
+	
+ChampionName	"Braum",
+SpellName	"BraumQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1050,
+Radius	60,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"BraumQMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Braum",
+SpellName	"BraumRWrapper",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	500,
+Range	1200,
+Radius	115,
+MissileSpeed	1400,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	4,
+IsDangerous	true,
+MissileSpellName	"braumrmissile",
+	
+	
+	
+Braum	
+	
+Caitlyn	
+	
+	
+	
+	
+ChampionName	"Caitlyn",
+SpellName	"CaitlynPiltoverPeacemaker",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	625,
+Range	1300,
+Radius	90,
+MissileSpeed	2200,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"CaitlynPiltoverPeacemaker",
+	
+	
+	
+	
+	
+	
+ChampionName	"Caitlyn",
+SpellName	"CaitlynEntrapment",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	125,
+Range	1000,
+Radius	80,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	1,
+IsDangerous	false,
+MissileSpellName	"CaitlynEntrapmentMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+Caitlyn	
+	
+Cassiopeia	
+	
+	
+	
+	
+ChampionName	"Cassiopeia",
+SpellName	"CassiopeiaNoxiousBlast",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	600,
+Range	850,
+Radius	150,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"CassiopeiaNoxiousBlast",
+	
+	
+	
+	
+	
+ChampionName	"Cassiopeia",
+SpellName	"CassiopeiaPetrifyingGaze",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCone,
+Delay	600,
+Range	825,
+Radius	80,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	false,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"CassiopeiaPetrifyingGaze",
+	
+	
+Cassiopeia	
+	
+Chogath	
+	
+	
+	
+	
+ChampionName	"Chogath",
+SpellName	"Rupture",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	1200,
+Range	950,
+Radius	250,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	false,
+MissileSpellName	"Rupture",
+	
+	
+Chogath	
+	
+Corki	
+	
+	
+	
+	
+ChampionName	"Corki",
+SpellName	"PhosphorusBomb",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	300,
+Range	825,
+Radius	250,
+MissileSpeed	1000,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"PhosphorusBombMissile",
+	
+	
+	
+	
+	
+	
+ChampionName	"Corki",
+SpellName	"MissileBarrage",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	200,
+Range	1300,
+Radius	40,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"MissileBarrageMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Corki",
+SpellName	"MissileBarrage2",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	200,
+Range	1500,
+Radius	40,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"MissileBarrageMissile2",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+Corki	
+	
+Darius	
+	
+	
+	
+	
+ChampionName	"Darius",
+SpellName	"DariusAxeGrabCone",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCone,
+Delay	300,
+Range	550,
+Radius	80,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	false,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"DariusAxeGrabCone",
+	
+	
+Darius	
+	
+DrMundo	
+	
+	
+	
+	
+ChampionName	"DrMundo",
+SpellName	"InfectedCleaverMissileCast",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1050,
+Radius	60,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	false,
+MissileSpellName	"InfectedCleaverMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+DrMundo	
+	
+Draven	
+	
+	
+	
+	
+ChampionName	"Draven",
+SpellName	"DravenDoubleShot",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	130,
+MissileSpeed	1400,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"DravenDoubleShotMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+ChampionName	"Draven",
+SpellName	"DravenRCast",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	400,
+Range	20000,
+Radius	160,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"DravenR",
+	
+	
+	
+Draven	
+	
+Elise	
+	
+	
+	
+	
+ChampionName	"Elise",
+SpellName	"EliseHumanE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	55,
+MissileSpeed	1450,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	4,
+IsDangerous	true,
+MissileSpellName	"EliseHumanE",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+Elise	
+	
+Evelynn	
+	
+	
+	
+	
+ChampionName	"Evelynn",
+SpellName	"EvelynnR",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	650,
+Radius	350,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"EvelynnR",
+	
+	
+Evelynn	
+	
+Ezreal	
+	
+	
+	
+	
+ChampionName	"Ezreal",
+SpellName	"EzrealMysticShot",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1200,
+Radius	60,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"EzrealMysticShotMissile",
+ExtraMissileNames	{"EzrealMysticShotPulseMissile"},
+CanBeRemoved	true,
+	
+	
+,	
+Id	229,
+	
+	
+	
+	
+	
+ChampionName	"Ezreal",
+SpellName	"EzrealEssenceFlux",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1050,
+Radius	80,
+MissileSpeed	1600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"EzrealEssenceFluxMissile",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Ezreal",
+SpellName	"EzrealTrueshotBarrage",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	1000,
+Range	20000,
+Radius	160,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"EzrealTrueshotBarrage",
+	,
+Id	245,
+	
+	
+Ezreal	
+	
+Fizz	
+	
+	
+	
+	
+ChampionName	"Fizz",
+SpellName	"FizzMarinerDoom",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1300,
+Radius	120,
+MissileSpeed	1350,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"FizzMarinerDoomMissile",
+	{CollisionObjectTypes.Champions,CollisionObjectTypes.YasuoWall},
+CanBeRemoved	true,
+	
+	
+Fizz	
+	
+Galio	
+	
+	
+	
+	
+ChampionName	"Galio",
+SpellName	"GalioResoluteSmite",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	900,
+Radius	200,
+MissileSpeed	1300,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"GalioResoluteSmite",
+	
+	
+	
+	
+	
+ChampionName	"Galio",
+SpellName	"GalioRighteousGust",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1200,
+Radius	120,
+MissileSpeed	1200,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"GalioRighteousGust",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Galio",
+SpellName	"GalioIdolOfDurand",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	0,
+Radius	550,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	false,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"",
+	
+	
+Galio	
+	
+Gnar	
+	
+	
+	
+	
+ChampionName	"Gnar",
+SpellName	"GnarQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1125,
+Radius	60,
+MissileSpeed	2500,
+MissileAccel	-3000,
+MissileMaxSpeed	2500,
+MissileMinSpeed	1400,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+CanBeRemoved	true,
+ForceRemove	true,
+MissileSpellName	"gnarqmissile",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Gnar",
+SpellName	"GnarQReturn",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	0,
+Range	2500,
+Radius	75,
+MissileSpeed	60,
+MissileAccel	800,
+MissileMaxSpeed	2600,
+MissileMinSpeed	60,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+CanBeRemoved	true,
+ForceRemove	true,
+MissileSpellName	"GnarQMissileReturn",
+DisableFowDetection	false,
+	,
+	
+	
+	
+	
+	
+ChampionName	"Gnar",
+SpellName	"GnarBigQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	500,
+Range	1150,
+Radius	90,
+MissileSpeed	2100,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"GnarBigQMissile",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Gnar",
+SpellName	"GnarBigW",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotLine,
+Delay	600,
+Range	600,
+Radius	80,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"GnarBigW",
+	
+	
+	
+	
+	
+ChampionName	"Gnar",
+SpellName	"GnarE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	0,
+Range	473,
+Radius	150,
+MissileSpeed	903,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"GnarE",
+	
+	
+	
+	
+	
+ChampionName	"Gnar",
+SpellName	"GnarBigE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	475,
+Radius	200,
+MissileSpeed	1000,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"GnarBigE",
+	
+	
+	
+	
+	
+ChampionName	"Gnar",
+SpellName	"GnarR",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	0,
+Radius	500,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	false,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"",
+	
+	
+	
+	
+Gragas	
+	
+	
+	
+	
+ChampionName	"Gragas",
+SpellName	"GragasQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	1100,
+Radius	275,
+MissileSpeed	1300,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"GragasQMissile",
+ExtraDuration	4500,
+ToggleParticleName	"Gragas_",
+DontCross	true,
+	
+	
+	
+	
+	
+ChampionName	"Gragas",
+SpellName	"GragasE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	0,
+Range	950,
+Radius	200,
+MissileSpeed	1200,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"GragasE",
+CanBeRemoved	true,
+ExtraRange	300,
+	{CollisionObjectTypes.Champions,CollisionObjectTypes.Minion},
+	
+	
+	
+	
+	
+ChampionName	"Gragas",
+SpellName	"GragasR",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	1050,
+Radius	375,
+MissileSpeed	1800,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"GragasRBoom",
+	,
+	
+	
+Gragas	
+	
+Graves	
+	
+	
+	
+	
+ChampionName	"Graves",
+SpellName	"GravesClusterShot",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+Radius	50,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"GravesClusterShotAttack",
+	,
+MultipleNumber	3,
+MultipleAngle	15*(float)Math.PI/180,
+	
+	
+	
+	
+	
+ChampionName	"Graves",
+SpellName	"GravesChargeShot",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	100,
+MissileSpeed	2100,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"GravesChargeShotShot",
+	
+	
+,	
+	
+	
+Graves	
+	
+Heimerdinger	
+	
+	
+	
+	
+ChampionName	"Heimerdinger",
+SpellName	"Heimerdingerwm",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1500,
+Radius	70,
+MissileSpeed	1800,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"HeimerdingerWAttack2",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Heimerdinger",
+SpellName	"HeimerdingerE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	925,
+Radius	100,
+MissileSpeed	1200,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"heimerdingerespell",
+	,
+	
+	
+Heimerdinger	
+	
+Irelia	
+	
+	
+	
+	
+ChampionName	"Irelia",
+SpellName	"IreliaTranscendentBlades",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	0,
+Range	1200,
+Radius	65,
+MissileSpeed	1600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"IreliaTranscendentBlades",
+	,
+	
+	
+Irelia	
+	
+Janna	
+	
+	
+	
+	
+ChampionName	"Janna",
+SpellName	"JannaQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1700,
+Radius	150,
+MissileSpeed	900,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"HowlingGaleSpell",
+	,
+	
+	
+Janna	
+	
+JarvanIV	
+	
+	
+	
+	
+ChampionName	"JarvanIV",
+SpellName	"JarvanIVDragonStrike",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	880,
+Radius	70,
+MissileSpeed	1450,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"JarvanIVDragonStrike",
+	
+	
+	
+	
+	
+ChampionName	"JarvanIV",
+SpellName	"JarvanIVDemacianStandard",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	500,
+Range	860,
+Radius	175,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"JarvanIVDemacianStandard",
+	
+	
+JarvanIV	
+	
+Jayce	
+	
+	
+	
+	
+ChampionName	"Jayce",
+SpellName	"jayceshockblast",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1300,
+Radius	70,
+MissileSpeed	1450,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"JayceShockBlastMis",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+	
+	
+	
+ChampionName	"Jayce",
+SpellName	"JayceQAccel",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1300,
+Radius	70,
+MissileSpeed	2350,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"JayceShockBlastWallMis",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+Jayce	
+	
+Jinx	
+	
+	
+	
+	
+	
+ChampionName	"Jinx",
+SpellName	"JinxW",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	600,
+Range	1500,
+Radius	60,
+MissileSpeed	3300,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"JinxWMissile",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+	
+	
+	
+ChampionName	"Jinx",
+SpellName	"JinxRWrapper",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	600,
+Range	20000,
+Radius	140,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"JinxR",
+CanBeRemoved	true,
+	{CollisionObjectTypes.Champions,CollisionObjectTypes.YasuoWall},
+	
+	
+Jinx	
+	
+Kalista	
+	
+	
+	
+	
+ChampionName	"Kalista",
+SpellName	"KalistaMysticShot",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1200,
+Radius	40,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"kalistamysticshotmis",
+ExtraMissileNames	{"kalistamysticshotmistrue"},
+CanBeRemoved	true,
+	
+	
+	
+	
+Kalista	
+	
+Karma	
+	
+	
+	
+	
+ChampionName	"Karma",
+SpellName	"KarmaQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1050,
+Radius	60,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"KarmaQMissile",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+//TODO:addthecircleattheend.	
+	
+	
+	
+ChampionName	"Karma",
+SpellName	"KarmaQMantra",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	950,
+Radius	80,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"KarmaQMissileMantra",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+Karma	
+	
+Karthus	
+	
+	
+	
+	
+ChampionName	"Karthus",
+SpellName	"KarthusLayWasteA2",
+ExtraSpellNames	
+	
+	
+	
+	
+,	
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	625,
+Range	875,
+Radius	160,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"",
+	
+	
+Karthus	
+	
+Kassadin	
+	
+	
+	
+	
+ChampionName	"Kassadin",
+SpellName	"RiftWalk",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	700,
+Radius	270,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"RiftWalk",
+	
+	
+Kassadin	
+	
+Kennen	
+	
+	
+	
+	
+ChampionName	"Kennen",
+SpellName	"KennenShurikenHurlMissile1",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	125,
+Range	1050,
+Radius	50,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"KennenShurikenHurlMissile1",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+Kennen	
+	
+Khazix	
+	
+	
+	
+	
+ChampionName	"Khazix",
+SpellName	"KhazixW",
+ExtraSpellNames	{"khazixwlong"},
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1025,
+Radius	73,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"KhazixWMissile",
+CanBeRemoved	true,
+MultipleNumber	3,
+MultipleAngle	22f*(float)Math.PI/180,
+	
+	
+,	
+	
+	
+	
+	
+	
+ChampionName	"Khazix",
+SpellName	"KhazixE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	600,
+Radius	300,
+MissileSpeed	1500,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"KhazixE",
+	
+	
+Khazix	
+	
+Kogmaw	
+	
+	
+	
+	
+ChampionName	"Kogmaw",
+SpellName	"KogMawQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1200,
+Radius	70,
+MissileSpeed	1650,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"KogMawQMis",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+	
+	
+	
+ChampionName	"Kogmaw",
+SpellName	"KogMawVoidOoze",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1360,
+Radius	120,
+MissileSpeed	1400,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"KogMawVoidOozeMissile",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Kogmaw",
+SpellName	"KogMawLivingArtillery",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	1200,
+Range	1800,
+Radius	150,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"KogMawLivingArtillery",
+	
+	
+Kogmaw	
+	
+Leblanc	
+	
+	
+	
+	
+ChampionName	"Leblanc",
+SpellName	"LeblancSlide",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	0,
+Range	600,
+Radius	220,
+MissileSpeed	1500,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"LeblancSlide",
+	
+	
+	
+	
+	
+ChampionName	"Leblanc",
+SpellName	"LeblancSlideM",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	0,
+Range	600,
+Radius	220,
+MissileSpeed	1500,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"LeblancSlideM",
+	
+	
+	
+	
+	
+ChampionName	"Leblanc",
+SpellName	"LeblancSoulShackle",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	950,
+Radius	70,
+MissileSpeed	1600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"LeblancSoulShackle",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+	
+	
+	
+ChampionName	"Leblanc",
+SpellName	"LeblancSoulShackleM",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	950,
+Radius	70,
+MissileSpeed	1600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"LeblancSoulShackleM",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+Leblanc	
+	
+LeeSin	
+	
+	
+	
+	
+ChampionName	"LeeSin",
+SpellName	"BlindMonkQOne",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	65,
+MissileSpeed	1800,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"BlindMonkQOne",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+LeeSin	
+	
+Leona	
+	
+	
+	
+	
+ChampionName	"Leona",
+SpellName	"LeonaZenithBlade",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	905,
+Radius	100,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"LeonaZenithBladeMissile",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Leona",
+SpellName	"LeonaSolarFlare",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	1000,
+Range	1200,
+Radius	300,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"LeonaSolarFlare",
+	
+	
+Leona	
+	
+Lissandra	
+	
+	
+	
+	
+ChampionName	"Lissandra",
+SpellName	"LissandraQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	700,
+Radius	75,
+MissileSpeed	2200,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"LissandraQMissile",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Lissandra",
+SpellName	"LissandraQShards",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	700,
+Radius	90,
+MissileSpeed	2200,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"lissandraqshards",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Lissandra",
+SpellName	"LissandraE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1025,
+Radius	125,
+MissileSpeed	850,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"LissandraEMissile",
+	,
+	
+Lulu	
+	
+Lucian	
+	
+	
+	
+	
+ChampionName	"Lucian",
+SpellName	"LucianQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotLine,
+Delay	500,
+Range	1300,
+Radius	65,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"LucianQ",
+	
+	
+Lucian	
+	
+Lulu	
+	
+	
+	
+	
+ChampionName	"Lulu",
+SpellName	"LuluQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	950,
+Radius	60,
+MissileSpeed	1450,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"LuluQMissile",
+ExtraMissileNames	{"LuluQMissileTwo"},
+	,
+	
+	
+Lulu	
+	
+Lux	
+	
+	
+	
+	
+ChampionName	"Lux",
+SpellName	"LuxLightBinding",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1300,
+Radius	70,
+MissileSpeed	1200,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"LuxLightBindingMis",
+//CanBeRemoved	true,
+//	{CollisionObjectTypes.Champions,CollisionObjectTypes.Minion,CollisionObjectTypes.YasuoWall,},
+	
+	
+	
+	
+	
+ChampionName	"Lux",
+SpellName	"LuxLightStrikeKugel",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	1100,
+Radius	275,
+MissileSpeed	1300,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"LuxLightStrikeKugel",
+ExtraDuration	5500,
+ToggleParticleName	"LuxLightstrike_tar",
+DontCross	true,
+CanBeRemoved	true,
+	,
+	
+	
+	
+	
+	
+ChampionName	"Lux",
+SpellName	"LuxMaliceCannon",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotLine,
+Delay	1000,
+Range	3500,
+Radius	190,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"LuxMaliceCannon",
+	
+	
+Lux	
+	
+Malphite	
+	
+	
+	
+	
+ChampionName	"Malphite",
+SpellName	"UFSlash",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	0,
+Range	1000,
+Radius	270,
+MissileSpeed	1500,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"UFSlash",
+	
+	
+Malphite	
+	
+Malzahar	
+	
+	
+	
+	
+ChampionName	"Malzahar",
+SpellName	"AlZaharCalloftheVoid",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotLine,
+Delay	1000,
+Range	900,
+Radius	85,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+DontCross	true,
+MissileSpellName	"AlZaharCalloftheVoid",
+	
+	
+Malzahar	
+	
+Morgana	
+	
+	
+	
+	
+ChampionName	"Morgana",
+SpellName	"DarkBindingMissile",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1300,
+Radius	80,
+MissileSpeed	1200,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"DarkBindingMissile",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+Morgana	
+	
+Nami	
+	
+	
+	
+	
+ChampionName	"Nami",
+SpellName	"NamiQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	1000,
+Range	1625,
+Radius	150,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"namiqmissile",
+	
+	
+	
+	
+	
+ChampionName	"Nami",
+SpellName	"NamiR",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	500,
+Range	2750,
+Radius	260,
+MissileSpeed	850,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"NamiRMissile",
+	,
+	
+	
+Nami	
+	
+Nautilus	
+	
+	
+	
+	
+ChampionName	"Nautilus",
+SpellName	"NautilusAnchorDrag",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	90,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"NautilusAnchorDragMissile",
+CanBeRemoved	true,
+	
+	
+,	
+//walls?	
+	
+	
+Nautilus	
+	
+Nidalee	
+	
+	
+	
+	
+ChampionName	"Nidalee",
+SpellName	"JavelinToss",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	125,
+Range	1500,
+Radius	40,
+MissileSpeed	1300,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"JavelinToss",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+Nidalee	
+	
+Olaf	
+	
+	
+	
+	
+ChampionName	"Olaf",
+SpellName	"OlafAxeThrowCast",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+ExtraRange	150,
+Radius	105,
+MissileSpeed	1600,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"olafaxethrow",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+Olaf	
+	
+Orianna	
+	
+	
+	
+	
+ChampionName	"Orianna",
+SpellName	"OriannasQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	0,
+Range	1500,
+Radius	80,
+MissileSpeed	1200,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"orianaizuna",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Orianna",
+SpellName	"OriannaQend",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	0,
+Range	1500,
+Radius	90,
+MissileSpeed	1200,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Orianna",
+SpellName	"OrianaDissonanceCommand",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	0,
+Radius	255,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"OrianaDissonanceCommand",
+FromObject	"yomu_ring_",
+	
+	
+	
+	
+	
+ChampionName	"Orianna",
+SpellName	"OriannasE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	0,
+Range	1500,
+Radius	85,
+MissileSpeed	1850,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"orianaredact",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Orianna",
+SpellName	"OrianaDetonateCommand",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	700,
+Range	0,
+Radius	410,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"OrianaDetonateCommand",
+FromObject	"yomu_ring_",
+	
+	
+Orianna	
+	
+Quinn	
+	
+	
+	
+	
+ChampionName	"Quinn",
+SpellName	"QuinnQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1050,
+Radius	80,
+MissileSpeed	1550,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"QuinnQMissile",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+Quinn	
+	
+Rengar	
+	
+	
+	
+	
+ChampionName	"Rengar",
+SpellName	"RengarE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+Radius	70,
+MissileSpeed	1500,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"RengarEFinal",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+Rengar	
+	
+Riven	
+	
+	
+	
+	
+ChampionName	"Riven",
+SpellName	"rivenizunablade",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	125,
+MissileSpeed	2200,
+FixedRange	false,
+AddHitbox	false,
+DangerValue	5,
+IsDangerous	true,
+MultipleNumber	3,
+MultipleAngle	15*(float)Math.PI/180,
+MissileSpellName	"RivenLightsaberMissile",
+ExtraMissileNames	{"RivenLightsaberMissileSide"}
+	
+	
+Riven	
+	
+Rumble	
+	
+	
+	
+	
+ChampionName	"Rumble",
+SpellName	"RumbleGrenade",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	950,
+Radius	60,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"RumbleGrenade",
+CanBeRemoved	true,
+	
+	
+,	
+	
+	
+	
+	
+	
+ChampionName	"Rumble",
+SpellName	"RumbleCarpetBombM",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	400,
+MissileDelayed	true,
+Range	1200,
+Radius	200,
+MissileSpeed	1600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	4,
+IsDangerous	false,
+MissileSpellName	"RumbleCarpetBombMissile",
+CanBeRemoved	false,
+	newCollisionObjectTypes[]{},
+	
+	
+Rumble	
+	
+Sejuani	
+	
+	
+	
+	
+ChampionName	"Sejuani",
+SpellName	"SejuaniArcticAssault",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	0,
+Range	900,
+Radius	70,
+MissileSpeed	1600,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"",
+ExtraRange	200,
+	
+	
+,	
+	
+//TODO:fix?	
+	
+	
+	
+ChampionName	"Sejuani",
+SpellName	"SejuaniGlacialPrisonStart",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	110,
+MissileSpeed	1600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"sejuaniglacialprison",
+CanBeRemoved	true,
+	{CollisionObjectTypes.Champions,CollisionObjectTypes.YasuoWall},
+	
+	
+Sejuani	
+	
+Sion	
+	
+	
+	
+	
+ChampionName	"Sion",
+SpellName	"SionE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	800,
+Radius	80,
+MissileSpeed	1800,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"SionEMissile",
+	
+	
+	
+	
+Sion	
+	
+Soraka	
+	
+	
+	
+	
+ChampionName	"Soraka",
+SpellName	"SorakaQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	500,
+Range	950,
+Radius	300,
+MissileSpeed	1750,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"",
+	,
+	
+	
+Soraka	
+	
+Shen	
+	
+	
+	
+	
+ChampionName	"Shen",
+SpellName	"ShenShadowDash",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	0,
+Range	650,
+Radius	50,
+MissileSpeed	1600,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"ShenShadowDash",
+ExtraRange	200,
+	
+	
+	
+	
+	
+Shen	
+	
+Shyvana	
+	
+	
+	
+	
+ChampionName	"Shyvana",
+SpellName	"ShyvanaFireball",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	950,
+Radius	60,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ShyvanaFireballMissile",
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Shyvana",
+SpellName	"ShyvanaTransformCast",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+Radius	150,
+MissileSpeed	1500,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"ShyvanaTransformCast",
+ExtraRange	200,
+	
+	
+Shyvana	
+	
+Sivir	
+	
+	
+	
+	
+ChampionName	"Sivir",
+SpellName	"SivirQReturn",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	0,
+Range	1250,
+Radius	100,
+MissileSpeed	1350,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"SivirQMissileReturn",
+DisableFowDetection	false,
+MissileFollowsUnit	true,
+	,
+	
+	
+	
+	
+	
+ChampionName	"Sivir",
+SpellName	"SivirQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1250,
+Radius	90,
+MissileSpeed	1350,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"SivirQMissile",
+	,
+	
+	
+Sivir	
+	
+Skarner	
+	
+	
+	
+	
+ChampionName	"Skarner",
+SpellName	"SkarnerFracture",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+Radius	70,
+MissileSpeed	1500,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"SkarnerFractureMissile",
+	,
+	
+	
+Skarner	
+	
+Sona	
+	
+	
+	
+	
+ChampionName	"Sona",
+SpellName	"SonaR",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+Radius	140,
+MissileSpeed	2400,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	5,
+IsDangerous	true,
+MissileSpellName	"SonaR",
+	,
+	
+	
+Sona	
+	
+Swain	
+	
+	
+	
+	
+ChampionName	"Swain",
+SpellName	"SwainShadowGrasp",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	1100,
+Range	900,
+Radius	180,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"SwainShadowGrasp",
+	
+	
+Swain	
+	
+Syndra	
+	
+	
+	
+	
+ChampionName	"Syndra",
+SpellName	"SyndraQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	600,
+Range	800,
+Radius	150,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"SyndraQ",
+	
+	
+	
+	
+	
+ChampionName	"Syndra",
+SpellName	"syndrawcast",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	950,
+Radius	210,
+MissileSpeed	1450,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"syndrawcast",
+	
+	
+	
+	
+	
+ChampionName	"Syndra",
+SpellName	"syndrae5",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	300,
+Range	950,
+Radius	90,
+MissileSpeed	1601,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"syndrae5",
+DisableFowDetection	true,
+	
+	
+	
+	
+	
+ChampionName	"Syndra",
+SpellName	"SyndraE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	300,
+Range	950,
+Radius	90,
+MissileSpeed	1601,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+DisableFowDetection	true,
+MissileSpellName	"SyndraE",
+	
+	
+Syndra	
+	
+Talon	
+	
+	
+	
+	
+ChampionName	"Talon",
+SpellName	"TalonRake",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	800,
+Radius	80,
+MissileSpeed	2300,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	true,
+MultipleNumber	3,
+MultipleAngle	20*(float)Math.PI/180,
+MissileSpellName	"talonrakemissileone",
+	
+	
+	
+	
+	
+ChampionName	"Talon",
+SpellName	"TalonRakeReturn",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	800,
+Radius	80,
+MissileSpeed	1850,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	true,
+MultipleNumber	3,
+MultipleAngle	20*(float)Math.PI/180,
+MissileSpellName	"talonrakemissiletwo",
+	
+	
+Riven	
+	
+Thresh	
+	
+	
+	
+	
+ChampionName	"Thresh",
+SpellName	"ThreshQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	500,
+Range	1100,
+Radius	70,
+MissileSpeed	1900,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"ThreshQMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Thresh",
+SpellName	"ThreshEFlay",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	125,
+Range	1075,
+Radius	110,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+Centered	true,
+MissileSpellName	"ThreshEMissile1",
+	
+	
+Thresh	
+	
+Tristana	
+	
+	
+	
+	
+ChampionName	"Tristana",
+SpellName	"RocketJump",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	500,
+Range	900,
+Radius	270,
+MissileSpeed	1500,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"RocketJump",
+	
+	
+Tristana	
+	
+Tryndamere	
+	
+	
+	
+	
+ChampionName	"Tryndamere",
+SpellName	"slashCast",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	0,
+Range	660,
+Radius	93,
+MissileSpeed	1300,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"slashCast",
+	
+	
+Tryndamere	
+	
+TwistedFate	
+	
+	
+	
+	
+ChampionName	"TwistedFate",
+SpellName	"WildCards",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1450,
+Radius	40,
+MissileSpeed	1000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"SealFateMissile",
+MultipleNumber	3,
+MultipleAngle	28*(float)Math.PI/180,
+	,
+	
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Twitch",
+SpellName	"TwitchVenomCask",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	900,
+Radius	275,
+MissileSpeed	1400,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"TwitchVenomCaskMissile",
+	,
+	
+	
+Twitch	
+	
+Urgot	
+	
+	
+	
+	
+ChampionName	"Urgot",
+SpellName	"UrgotHeatseekingLineMissile",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	125,
+Range	1000,
+Radius	60,
+MissileSpeed	1600,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"UrgotHeatseekingLineMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+ChampionName	"Urgot",
+SpellName	"UrgotPlasmaGrenade",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	1100,
+Radius	210,
+MissileSpeed	1500,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"UrgotPlasmaGrenadeBoom",
+	
+	
+Urgot	
+	
+Varus	
+	
+	
+	
+	
+ChampionName	"Varus",
+SpellName	"VarusQMissilee",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1800,
+Radius	70,
+MissileSpeed	1900,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"VarusQMissile",
+	,
+	
+	
+	
+	
+	
+ChampionName	"Varus",
+SpellName	"VarusE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	1000,
+Range	925,
+Radius	235,
+MissileSpeed	1500,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"VarusE",
+	
+	
+	
+	
+	
+ChampionName	"Varus",
+SpellName	"VarusR",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1200,
+Radius	100,
+MissileSpeed	1950,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"VarusRMissile",
+CanBeRemoved	true,
+	{CollisionObjectTypes.Champions,CollisionObjectTypes.YasuoWall},
+	
+	
+Varus	
+	
+Veigar	
+	
+	
+	
+	
+ChampionName	"Veigar",
+SpellName	"VeigarDarkMatter",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	1350,
+Range	900,
+Radius	225,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"",
+	
+	
+	
+	
+	
+ChampionName	"Veigar",
+SpellName	"VeigarEventHorizon",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotRing,
+Delay	250,
+Range	600,
+Radius	80,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	false,
+DangerValue	3,
+IsDangerous	true,
+DontAddExtraDuration	true,
+RingRadius	350,
+ExtraDuration	3000,
+DontCross	true,
+MissileSpellName	"",
+	
+	
+Veigar	
+	
+Velkoz	
+	
+	
+	
+	
+ChampionName	"Velkoz",
+SpellName	"VelkozQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1100,
+Radius	50,
+MissileSpeed	1300,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"VelkozQMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Velkoz",
+SpellName	"VelkozQSplit",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	900,
+Radius	55,
+MissileSpeed	2100,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"VelkozQMissileSplit",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Velkoz",
+SpellName	"VelkozW",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1200,
+Radius	88,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"VelkozWMissile",
+	
+	
+	
+	
+	
+ChampionName	"Velkoz",
+SpellName	"VelkozE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	500,
+Range	800,
+Radius	225,
+MissileSpeed	1500,
+FixedRange	false,
+AddHitbox	false,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"VelkozEMissile",
+	
+	
+Velkoz	
+	
+Vi	
+	
+	
+	
+	
+ChampionName	"Vi",
+SpellName	"Vi-q",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1000,
+Radius	90,
+MissileSpeed	1500,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"ViQMissile",
+	
+	
+Vi	
+	
+Viktor	
+	
+	
+	
+	
+ChampionName	"Viktor",
+SpellName	"Laser",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1500,
+Radius	80,
+MissileSpeed	780,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ViktorDeathRayFixMissile",
+	,
+	
+	
+Viktor	
+	
+Xerath	
+	
+	
+	
+	
+ChampionName	"Xerath",
+SpellName	"xeratharcanopulse2",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotLine,
+Delay	600,
+Range	1600,
+Radius	100,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"xeratharcanopulse2",
+	
+	
+	
+	
+	
+ChampionName	"Xerath",
+SpellName	"XerathArcaneBarrage2",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	700,
+Range	1000,
+Radius	200,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"XerathArcaneBarrage2",
+	
+	
+	
+	
+	
+ChampionName	"Xerath",
+SpellName	"XerathMageSpear",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	200,
+Range	1150,
+Radius	60,
+MissileSpeed	1400,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	true,
+MissileSpellName	"XerathMageSpearMissile",
+CanBeRemoved	true,
+	
+	
+	
+	
+	
+	
+	
+	
+ChampionName	"Xerath",
+SpellName	"xerathrmissilewrapper",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	700,
+Range	5600,
+Radius	120,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"xerathrmissilewrapper",
+	
+	
+Xerath	
+	
+Yasuo	
+	
+	
+	
+	
+ChampionName	"Yasuo",
+SpellName	"yasuoq2",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotLine,
+Delay	400,
+Range	550,
+Radius	20,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	true,
+MissileSpellName	"yasuoq2",
+Invert	true,
+	
+	
+	
+	
+	
+ChampionName	"Yasuo",
+SpellName	"yasuoq3w",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	500,
+Range	1150,
+Radius	90,
+MissileSpeed	1500,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"yasuoq3w",
+	
+	
+	
+	
+	
+	
+ChampionName	"Yasuo",
+SpellName	"yasuoq",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotLine,
+Delay	400,
+Range	550,
+Radius	20,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	true,
+MissileSpellName	"yasuoq",
+Invert	true,
+	
+	
+Yasuo	
+	
+Zac	
+	
+	
+	
+	
+ChampionName	"Zac",
+SpellName	"ZacQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotLine,
+Delay	500,
+Range	550,
+Radius	120,
+MissileSpeed	int.MaxValue,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ZacQ",
+	
+	
+Zac	
+	
+Zed	
+	
+	
+	
+	
+ChampionName	"Zed",
+SpellName	"ZedShuriken",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	925,
+Radius	50,
+MissileSpeed	1700,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"zedshurikenmisone",
+FromObjects	{"Zed_Clone_idle.troy","Zed_Clone_Idle.troy"},
+ExtraMissileNames	{"zedshurikenmistwo","zedshurikenmisthree"},
+	,
+	
+	
+Zed	
+	
+Ziggs	
+	
+	
+	
+	
+ChampionName	"Ziggs",
+SpellName	"ZiggsQ",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	850,
+Radius	140,
+MissileSpeed	1700,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ZiggsQSpell",
+CanBeRemoved	false,
+DisableFowDetection	true,
+	
+	
+	
+	
+	
+ChampionName	"Ziggs",
+SpellName	"ZiggsQBounce1",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	850,
+Radius	140,
+MissileSpeed	1700,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ZiggsQSpell2",
+ExtraMissileNames	{"ZiggsQSpell2"},
+CanBeRemoved	false,
+DisableFowDetection	true,
+	
+	
+	
+	
+	
+ChampionName	"Ziggs",
+SpellName	"ZiggsQBounce2",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	850,
+Radius	160,
+MissileSpeed	1700,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ZiggsQSpell3",
+ExtraMissileNames	{"ZiggsQSpell3"},
+CanBeRemoved	false,
+DisableFowDetection	true,
+	
+	
+	
+	
+	
+ChampionName	"Ziggs",
+SpellName	"ZiggsW",
+Slot	SpellSlot.W,
+Type	SkillShotType.SkillshotCircle,
+Delay	250,
+Range	1000,
+Radius	275,
+MissileSpeed	1750,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ZiggsW",
+DisableFowDetection	true,
+	
+ChampionName	"Ziggs",
+SpellName	"ZiggsE",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotCircle,
+Delay	500,
+Range	900,
+Radius	235,
+MissileSpeed	1750,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ZiggsE",
+DisableFowDetection	true,
+	
+	
+	
+	
+	
+ChampionName	"Ziggs",
+SpellName	"ZiggsR",
+Slot	SpellSlot.R,
+Type	SkillShotType.SkillshotCircle,
+Delay	0,
+Range	5300,
+Radius	500,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ZiggsR",
+DisableFowDetection	true,
+	
+	
+ChampionName	"Zyra",
+SpellName	"ZyraQFissure",
+Slot	SpellSlot.Q,
+Type	SkillShotType.SkillshotCircle,
+Delay	600,
+Range	800,
+Radius	220,
+MissileSpeed	int.MaxValue,
+FixedRange	false,
+AddHitbox	true,
+DangerValue	2,
+IsDangerous	false,
+MissileSpellName	"ZyraQFissure",
+	
+ChampionName	"Zyra",
+SpellName	"ZyraGraspingRoots",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	250,
+Range	1150,
+Radius	70,
+MissileSpeed	1150,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"ZyraGraspingRoots",
+	
+ChampionName	"Zyra",
+SpellName	"zyrapassivedeathmanager",
+Slot	SpellSlot.E,
+Type	SkillShotType.SkillshotMissileLine,
+Delay	700,
+Range	1474,
+Radius	70,
+MissileSpeed	2000,
+FixedRange	true,
+AddHitbox	true,
+DangerValue	3,
+IsDangerous	true,
+MissileSpellName	"zyrapassivedeathmanager",
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

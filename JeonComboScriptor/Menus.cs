@@ -25,8 +25,9 @@ namespace JeonComboScriptor
         {
             baseMenu = new Menu("JCombo", "JCombo", true);
             baseMenu.AddToMainMenu();
+            baseMenu.AddItem(new MenuItem("IgnorePrediction", "IgnorePrediction").SetValue(false));
             baseMenu.AddItem(new MenuItem("ReloadSciprt", "ReloadSciprt").SetValue(false));
-            baseMenu.AddItem(new MenuItem("HitChange", "HitChange").SetValue(new StringList(new[] { "Low", "Medium", "High", "Very High" })));
+            baseMenu.AddItem(new MenuItem("HitChange", "HitChange").SetValue(new Slider(2,1,4)));
             baseMenu.AddItem(new MenuItem("ComboKey", "ComboKey").SetValue(new KeyBind(32, KeyBindType.Press)));
 
             var menu_combo = new Menu("ComboInfo", "ComboInfo");
@@ -44,16 +45,16 @@ namespace JeonComboScriptor
             menu_combo.AddSubMenu(menu_w);
             menu_combo.AddSubMenu(menu_e);
             menu_combo.AddSubMenu(menu_r);
-            menu_combo.AddSubMenu(menu_q2);
-            menu_combo.AddSubMenu(menu_w2);
-            menu_combo.AddSubMenu(menu_e2);
 
             AddSpellSubmenu(menu_q, "Q", Q);
             AddSpellSubmenu(menu_w, "W", W);
             AddSpellSubmenu(menu_e, "E", E);
-            AddSpellSubmenu(menu_e, "R", R);
+            AddSpellSubmenu(menu_r, "R", R);
             if(IsChangeable)
             {
+                menu_combo.AddSubMenu(menu_q2);
+                menu_combo.AddSubMenu(menu_w2);
+                menu_combo.AddSubMenu(menu_e2);
                 AddSpellSubmenu(menu_q2, "Q2", Q2);
                 AddSpellSubmenu(menu_w2, "W2", W2);
                 AddSpellSubmenu(menu_e2, "E2", E2);
@@ -73,30 +74,29 @@ namespace JeonComboScriptor
         public static void AddSpellSubmenu(Menu menu,String spellslotname,SpellStatus spells)
         {
             if (spellslotname.Length == 1)
-                menu.AddItem(SetMenuItem(spellslotname + "_name", "Name :").SetValue(spells.name[0]));
+                menu.AddItem(SetMenuItem(spellslotname + "_name", "Name : "+spells.name[0]));
             else
-                menu.AddItem(SetMenuItem(spellslotname + "_name", "Name :").SetValue(spells.name[1]));
+                menu.AddItem(SetMenuItem(spellslotname + "_name", "Name : "+spells.name[1]));
 
-            menu.AddItem(SetMenuItem(spellslotname + "_level", "Level :").SetValue(spells.level));
-            menu.AddItem(SetMenuItem(spellslotname + "_Damagetype", "Damagetype :").SetValue(GetStringByDmgtype(spells.Damagetype)));
-            menu.AddItem(SetMenuItem(spellslotname + "_Range", "Range :").SetValue(GetStringByDmgtype(spells.Range)));
-            menu.AddItem(SetMenuItem(spellslotname + "_IsCharging", "IsCharging :").SetValue(spells.IsCharging));
-            menu.AddItem(SetMenuItem(spellslotname + "_IsMissile", "IsMissile :").SetValue(spells.IsMissile));
-            menu.AddItem(SetMenuItem(spellslotname + "_IsBlockable", "IsBlockable :").SetValue(spells.IsBlockable));
-            menu.AddItem(SetMenuItem(spellslotname + "_IsIgnorePrediction", "IgnorePrediction :").SetValue(spells.IsIgnorePrediction));
-            menu.AddItem(SetMenuItem(spellslotname + "_DmgLv1", "DmgLv1 :").SetValue(spells.DmgLv1));
-            menu.AddItem(SetMenuItem(spellslotname + "_DmgPer", "DmgPer :").SetValue(spells.DmgPer));
-            menu.AddItem(SetMenuItem(spellslotname + "_totalAD", "totalAD :").SetValue(spells.totalAD));
-            menu.AddItem(SetMenuItem(spellslotname + "_addAD", "addAD :").SetValue(spells.addAD));
-            menu.AddItem(SetMenuItem(spellslotname + "_totalAP", "totalAP :").SetValue(spells.totalAP));
+            menu.AddItem(SetMenuItem(spellslotname + "_level", "Level : "+spells.level));
+            menu.AddItem(SetMenuItem(spellslotname + "_Damagetype", "Damagetype : " + GetStringByDmgtype(spells.Damagetype)));
+            menu.AddItem(SetMenuItem(spellslotname + "_Range", "Range : "+spells.Range));
+            menu.AddItem(SetMenuItem(spellslotname + "_IsCharging", "IsCharging : " + spells.IsCharging));
+            menu.AddItem(SetMenuItem(spellslotname + "_IsMissile", "IsMissile : " + spells.IsMissile));
+            menu.AddItem(SetMenuItem(spellslotname + "_IsBlockable", "IsBlockable : " + spells.IsBlockable));
+            menu.AddItem(SetMenuItem(spellslotname + "_DmgLv1", "DmgLv1 : " + spells.DmgLv1));
+            menu.AddItem(SetMenuItem(spellslotname + "_DmgPer", "DmgPer : " + spells.DmgPer));
+            menu.AddItem(SetMenuItem(spellslotname + "_totalAD", "totalAD : " + spells.totalAD));
+            menu.AddItem(SetMenuItem(spellslotname + "_addAD", "addAD : " + spells.addAD));
+            menu.AddItem(SetMenuItem(spellslotname + "_totalAP", "totalAP : " + spells.totalAP));
             menu.AddItem(SetMenuItem("noneuse", "----SpeacialList----"));
-            menu.AddItem(SetMenuItem(spellslotname + "_EnemyAP", "EnemyAP :").SetValue(spells.totalAP));
-            menu.AddItem(SetMenuItem(spellslotname + "_MaxMana", "MaxMana :").SetValue(spells.totalAP));
-            menu.AddItem(SetMenuItem(spellslotname + "_EnemyMaxHP", "EnemyMaxHP :").SetValue(spells.EnemyMaxHP));
-            menu.AddItem(SetMenuItem(spellslotname + "_EnemyCurHP", "EnemyCurHP :").SetValue(spells.EnemyCurHP));
-            menu.AddItem(SetMenuItem(spellslotname + "_EnemyMissHP", "EnemyMissHP :").SetValue(spells.EnemyMissHP));
-            menu.AddItem(SetMenuItem(spellslotname + "_Per100AP", "Per100AP :").SetValue(spells.Per100AP));
-            menu.AddItem(SetMenuItem(spellslotname + "_IsNeedCalculate", "IsNeedCalculate :").SetValue(spells.IsNeedCalculate));
+            menu.AddItem(SetMenuItem(spellslotname + "_EnemyAP", "EnemyAP : " + spells.totalAP));
+            menu.AddItem(SetMenuItem(spellslotname + "_MaxMana", "MaxMana : " + spells.totalAP));
+            menu.AddItem(SetMenuItem(spellslotname + "_EnemyMaxHP", "EnemyMaxHP : " + spells.EnemyMaxHP));
+            menu.AddItem(SetMenuItem(spellslotname + "_EnemyCurHP", "EnemyCurHP : " + spells.EnemyCurHP));
+            menu.AddItem(SetMenuItem(spellslotname + "_EnemyMissHP", "EnemyMissHP : " + spells.EnemyMissHP));
+            menu.AddItem(SetMenuItem(spellslotname + "_Per100AP", "Per100AP : " + spells.Per100AP));
+            menu.AddItem(SetMenuItem(spellslotname + "_IsNeedCalculate", "IsNeedCalculate : " + spells.IsNeedCalculate));
         }
         public static MenuItem SetMenuItem(string id,string name)
         {
@@ -115,6 +115,22 @@ namespace JeonComboScriptor
                     return "TRUE";
                 default:
                     return "Error";
+            }
+        }
+        public static HitChance GetHitchanceByInt(int name)
+        {
+            switch (name)
+            {
+                case 1:
+                    return HitChance.Low;
+                case 2:
+                    return HitChance.Medium;
+                case 3:
+                    return HitChance.High;
+                case 4:
+                    return HitChance.VeryHigh;
+                default:
+                    return HitChance.Low;
             }
         }
     }
