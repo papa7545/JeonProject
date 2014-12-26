@@ -32,6 +32,7 @@ namespace Jeon_MissileDB
             comboBox1.DataSource = Champions;
             comboBox2.DataSource = SpellSlots;
             Isinit = true;
+            versiontext.Text = Program.appversion;
 
         }
 

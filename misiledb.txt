@@ -1,3 +1,5 @@
+AppVersion_4.21.0
+
 ChampionName_Aatrox
 SpellName_AatroxQ
 Slot_SpellSlot.Q

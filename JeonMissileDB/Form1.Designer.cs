@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -44,6 +45,7 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.versiontext = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -184,17 +186,28 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("굴림", 10F);
-            this.label9.Location = new System.Drawing.Point(225, 32);
+            this.label9.Location = new System.Drawing.Point(220, 32);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(61, 14);
+            this.label9.Size = new System.Drawing.Size(27, 14);
             this.label9.TabIndex = 16;
-            this.label9.Text = "Ver 4.21";
+            this.label9.Text = "Ver";
+            // 
+            // versiontext
+            // 
+            this.versiontext.AutoSize = true;
+            this.versiontext.Font = new System.Drawing.Font("굴림", 10F);
+            this.versiontext.Location = new System.Drawing.Point(244, 32);
+            this.versiontext.Name = "versiontext";
+            this.versiontext.Size = new System.Drawing.Size(49, 14);
+            this.versiontext.TabIndex = 17;
+            this.versiontext.Text = "0.00.0";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(305, 240);
+            this.Controls.Add(this.versiontext);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox4);
@@ -211,10 +224,11 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(321, 278);
             this.MinimumSize = new System.Drawing.Size(321, 278);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "JeonMisileDB";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,6 +252,7 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label versiontext;
     }
 }
 

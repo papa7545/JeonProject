@@ -23,12 +23,14 @@ namespace Jeon_MissileDB
         public static List<String> Speeds = new List<string>();
         public static List<cInfo> Infos = new List<cInfo>();
 
+        public static string appversion = "";
 
         public class cInfo
         {
             public string cName;
             public string SlotName, Type, Delay, Range, Width, Speed;
         }
+
 
         [STAThread]
         static void Main()
@@ -70,6 +72,10 @@ namespace Jeon_MissileDB
             foreach (var t in text.Where(tx => tx.StartsWith("MissileSpeed_")))
             {
                 Speeds.Add(t.Replace("MissileSpeed_", ""));
+            }
+            foreach (var t in text.Where(tx => tx.StartsWith("Version_")))
+            {
+                appversion = t.Replace("Version_", "");
             }
 
 
