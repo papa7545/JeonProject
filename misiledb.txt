@@ -122,7 +122,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_250
 Range_0
 Radius_550
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_false
 DangerValue_5
@@ -168,7 +168,7 @@ Type_SkillShotType.SkillshotCone
 Delay_250
 Range_825
 Radius_80
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_false
 DangerValue_2
@@ -186,7 +186,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_250
 Range_600
 Radius_251
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_5
@@ -275,7 +275,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_250
 Range_0
 Radius_600
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_false
 DangerValue_2
@@ -319,7 +319,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_850
 Range_900
 Radius_240
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -431,7 +431,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_600
 Range_850
 Radius_150
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -449,7 +449,7 @@ Type_SkillShotType.SkillshotCone
 Delay_600
 Range_825
 Radius_80
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_false
 DangerValue_5
@@ -471,7 +471,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_1200
 Range_950
 Radius_250
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_3
@@ -560,7 +560,7 @@ Type_SkillShotType.SkillshotCone
 Delay_300
 Range_550
 Radius_80
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_false
 DangerValue_3
@@ -677,7 +677,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_250
 Range_650
 Radius_350
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_5
@@ -827,7 +827,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_250
 Range_0
 Radius_550
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_false
 DangerValue_5
@@ -917,7 +917,7 @@ Type_SkillShotType.SkillshotLine
 Delay_600
 Range_600
 Radius_80
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_true
 DangerValue_2
@@ -971,7 +971,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_250
 Range_0
 Radius_500
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_false
 DangerValue_5
@@ -1210,7 +1210,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_500
 Range_860
 Radius_175
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -1408,7 +1408,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_625
 Range_875
 Radius_160
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -1430,7 +1430,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_250
 Range_700
 Radius_270
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -1566,7 +1566,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_1200
 Range_1800
 Radius_150
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -1717,7 +1717,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_1000
 Range_1200
 Radius_300
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_5
@@ -1799,7 +1799,7 @@ Type_SkillShotType.SkillshotLine
 Delay_500
 Range_1300
 Radius_65
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_true
 DangerValue_2
@@ -1888,7 +1888,7 @@ Type_SkillShotType.SkillshotLine
 Delay_1000
 Range_3500
 Radius_190
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_true
 DangerValue_5
@@ -1932,7 +1932,7 @@ Type_SkillShotType.SkillshotLine
 Delay_1000
 Range_900
 Radius_85
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -1981,7 +1981,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_1000
 Range_1625
 Radius_150
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_3
@@ -2140,7 +2140,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_250
 Range_0
 Radius_255
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_true
 DangerValue_2
@@ -2178,7 +2178,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_700
 Range_0
 Radius_410
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_true
 DangerValue_5
@@ -2578,7 +2578,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_1100
 Range_900
 Radius_180
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_3
@@ -2600,7 +2600,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_600
 Range_800
 Radius_150
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -2961,7 +2961,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_1350
 Range_900
 Radius_225
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -2979,7 +2979,7 @@ Type_SkillShotType.SkillshotRing
 Delay_250
 Range_600
 Radius_80
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_false
 DangerValue_3
@@ -3134,7 +3134,7 @@ Type_SkillShotType.SkillshotLine
 Delay_600
 Range_1600
 Radius_100
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_true
 DangerValue_2
@@ -3152,7 +3152,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_700
 Range_1000
 Radius_200
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -3192,7 +3192,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_700
 Range_5600
 Radius_120
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_3
@@ -3214,7 +3214,7 @@ Type_SkillShotType.SkillshotLine
 Delay_400
 Range_550
 Radius_20
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_true
 DangerValue_2
@@ -3252,7 +3252,7 @@ Type_SkillShotType.SkillshotLine
 Delay_400
 Range_550
 Radius_20
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_true
 DangerValue_2
@@ -3275,7 +3275,7 @@ Type_SkillShotType.SkillshotLine
 Delay_500
 Range_550
 Radius_120
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_true
 AddHitbox_true
 DangerValue_2
@@ -3418,7 +3418,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_0
 Range_5300
 Radius_500
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2
@@ -3434,7 +3434,7 @@ Type_SkillShotType.SkillshotCircle
 Delay_600
 Range_800
 Radius_220
-MissileSpeed_int.MaxValue
+MissileSpeed_2147483647
 FixedRange_false
 AddHitbox_true
 DangerValue_2

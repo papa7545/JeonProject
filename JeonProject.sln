@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonComboScriptor", "JeonCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonZilean", "JeonZilean\JeonZilean.csproj", "{184D02A5-752A-4995-B957-A17F7A41BD8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{D45C7FF9-F736-4932-870D-B02F354B667C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeon_MissileDB", "JeonMissileDB\Jeon_MissileDB.csproj", "{ACA872B9-AF5F-4A37-952A-C70F372C9C70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{184D02A5-752A-4995-B957-A17F7A41BD8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{184D02A5-752A-4995-B957-A17F7A41BD8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{184D02A5-752A-4995-B957-A17F7A41BD8D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D45C7FF9-F736-4932-870D-B02F354B667C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D45C7FF9-F736-4932-870D-B02F354B667C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D45C7FF9-F736-4932-870D-B02F354B667C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D45C7FF9-F736-4932-870D-B02F354B667C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
