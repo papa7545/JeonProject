@@ -73,9 +73,9 @@ namespace Jeon_MissileDB
             {
                 Speeds.Add(t.Replace("MissileSpeed_", ""));
             }
-            foreach (var t in text.Where(tx => tx.StartsWith("Version_")))
+            foreach (var t in text.Where(tx => tx.StartsWith("AppVersion_")))
             {
-                appversion = t.Replace("Version_", "");
+                appversion = t.Replace("AppVersion_", "");
             }
 
 
