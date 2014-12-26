@@ -78,6 +78,15 @@ namespace JeonComboScriptor
                     }
                     return Player.CalcDamage(target, Damage.DamageType.True, eDmg);
                 }
+                else if (Player.BaseSkinName == "Darius" && Spell.slot == SpellSlot.R) // Nasus Q
+                {
+                    double eDmg = 0;
+                    foreach (var venoms in Player.Buffs.Where(venoms => venoms.DisplayName == "NasusSiphoningStrike")) 
+                    {
+                        eDmg = spell_basedamage[Spell.level] + venoms.Count;
+                    }
+                    return Player.CalcDamage(target, Damage.DamageType.Physical, eDmg);
+                }
                 return 0;
             }
             

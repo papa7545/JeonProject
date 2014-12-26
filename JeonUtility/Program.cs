@@ -316,7 +316,6 @@ namespace JeonUtility
                         Vector3 cursor = Game.CursorPos;
                         Vector3 myPos = Player.ServerPosition;
                         Player.IssueOrder(GameObjectOrder.MoveTo, cursor);
-
                         foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(ward => ward.IsVisible && ward.IsAlly && !ward.IsMe &&
                             Vector3.DistanceSquared(cursor, ward.ServerPosition) <= 200 * 200 &&
                             ward.Distance(Player) <= 700 && ward.Name.IndexOf("Turret") == -1))
