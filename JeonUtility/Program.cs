@@ -319,14 +319,14 @@ namespace JeonUtility
                         Player.IssueOrder(GameObjectOrder.MoveTo, cursor);
                         foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(ward => ward.IsVisible && ward.IsAlly && !ward.IsMe &&
                             Vector3.DistanceSquared(cursor, ward.ServerPosition) <= 200 * 200 &&
-                            ward.Distance(Player) <= 700 && ward.Name.IndexOf("Turret") == -1))
+                            Vector3.Distance(ward.Position,Player.Position) <= 700 && ward.Name.IndexOf("Turret") == -1))
                         {
                             jumpspell.CastOnUnit(target);
                         }
 
                         if (rdyward)
                         {
-                            Items.GetWardSlot().UseItem(cursor);
+                            Player.Spellbook.CastSpell(Items.GetWardSlot().SpellSlot,cursor);
                         }
                     }
                 }
@@ -415,7 +415,7 @@ namespace JeonUtility
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Zhonyas_Hourglass))
                 {
                     if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_zhonya"))
-                        p_item.UseItem();
+                        Player.Spellbook.CastSpell(p_item.SpellSlot);
                 }
             }
             tempItemid = Convert.ToInt32(ItemId.Blade_of_the_Ruined_King);
@@ -428,7 +428,7 @@ namespace JeonUtility
                 {
                     if (ObjectManager.Get<Obj_AI_Hero>().Any(h=>h.IsEnemy && !h.IsDead && h.IsVisible &&
                         Vector3.Distance(h.Position, Player.Position) <= Jlib.getm_value("useitem_botrk_atg_p")) && Jlib.getm_bool("useitem_botrk_atg"))
-                        p_item.UseItem(target); ;
+                        Player.Spellbook.CastSpell(p_item.SpellSlot, target);
 
                     foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy && h.IsValid && h.IsVisible && Vector3.Distance(h.Position, Player.Position) <= 450))
                     {
@@ -439,7 +439,7 @@ namespace JeonUtility
                             target = hero;
                         }
                     }
-                    p_item.UseItem(target);
+                    Player.Spellbook.CastSpell(p_item.SpellSlot, target);
                 }
             }
 
@@ -453,14 +453,14 @@ namespace JeonUtility
                     foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsAlly && !h.IsMe && h.IsValid && h.IsVisible && Vector3.Distance(h.Position, Player.Position) <= 800))
                     {
                         if (hero.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_mikaels"))
-                            p_item.UseItem(hero);
+                            Player.Spellbook.CastSpell(p_item.SpellSlot, hero);
 
                         if (Jlib.getm_bool("mikaels_cc_bool"))
                         {
                             foreach(var buff in hero.Buffs)
                             {
                                 if (bufflist.Any(b => b == buff.Type))
-                                    Utility.DelayAction.Add(Jlib.getm_value("useitem_p_mikaels_delay"), () => { p_item.UseItem(hero); }); 
+                                    Utility.DelayAction.Add(Jlib.getm_value("useitem_p_mikaels_delay"), () => { Player.Spellbook.CastSpell(p_item.SpellSlot, hero); }); 
                             }
                         }
                     }
@@ -481,7 +481,7 @@ namespace JeonUtility
                             Utility.DelayAction.Add(Jlib.getm_value("useitem_p_qs_delay"), () =>
                             {
                                 if (bufflist.Any(b => b == buff.Type))
-                                    p_item.UseItem();
+                                    Player.Spellbook.CastSpell(p_item.SpellSlot);
                                 if (buff.DisplayName == "zedulttargetmark")
                                     Game.PrintChat("zed! {0}", buff.Type.ToString());
                                 if (buff.DisplayName == "fizzmarinerdoombomb")
@@ -501,7 +501,7 @@ namespace JeonUtility
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Crystalline_Flask && !Player.HasBuff("ItemCrystalFlask")))
                 {
                     if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_fla"))
-                        p_item.UseItem();
+                        Player.Spellbook.CastSpell(p_item.SpellSlot);
                 }
             }
             tempItemid = Convert.ToInt32(ItemId.Health_Potion);
@@ -511,7 +511,7 @@ namespace JeonUtility
                 {
                     if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_hp"))
                     {
-                        p_item.UseItem();
+                        Player.Spellbook.CastSpell(p_item.SpellSlot);
                     }
                 }
             }
@@ -523,7 +523,7 @@ namespace JeonUtility
                 {
                     if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_mana"))
                     {
-                        p_item.UseItem();
+                        Player.Spellbook.CastSpell(p_item.SpellSlot);
                     }
                 }
             }
@@ -662,7 +662,6 @@ namespace JeonUtility
                 int interval = 20;
                 int i = 0;
 
-                Game.PrintChat(x + "," + y);
                 Drawing.DrawText(x, y, Color.Wheat, "Champion : " + Player.BaseSkinName);
                 i++;
 
