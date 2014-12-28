@@ -24,7 +24,7 @@ namespace JeonHelperForDev
 
         public class PositionInfo
         {
-            public Vector3 position;
+            public Vector3 Position;
             public Byte count;
         }
 
@@ -66,6 +66,7 @@ namespace JeonHelperForDev
             var menu_positions = new Menu("DrawingPositions", "DrawingPositions");
             baseMenu.AddSubMenu(menu_positions);
             menu_positions.AddItem(new MenuItem("item_positions_key", "Key : ").SetValue<KeyBind>(new KeyBind('T', KeyBindType.Toggle)));
+            menu_positions.AddItem(new MenuItem("item_positions_undo", "UndoKey : ").SetValue<KeyBind>(new KeyBind('K', KeyBindType.Toggle)));
             menu_positions.AddItem(new MenuItem("item_positions_clear", "Clear").SetValue<bool>(false));
            
 
@@ -103,40 +104,71 @@ namespace JeonHelperForDev
             #region spell_me
             if (baseMenu.Item("item_spell_me_q").GetValue<bool>() || baseMenu.Item("item_spell_me_q_key").GetValue<KeyBind>().Active && baseMenu.Item("item_spell_me_bool").GetValue<bool>())
             {
+
+                char Key = (char)baseMenu.Item("item_spell_me_q_key").GetValue<KeyBind>().Key;
+
                 show_spell_me(SpellSlot.Q);
                 baseMenu.Item("item_spell_me_q").SetValue<bool>(false);
-                baseMenu.Item("item_spell_me_q_key").SetValue<KeyBind>(new KeyBind('Q', KeyBindType.Toggle));
+                baseMenu.Item("item_spell_me_q_key").SetValue<KeyBind>(new KeyBind(Key, KeyBindType.Toggle));
             }
             if (baseMenu.Item("item_spell_me_w").GetValue<bool>() || baseMenu.Item("item_spell_me_w_key").GetValue<KeyBind>().Active && baseMenu.Item("item_spell_me_bool").GetValue<bool>())
             {
+                char Key = (char)baseMenu.Item("item_spell_me_w_key").GetValue<KeyBind>().Key;
+
                 show_spell_me(SpellSlot.W);
                 baseMenu.Item("item_spell_me_w").SetValue<bool>(false);
-                baseMenu.Item("item_spell_me_w_key").SetValue<KeyBind>(new KeyBind('W', KeyBindType.Toggle));
+                baseMenu.Item("item_spell_me_w_key").SetValue<KeyBind>(new KeyBind(Key, KeyBindType.Toggle));
             }
             if (baseMenu.Item("item_spell_me_e").GetValue<bool>() || baseMenu.Item("item_spell_me_e_key").GetValue<KeyBind>().Active && baseMenu.Item("item_spell_me_bool").GetValue<bool>())
             {
+                char Key = (char)baseMenu.Item("item_spell_me_e_key").GetValue<KeyBind>().Key;
+
                 show_spell_me(SpellSlot.E);
                 baseMenu.Item("item_spell_me_e").SetValue<bool>(false);
-                baseMenu.Item("item_spell_me_e_key").SetValue<KeyBind>(new KeyBind('E', KeyBindType.Toggle));
+                baseMenu.Item("item_spell_me_e_key").SetValue<KeyBind>(new KeyBind(Key, KeyBindType.Toggle));
             }
             if (baseMenu.Item("item_spell_me_r").GetValue<bool>() || baseMenu.Item("item_spell_me_r_key").GetValue<KeyBind>().Active && baseMenu.Item("item_spell_me_bool").GetValue<bool>())
             {
+                char Key = (char)baseMenu.Item("item_spell_me_r_key").GetValue<KeyBind>().Key;
+
                 show_spell_me(SpellSlot.R);
                 baseMenu.Item("item_spell_me_r").SetValue<bool>(false);
-                baseMenu.Item("item_spell_me_r_key").SetValue<KeyBind>(new KeyBind('R', KeyBindType.Toggle));
+                baseMenu.Item("item_spell_me_r_key").SetValue<KeyBind>(new KeyBind(Key, KeyBindType.Toggle));
             }
+
+
             if (baseMenu.Item("item_positions_key").GetValue<KeyBind>().Active)
             {
+
+                char Key = (char)baseMenu.Item("item_positions_key").GetValue<KeyBind>().Key;
+
                 PositionInfo temp = new PositionInfo();
                 temp.count = (byte)(positions.Count + 1);
-                temp.position = Player.Position;
+                temp.Position = Player.Position;
                 positions.Add(temp);
-                baseMenu.Item("item_positions_key").SetValue<KeyBind>(new KeyBind('T', KeyBindType.Toggle));
+
+                baseMenu.Item("item_positions_key").SetValue<KeyBind>(new KeyBind(Key, KeyBindType.Toggle));
+            }
+            if (baseMenu.Item("item_positions_clear").GetValue<bool>())
+            {
+                positions.Clear();
+                baseMenu.Item("item_positions_clear").SetValue<bool>(false);
+            }
+            if (baseMenu.Item("item_positions_undo").GetValue<KeyBind>().Active)
+            {
+                char Key = (char)baseMenu.Item("item_positions_undo").GetValue<KeyBind>().Key;
+                positions.RemoveAt(positions.Count - 1);
+                baseMenu.Item("item_positions_undo").SetValue<KeyBind>(new KeyBind(Key, KeyBindType.Toggle));
             }
             #endregion
 
-
-
+            foreach (var position in positions)
+            {
+                Vector2 text = Drawing.WorldToScreen(position.Position);
+                Drawing.DrawText(text.X - 29, text.Y - 14, System.Drawing.Color.Black, position.count.ToString());//shadow
+                Drawing.DrawText(text.X - 30, text.Y - 15, System.Drawing.Color.Red, position.count.ToString());
+                Drawing.DrawText(text.X-30, text.Y, System.Drawing.Color.White, position.Position.ToString());
+            }
         }
 
         private static void show_spell_me(SpellSlot slot)
@@ -203,6 +235,12 @@ namespace JeonHelperForDev
                     Utility.DrawCircle(missile.StartPosition, 100, System.Drawing.Color.White);
                     
                 }
+
+            foreach(var position in positions)
+            {
+                Vector2 text = Drawing.WorldToScreen(position.Position);
+                Utility.DrawCircle(position.Position, 100, System.Drawing.Color.Blue);
+            }
         }
     }
 }
