@@ -262,7 +262,7 @@ namespace JeonAutoSoraka
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
-            if (Game.Time > 30 && StartBuy)
+            if (Game.Time > 50 && StartBuy)
             {
                 ObjectManager.Player.BuyItem(JeonItem.GetItemIdbyInt(3301));
                 ObjectManager.Player.BuyItem(JeonItem.GetItemIdbyInt(3340));
