@@ -19,16 +19,15 @@ namespace JeonComboScriptor
 {
     class Menus:Program
     {
-        public static List<MenuItem> MenuList = new List<MenuItem>();
 
         public static void CreateMenu()
         {
-            baseMenu = new Menu("JCombo", "JCombo", true);
+            baseMenu = new Menu("JComboScriptor", "JComboScriptor", true);
             baseMenu.AddToMainMenu();
-            baseMenu.AddItem(new MenuItem("IgnorePrediction", "IgnorePrediction").SetValue(false));
-            baseMenu.AddItem(new MenuItem("ReloadSciprt", "ReloadSciprt").SetValue(false));
-            baseMenu.AddItem(new MenuItem("HitChange", "HitChange").SetValue(new Slider(2,1,4)));
-            baseMenu.AddItem(new MenuItem("ComboKey", "ComboKey").SetValue(new KeyBind(32, KeyBindType.Press)));
+
+
+            var menu_ts = new Menu("TargetSelector", "TargetSelector");
+            TargetSelector.AddToMenu(menu_ts);
 
             var menu_combo = new Menu("ComboInfo", "ComboInfo");
             var menu_q = new Menu("Q", "Q");
@@ -40,7 +39,16 @@ namespace JeonComboScriptor
             var menu_w2 = new Menu("W2", "W2");
             var menu_e2 = new Menu("E2", "E2");
 
+
+            var menu_comboset = new Menu("ComboSetting", "ComboSetting");
+            menu_comboset.AddItem(new MenuItem("IgnorePrediction", "IgnorePrediction").SetValue(false));
+            menu_comboset.AddItem(new MenuItem("HitChance", "HitChance").SetValue(new Slider(2, 1, 4)));
+            menu_comboset.AddItem(new MenuItem("Combo_Key", "ComboKey : ").SetValue(new KeyBind(32, KeyBindType.Press)));
+
+
+
             baseMenu.AddSubMenu(menu_combo);
+            baseMenu.AddSubMenu(menu_comboset);
             menu_combo.AddSubMenu(menu_q);
             menu_combo.AddSubMenu(menu_w);
             menu_combo.AddSubMenu(menu_e);
@@ -50,6 +58,7 @@ namespace JeonComboScriptor
             AddSpellSubmenu(menu_w, "W", W);
             AddSpellSubmenu(menu_e, "E", E);
             AddSpellSubmenu(menu_r, "R", R);
+
             if(IsChangeable)
             {
                 menu_combo.AddSubMenu(menu_q2);
@@ -63,46 +72,72 @@ namespace JeonComboScriptor
 
 
             var menu_misc = new Menu("Misc", "Misc");
-            menu_misc.AddItem(SetMenuItem("Misc_combo", "Combo:").SetValue(Misc.textCombo));
-            menu_misc.AddItem(SetMenuItem("Misc_DrawQ", "DrawQ").SetValue(Misc.DrawQ));
-            menu_misc.AddItem(SetMenuItem("Misc_DrawW", "DrawW").SetValue(Misc.DrawW));
-            menu_misc.AddItem(SetMenuItem("Misc_DrawE", "DrawE").SetValue(Misc.DrawE));
-            menu_misc.AddItem(SetMenuItem("Misc_DrawR", "DrawR").SetValue(Misc.DrawR));
+            menu_misc.AddItem(SetMenuItem("Misc_combo", "Combo:" + Misc.textCombo));
+            menu_misc.AddItem(SetMenuItem("Misc_DrawQ", "DrawQ - " + Misc.DrawQ));
+            menu_misc.AddItem(SetMenuItem("Misc_DrawW", "DrawW - " + Misc.DrawW));
+            menu_misc.AddItem(SetMenuItem("Misc_DrawE", "DrawE - " + Misc.DrawE));
+            menu_misc.AddItem(SetMenuItem("Misc_DrawR", "DrawR - " + Misc.DrawR));
+
+            baseMenu.AddSubMenu(menu_misc);
 
         }
 
         public static void AddSpellSubmenu(Menu menu,String spellslotname,SpellStatus spells)
         {
             if (spellslotname.Length == 1)
-                menu.AddItem(SetMenuItem(spellslotname + "_name", "Name : "+spells.name[0]));
+                menu.AddItem(SetMenuItem(spellslotname + "_name", "Name : " + spells.name[0]));
             else
-                menu.AddItem(SetMenuItem(spellslotname + "_name", "Name : "+spells.name[1]));
+                menu.AddItem(SetMenuItem(spellslotname + "_name", "Name : " + spells.name[1]));
 
-            menu.AddItem(SetMenuItem(spellslotname + "_level", "Level : "+spells.level));
+            menu.AddItem(SetMenuItem(spellslotname + "_level", "Level : " + spells.level));
             menu.AddItem(SetMenuItem(spellslotname + "_Damagetype", "Damagetype : " + GetStringByDmgtype(spells.Damagetype)));
-            menu.AddItem(SetMenuItem(spellslotname + "_Range", "Range : "+spells.Range));
+            menu.AddItem(SetMenuItem(spellslotname + "_Range", "Range : " + spells.Range));
             menu.AddItem(SetMenuItem(spellslotname + "_IsCharging", "IsCharging : " + spells.IsCharging));
+            if (spells.IsCharging)
+            {
+                menu.AddItem(SetMenuItem(spellslotname + "_ChargingTime", "ChargingTime : " + spells.ChargingTime));
+            }
             menu.AddItem(SetMenuItem(spellslotname + "_IsMissile", "IsMissile : " + spells.IsMissile));
+
+            if (spells.IsMissile)
+            {
+                menu.AddItem(SetMenuItem(spellslotname + "_MissileType", "MissileType : " + ComboSpells.GetSStypeByByte(spells.MissileType).ToString().Replace("Skillshot", "")));
+                menu.AddItem(SetMenuItem(spellslotname + "_MissileDelay", "MissileDelay  : " + spells.MissileDelay));
+            }
             menu.AddItem(SetMenuItem(spellslotname + "_IsBlockable", "IsBlockable : " + spells.IsBlockable));
-            menu.AddItem(SetMenuItem(spellslotname + "_DmgLv1", "DmgLv1 : " + spells.DmgLv1));
-            menu.AddItem(SetMenuItem(spellslotname + "_DmgPer", "DmgPer : " + spells.DmgPer));
-            menu.AddItem(SetMenuItem(spellslotname + "_totalAD", "totalAD : " + spells.totalAD));
-            menu.AddItem(SetMenuItem(spellslotname + "_addAD", "addAD : " + spells.addAD));
-            menu.AddItem(SetMenuItem(spellslotname + "_totalAP", "totalAP : " + spells.totalAP));
-            menu.AddItem(SetMenuItem("noneuse", "----SpeacialList----"));
-            menu.AddItem(SetMenuItem(spellslotname + "_EnemyAP", "EnemyAP : " + spells.totalAP));
-            menu.AddItem(SetMenuItem(spellslotname + "_MaxMana", "MaxMana : " + spells.totalAP));
-            menu.AddItem(SetMenuItem(spellslotname + "_EnemyMaxHP", "EnemyMaxHP : " + spells.EnemyMaxHP));
-            menu.AddItem(SetMenuItem(spellslotname + "_EnemyCurHP", "EnemyCurHP : " + spells.EnemyCurHP));
-            menu.AddItem(SetMenuItem(spellslotname + "_EnemyMissHP", "EnemyMissHP : " + spells.EnemyMissHP));
-            menu.AddItem(SetMenuItem(spellslotname + "_Per100AP", "Per100AP : " + spells.Per100AP));
+
+
+            SetMenuItem(spellslotname + "_DmgLv1", "DmgLv1 : ", spells.DmgLv1, menu);
+            SetMenuItem(spellslotname + "_DmgPer", "DmgPer : ", spells.DmgPer, menu);
+            SetMenuItem(spellslotname + "_totalAD", "totalAD : ", spells.totalAD, menu);
+            SetMenuItem(spellslotname + "_addAD", "addAD : ", spells.addAD, menu);
+            SetMenuItem(spellslotname + "_totalAP", "totalAP : ", spells.totalAP, menu);
+
+            menu.AddItem(SetMenuItem(spellslotname + "noneuse", "----SpeacialList----"));
+
+            SetMenuItem(spellslotname + "_EnemyAP", "EnemyAP : ", spells.totalAP, menu);
+            SetMenuItem(spellslotname + "_MaxMana", "MaxMana : ", spells.totalAP, menu);
+            SetMenuItem(spellslotname + "_EnemyMaxHP", "EnemyMaxHP : ", spells.EnemyMaxHP, menu);
+            SetMenuItem(spellslotname + "_EnemyCurHP", "EnemyCurHP : ", spells.EnemyCurHP, menu);
+            SetMenuItem(spellslotname + "_EnemyMissHP", "EnemyMissHP : ", spells.EnemyMissHP, menu);
+            SetMenuItem(spellslotname + "_Per100AP", "Per100AP : ", spells.Per100AP, menu);
             menu.AddItem(SetMenuItem(spellslotname + "_IsNeedCalculate", "IsNeedCalculate : " + spells.IsNeedCalculate));
         }
         public static MenuItem SetMenuItem(string id,string name)
         {
             MenuItem temp = new MenuItem(id, name);
-            MenuList.Add(temp);
             return temp;
+        }
+        public static MenuItem SetMenuItem(string id, string name,double target,Menu menu)
+        {
+            if (!(target <= 0))
+            {
+                MenuItem temp = new MenuItem(id, name + target);
+                baseMenu.AddItem(temp);
+                return temp;
+            }
+            else
+                return null;
         }
         private static string GetStringByDmgtype(int i)
         {

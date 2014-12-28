@@ -22,17 +22,12 @@ namespace JeonComboScriptor
         // 목록 추가시 수정해야될 부분 SetSpellstatus,SaveSpellstatus,GetSpellstatus
         public static void SetSpellstatus(string targetSpell)
         {
-            SetSettingValue(targetSpell, "Range", "100", setFile.FullName);
             SetSettingValue(targetSpell, "Damagetype", "1", setFile.FullName);
-            SetSettingValue(targetSpell, "IsCharging", "0", setFile.FullName);
-            SetSettingValue(targetSpell, "ChargingMin", "000", setFile.FullName);
-            SetSettingValue(targetSpell, "ChargingMax", "000", setFile.FullName);
+            SetSettingValue(targetSpell, "IsCharged", "0", setFile.FullName);
             SetSettingValue(targetSpell, "ChargingTime", "0", setFile.FullName);
             SetSettingValue(targetSpell, "IsMissile", "0", setFile.FullName);
             SetSettingValue(targetSpell, "MissileType", "1", setFile.FullName);  // 1-Circle,2-Cone,3-Line
             SetSettingValue(targetSpell, "MissileDelay", "00", setFile.FullName);
-            SetSettingValue(targetSpell, "MissileSpeed", "00", setFile.FullName);
-            SetSettingValue(targetSpell, "MissileWidth", "00", setFile.FullName);
             SetSettingValue(targetSpell, "IsBlockable", "0", setFile.FullName);
             SetSettingValue(targetSpell, "DmgLv1", "00", setFile.FullName);
             SetSettingValue(targetSpell, "DmgPer", "00", setFile.FullName);
@@ -52,28 +47,22 @@ namespace JeonComboScriptor
         }
         public static void SetMisc()
         {
-            SetSettingValue("Misc", "Combo", "1-2-3-4-1", setFile.FullName);
+            SetSettingValue("Misc", "Combo", "1-2-3-4", setFile.FullName);
             SetSettingValue("Misc", "DrawQ", "1", setFile.FullName);
             SetSettingValue("Misc", "DrawW", "1", setFile.FullName);
             SetSettingValue("Misc", "DrawE", "1", setFile.FullName);
             SetSettingValue("Misc", "DrawR", "1", setFile.FullName);
-            SetSettingValue("Misc", "DrawCombo", "1", setFile.FullName);
         }
 
         
         public static void GetSpellstatus(ref SpellStatus targetSpell, String name)
         {
-            targetSpell.Range = GetSettingValue_Int(name, "Range", setFile.FullName);
             targetSpell.Damagetype = (byte)GetSettingValue_Int(name, "Damagetype", setFile.FullName);
-            targetSpell.IsCharging = GetSettingValue_Bool(name, "IsCharging", setFile.FullName);
-            targetSpell.ChargingMin = GetSettingValue_Int(name, "ChargingMin", setFile.FullName);
-            targetSpell.ChargingMax = GetSettingValue_Int(name, "ChargingMax", setFile.FullName);
+            targetSpell.IsCharging = GetSettingValue_Bool(name, "IsCharged", setFile.FullName);
             targetSpell.ChargingTime = GetSettingValue_Double(name, "ChargingTime", setFile.FullName);
             targetSpell.IsMissile = GetSettingValue_Bool(name, "IsMissile", setFile.FullName);
             targetSpell.MissileType = (byte)GetSettingValue_Int(name, "MissileType", setFile.FullName);
             targetSpell.MissileDelay = GetSettingValue_Int(name, "MissileDelay", setFile.FullName);
-            targetSpell.MissileSpeed = GetSettingValue_Int(name, "MissileSpeed", setFile.FullName);
-            targetSpell.MissileWidth = GetSettingValue_Int(name, "MissileWidth", setFile.FullName);
             targetSpell.IsBlockable = GetSettingValue_Bool(name, "IsBlockable", setFile.FullName);
             targetSpell.DmgLv1 = GetSettingValue_Double(name, "DmgLv1", setFile.FullName);
             targetSpell.DmgPer = GetSettingValue_Double(name, "DmgPer", setFile.FullName);
@@ -93,18 +82,42 @@ namespace JeonComboScriptor
             targetSpell.level = ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).Level;
             targetSpell.manacost = ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).ManaCost;
 
+            if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride[0] == 0)
+            {
+                if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius[0] == 0)
+                {
+                    targetSpell.Range =
+                        (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRange[0];
+                }
+                else
+                {
+                    targetSpell.Range =
+                        (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius[0];
+                }
+            }
+            else
+                targetSpell.Range =
+                    (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride[0];
+            
             targetSpell.name[0] = ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).Name.Replace(Player.BaseSkinName,"");
             targetSpell.name[1] = GetChangeableSpellName(targetSpell.slot);
+
         }
         public static void GetMisc()
         {
-            GetSettingValue_Combo("Misc", "Combo", setFile.FullName);
-            Misc.textCombo = GetSettingValue_String("Misc", "Combo", setFile.FullName);
+
+            Misc.textCombo = GetSettingValue_String("Misc", "Combo", setFile.FullName)
+                .Replace("1", "Q").Replace("2", "W").Replace("3", "E").Replace("4", "R")
+                .Replace("5", "Q2").Replace("6","W2").Replace("7","E2");
             Misc.DrawQ = GetSettingValue_Bool("Misc", "DrawQ", setFile.FullName);
             Misc.DrawW = GetSettingValue_Bool("Misc", "DrawW", setFile.FullName);
             Misc.DrawE = GetSettingValue_Bool("Misc", "DrawE", setFile.FullName);
             Misc.DrawR = GetSettingValue_Bool("Misc", "DrawR", setFile.FullName);
-            Misc.DrawCombo = GetSettingValue_Bool("Misc", "DrawCombo", setFile.FullName);
+
+
+
+            Misc.Combo = Misc.textCombo.Split('-');
+
         }
 
         private static SpellSlot GetSpellSlotByString(String temp)
@@ -173,5 +186,6 @@ namespace JeonComboScriptor
 
             return "";
         }
+
     }
 }

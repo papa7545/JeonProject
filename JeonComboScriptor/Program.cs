@@ -17,7 +17,7 @@ using Color = System.Drawing.Color;
 
 namespace JeonComboScriptor
 {
-    class Program:CaptureLib
+    class Program : CaptureLib
     {
         /*
          * Process :
@@ -27,19 +27,30 @@ namespace JeonComboScriptor
 
 
         public static Obj_AI_Hero Player = ObjectManager.Player;
+        public static Obj_AI_Hero SelectedC = null;
         public static String cName = Player.BaseSkinName;
+        public static String[] ChangeableHero = {
+                                                    "LeeSin","Elise","Jayce","Nidalee","RekSai"
+                                                };
+        public static Bool IsChangeable = ChangeableHero.Contains(cName);
+        public static Bool IsCharging = false;
+        public static double ChargingRange = 0,speed = 0;
+        public static Bool ChargingRange_set= false;
+        public static int pastTime;
+
+
         public static DirectoryInfo dir = new DirectoryInfo(Config.LeagueSharpDirectory.ToString() + @"\JeonScriptor");
         public static FileInfo setFile = new FileInfo(dir + "/" + cName + ".ini");
 
         public class SpellStatus
         {
             //read info in ini file
-            public string[] name = {"",""};
-            public byte Damagetype,MissileType;
-            public int Range,  ChargingMin, ChargingMax,MissileDelay,MissileSpeed,MissileWidth;
+            public string[] name = { "", "" };
+            public byte Damagetype, MissileType;
+            public int Range, MissileDelay;
             public double DmgLv1, DmgPer, totalAD, addAD, totalAP, EnemyAP, MaxMana, EnemyMaxHP, EnemyCurHP, EnemyMissHP, Per100AP,
                 ChargingTime;
-            public bool IsCharging,IsMissile, IsBlockable, IsIgnorePrediction,IsNeedCalculate;
+            public bool IsCharging, IsMissile, IsBlockable, IsNeedCalculate;
 
             //read info in Client
             public int level;
@@ -48,22 +59,23 @@ namespace JeonComboScriptor
         }
         public class MiscStatus
         {
-            public byte[] Combo={};
+            public String[] Combo = { };
+            public bool DrawQ, DrawW, DrawE, DrawR;
             public string textCombo;
-            public bool DrawQ, DrawW, DrawE, DrawR,DrawCombo;
         }
 
-        public static String[] ChangeableHero = {
-                                                    "LeeSin","Elise","Jayce","Nidalee","RekSai"
-                                                };
-        public static Bool IsChangeable = ChangeableHero.Contains(cName);
-
-        public static List<Spell> c_Spells = new List<Spell>();
 
         public static SpellStatus Q = new SpellStatus(), W = new SpellStatus(), E = new SpellStatus(), R = new SpellStatus();
         public static SpellStatus Q2 = new SpellStatus(), W2 = new SpellStatus(), E2 = new SpellStatus(), R2 = new SpellStatus();
         public static MiscStatus Misc = new MiscStatus();
+        public static Spell s_Q,s_W, s_E, s_R;
+
+
+
+        public static List<Spell> c_Spells = new List<Spell>();
+        public static List<SpellSlot> spell_orderlist = new List<SpellSlot>();
         public static HitChance h_chance;
+        public static byte spell_ordernum = 0;
 
         public static Menu baseMenu;
 
@@ -71,10 +83,11 @@ namespace JeonComboScriptor
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
         }
-        
+
         private static void OnGameLoad(EventArgs args)
         {
             Game.PrintChat("<font color ='#33FFFF'>Jeon's ComboScriptor v1.0 </font>Loaded");
+
 
 
             try
@@ -99,60 +112,79 @@ namespace JeonComboScriptor
                 }
 
                 DoReadini();
+                Menus.CreateMenu();
                 #endregion
             }
             catch
             {
-                Game.PrintChat("BUG!!!!!!!!!!");
+                Game.PrintChat("THERE ARE BUG! PLZ CHECK YOUR INI FILE");
             }
 
-            Menus.CreateMenu();
+
+            ComboSpells.getComboSpells();
+            ComboSpells.getComboSpellList();
+
+            foreach (var spell in c_Spells)
+            {
+                if (spell.Slot == SpellSlot.Q)
+                    s_Q = spell;
+                if (spell.Slot == SpellSlot.W)
+                    s_W = spell;
+                if (spell.Slot == SpellSlot.E)
+                    s_E = spell;
+                if (spell.Slot == SpellSlot.R)
+                    s_R = spell;
+            }
+
 
 
             Game.OnGameUpdate += OnGameUpdate;
             Drawing.OnEndScene += OnDraw_EndScene;
+            Game.OnWndProc += OnWndProc;
         }
-        
+
         private static void OnGameUpdate(EventArgs args)
         {
-            ComboSpells.getComboSpells();
-            h_chance = Menus.GetHitchanceByInt((byte)baseMenu.Item("HitChance").GetValue<Slider>().Value);
+            h_chance = Menus.GetHitchanceByInt(baseMenu.Item("HitChance").GetValue<Slider>().Value);
 
-            //Menus.link_menuitem2var(); --쓸까말까고민중
-            if (baseMenu.Item("ComboKey").GetValue<bool>())
-            {
-              ComboSpells.CastComboSpells(TargetSelector.GetSelectedTarget());    
-            }
 
-            if (baseMenu.Item("ReloadSciprt").GetValue<bool>())
-            {
-                DoReadini();
-                baseMenu.Item("ReloadScript").SetValue<bool>(false);
-            }
+
+            if (baseMenu.Item("Combo_Key").GetValue<KeyBind>().Active)
+                ComboSpells.CastComboSpells(SelectedC);
+
         }
 
 
         private static void OnDraw_EndScene(EventArgs args)
         {
-            if (baseMenu.Item("Misc_combo").GetValue<bool>())
-                Drawing.DrawText(100, 100, Color.White, Misc.textCombo);
-            if (baseMenu.Item("Misc_DrawQ").GetValue<bool>())
-                Utility.DrawCircle(Player.Position, Q.Range, Color.White);
-            if (baseMenu.Item("Misc_DrawW").GetValue<bool>())
-                Utility.DrawCircle(Player.Position, W.Range, Color.White);
-            if (baseMenu.Item("Misc_DrawE").GetValue<bool>())
-                Utility.DrawCircle(Player.Position, E.Range, Color.White);
+            if (Misc.DrawQ)
+                Utility.DrawCircle(Player.Position, Q.Range, Color.White, 5, 20);
+            if (Misc.DrawW)
+                Utility.DrawCircle(Player.Position, W.Range, Color.MidnightBlue, 5, 20);
+            if (Misc.DrawE)
+                Utility.DrawCircle(Player.Position, E.Range, Color.OrangeRed, 5, 20);
 
-            if (baseMenu.Item("Misc_DrawR").GetValue<bool>())
+            if (Misc.DrawR)
             {
-                Utility.DrawCircle(Player.Position, R.Range, Color.White, 1, 20);
+                Utility.DrawCircle(Player.Position, R.Range, Color.Red, 1, 20);
                 if (R.Range > 3000)
-                    Utility.DrawCircle(Player.Position, R.Range, Color.White,1,20,true);
+                    Utility.DrawCircle(Player.Position, R.Range, Color.White, 1, 20, true);
             }
+
+            if (SelectedC != null && SelectedC.IsVisible && !SelectedC.IsDead)
+                Utility.DrawCircle(SelectedC.Position, 75, Color.Red, 30, 10);
+
+            Drawing.DrawCircle(Player.Position, (float)ChargingRange, Color.Red);
+        }
+        private static void OnWndProc(WndEventArgs args)
+        {
+            if (args.Msg == 513) // Mouse L click or R click
+                SelectedC = GetSelectedTarget();
         }
 
         private static void DoReadini()
         {
+            Readini.GetMisc();
             Readini.GetSpellstatus(ref Q, "Q");
             Readini.GetSpellstatus(ref W, "W");
             Readini.GetSpellstatus(ref E, "E");
@@ -163,7 +195,17 @@ namespace JeonComboScriptor
                 Readini.GetSpellstatus(ref W2, "W2");
                 Readini.GetSpellstatus(ref E2, "E2");
             }
-            Readini.GetMisc();
+        }
+
+        public static Obj_AI_Hero GetSelectedTarget()
+        {
+            foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => 
+                Vector3.Distance(hero.Position,Game.CursorPos) <200 && hero.IsEnemy && !hero.IsDead 
+                && hero.IsValidTarget()))
+            {
+                    return enemy;
+            }
+            return null;
         }
     }
 }

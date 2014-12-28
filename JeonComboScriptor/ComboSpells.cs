@@ -23,70 +23,221 @@ namespace JeonComboScriptor
     {
         public static void CastComboSpells(Obj_AI_Hero target) // Combo 발사
         {
-            if(!target.IsDead && target.IsEnemy && target.IsVisible)
-            {
-                foreach(var s in c_Spells)
-                {
-                    Player.IssueOrder(GameObjectOrder.MoveTo, target); // 일단 움직임
+            spell_ordernum = 0;
+            if (target == null)
+                return;
 
-                    if(Vector3.Distance(target.Position, Player.Position) <= s.Range)//사정거리 안에 있음 발동
-                        s.CastIfHitchanceEquals(target, h_chance);
+            foreach(var spell in c_Spells)
+            {
+                if(target.Distance(Player.Position)<=spell.Range &&
+                    spell.Slot == spell_orderlist[spell_ordernum])
+                {
+                    if (Player.Spellbook.CanUseSpell(spell_orderlist[spell_ordernum]) == SpellState.Ready)
+                    {
+                        if (!spell.IsSkillshot)
+                        {
+                            if (spell.IsChargedSpell)
+                            {
+                                CastChargedSpell(spell, target);
+                                return;
+                            }
+                            else
+                            {
+                                spell.CastOnUnit(target);
+                                return;
+                            }
+                        }
+                        else if (!baseMenu.Item("IgnorePrediction").GetValue<bool>())
+                        {
+                            Game.PrintChat(spell.Type.ToString());
+                            Game.PrintChat(h_chance.ToString());
+                            if (spell.GetPrediction(target).Hitchance >= h_chance)
+                            {
+                                var pos = spell.GetPrediction(target);
+                                spell.Cast(pos.CastPosition);
+                                Drawing.DrawCircle(target.Position, 300, Color.Blue);
+                            }
+                        }                        
+                        else
+                        {
+                            spell.Cast(target.Position);
+                            return;
+                        }
+                    }
+
+                    if (spell_ordernum + 1 >= spell_orderlist.Count)
+                        spell_ordernum = 0;
+                    else
+                        spell_ordernum++;
                 }
             }
         }
-
 
 
         public static void getComboSpells()
         {
-            foreach (var combospell in Misc.Combo) // Misc.Combo : Byte형으로 1,2,3,4 등의 숫자를 담고 있음
+            c_Spells.Clear();
+            foreach(var t in Misc.Combo)
             {
-                Spell tempSpell = new Spell(GetSlotByByte(combospell));
-                #region setspells
-                if(!IsChangeable)
-                if (tempSpell.Slot == SpellSlot.Q && Q.Range >= 100)
+                if(t=="Q")
                 {
-                    tempSpell.Range = Q.Range;
-                    if(Q.IsCharging)
-                    tempSpell.SetCharged(Q.name[0], null, Q.ChargingMin, Q.ChargingMax, (float)Q.ChargingTime);
-                    if(Q.IsMissile)
-                    tempSpell.SetSkillshot(Q.MissileDelay,Q.MissileWidth,Q.MissileSpeed,Q.IsBlockable,
-                        GetSStypeByByte(Q.MissileType));
-                }
-                if (tempSpell.Slot == SpellSlot.W && W.Range >= 100)
-                {
-                    tempSpell.Range = W.Range;
-                    if (W.IsCharging)
-                        tempSpell.SetCharged(W.name[0], null, W.ChargingMin, W.ChargingMax, (float)W.ChargingTime);
-                    if (W.IsMissile)
-                        tempSpell.SetSkillshot(W.MissileDelay, W.MissileWidth, W.MissileSpeed, W.IsBlockable,
-                            GetSStypeByByte(W.MissileType));
-                }
+                    Spell temp = new Spell(Q.slot,Q.Range);
 
-                if (tempSpell.Slot == SpellSlot.E && E.Range >= 100)
-                {
-                    tempSpell.Range = E.Range;
-                    if (E.IsCharging)
-                        tempSpell.SetCharged(E.name[0], null, E.ChargingMin, E.ChargingMax, (float)E.ChargingTime);
-                    if (E.IsMissile)
-                        tempSpell.SetSkillshot(E.MissileDelay, E.MissileWidth, E.MissileSpeed, E.IsBlockable,
-                            GetSStypeByByte(E.MissileType));
+                    temp.IsSkillshot = Q.IsMissile;
+                    temp.IsChargedSpell = Q.IsCharging;
+
+                    if (temp.IsSkillshot)
+                    {
+                        temp.SetSkillshot(Q.MissileDelay,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.LineWidth,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.MissileSpeed,
+                            Q.IsBlockable, GetSStypeByByte(Q.MissileType));
+                    }
+                    if(temp.IsChargedSpell)
+                    {
+                        temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)Q.ChargingTime);
+                    }
+
+                    c_Spells.Add(temp);
                 }
-                if (tempSpell.Slot == SpellSlot.R && R.Range >= 100)
+                if (t == "W")
                 {
-                    tempSpell.Range = R.Range;
-                    if (R.IsCharging)
-                        tempSpell.SetCharged(R.name[0], null, R.ChargingMin, R.ChargingMax, (float)R.ChargingTime);
-                    if (R.IsMissile)
-                        tempSpell.SetSkillshot(R.MissileDelay, R.MissileWidth, R.MissileSpeed, R.IsBlockable,
-                            GetSStypeByByte(R.MissileType));
+                    Spell temp = new Spell(W.slot, W.Range);
+                    temp.IsSkillshot = W.IsMissile;
+                    temp.IsChargedSpell = W.IsCharging;
+
+                    if (temp.IsSkillshot)
+                    {
+                        temp.SetSkillshot(W.MissileDelay,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.LineWidth,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.MissileSpeed,
+                            W.IsBlockable, GetSStypeByByte(W.MissileType));
+                    }
+                    if (temp.IsChargedSpell)
+                    {
+                        temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)W.ChargingTime);
+                    }
+                    c_Spells.Add(temp);
                 }
-                #endregion
-           
-                c_Spells.Add(tempSpell); // Spell형 리스트에 tempSpell추가 Range는 위에서 추가됨
+                if (t == "E")
+                {
+                    Spell temp = new Spell(E.slot, E.Range);
+                    temp.IsSkillshot = E.IsMissile;
+                    temp.IsChargedSpell = E.IsCharging;
+
+                    if (temp.IsSkillshot)
+                    {
+                        temp.SetSkillshot(E.MissileDelay,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.LineWidth,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.MissileSpeed,
+                            E.IsBlockable, GetSStypeByByte(E.MissileType));
+                    }
+                    if (temp.IsChargedSpell)
+                    {
+                        temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)E.ChargingTime);
+                    }
+
+                    c_Spells.Add(temp);
+                }
+                if (t == "R")
+                {
+                    Spell temp = new Spell(R.slot, R.Range);
+
+                    temp.IsSkillshot = R.IsMissile;
+                    temp.IsChargedSpell = R.IsCharging;
+
+                    if (temp.IsSkillshot)
+                    {
+                        temp.SetSkillshot(R.MissileDelay,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.LineWidth,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.MissileSpeed,
+                            R.IsBlockable, GetSStypeByByte(R.MissileType));
+                    }
+                    if (temp.IsChargedSpell)
+                    {
+                        temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)R.ChargingTime);
+                    }
+
+                    c_Spells.Add(temp);
+                }                
+                if (t == "Q2")
+                {
+                    Spell temp = new Spell(Q2.slot, Q2.Range);
+                    temp.IsSkillshot = Q2.IsMissile;
+                    temp.IsChargedSpell = Q2.IsCharging;
+
+                    if (temp.IsSkillshot)
+                    {
+                        temp.SetSkillshot(Q2.MissileDelay,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.LineWidth,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.MissileSpeed,
+                            Q2.IsBlockable, GetSStypeByByte(Q2.MissileType));
+                    }
+                    if (temp.IsChargedSpell)
+                    {
+                        temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)Q2.ChargingTime);
+                    }
+
+                    c_Spells.Add(temp);
+                }
+                if (t == "W2")
+                {
+                    Spell temp = new Spell(W2.slot, W2.Range);
+                    temp.IsSkillshot = W2.IsMissile;
+                    temp.IsChargedSpell = W2.IsCharging;
+
+                    if (temp.IsSkillshot)
+                    {
+                        temp.SetSkillshot(W2.MissileDelay,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.LineWidth,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.MissileSpeed,
+                            W2.IsBlockable, GetSStypeByByte(W2.MissileType));
+                    }
+                    if (temp.IsChargedSpell)
+                    {
+                        temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)W2.ChargingTime);
+                    }
+
+                    c_Spells.Add(temp);
+                }
+                if (t == "E2")
+                {
+                    Spell temp = new Spell(E2.slot, E2.Range);
+                    temp.IsSkillshot = E2.IsMissile;
+                    temp.IsChargedSpell = E2.IsCharging;
+
+                    if (temp.IsSkillshot)
+                    {
+                        temp.SetSkillshot(E2.MissileDelay,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.LineWidth,
+                            Player.Spellbook.GetSpell(temp.Slot).SData.MissileSpeed,
+                            E2.IsBlockable, GetSStypeByByte(E2.MissileType));
+                    }
+                    if (temp.IsChargedSpell)
+                    {
+                        temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)E2.ChargingTime);
+                    }
+
+                    c_Spells.Add(temp);
+                }
             }
         }
 
+        public static void getComboSpellList()
+        {
+            spell_orderlist.Clear();
+            foreach (var spell in c_Spells)
+            {
+                spell_orderlist.Add(spell.Slot);
+            }
+        }
 
         public static SpellSlot GetSlotByByte(byte temp)
         {
@@ -121,7 +272,43 @@ namespace JeonComboScriptor
                     return SkillshotType.SkillshotCircle;
 
             }
-        }
+        }    
     
+        public static void CastChargedSpell(Spell spell,Obj_AI_Hero target)
+        {
+
+            if (IsCharging)
+            {
+                if (Environment.TickCount - pastTime < 10)
+                    return;
+
+                var speed = (spell.ChargedMaxRange - spell.ChargedMinRange) / Q.ChargingTime /100;
+                if(!ChargingRange_set)
+                {
+                    ChargingRange = spell.ChargedMinRange;
+                    ChargingRange_set = true;
+                }
+
+                ChargingRange += speed;
+                //Game.PrintChat(String.Format("speed:{0} range:{1}", speed, ChargingRange));
+                pastTime = Environment.TickCount;
+
+                var Target = TargetSelector.GetTarget((float)ChargingRange, TargetSelector.DamageType.Physical);
+                if(Target != null)
+                {
+                    Game.PrintChat("Cast : {0}", Target.BaseSkinName);
+                    ChargingRange = 0;
+                    IsCharging = false;
+                    ChargingRange_set = true;
+                    ChargingRange = spell.ChargedMinRange;
+                }
+            }
+            else
+            {
+                spell.StartCharging();
+                Game.PrintChat("charging");
+                IsCharging = true;
+            }
+        }
     }
 }

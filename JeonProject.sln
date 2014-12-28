@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonZilean", "JeonZilean\Je
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeon_MissileDB", "JeonMissileDB\Jeon_MissileDB.csproj", "{ACA872B9-AF5F-4A37-952A-C70F372C9C70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonHelperForDev", "JeonHelperForDev\JeonHelperForDev.csproj", "{252A7C73-5D91-48E9-8536-98B9AC6B46FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{252A7C73-5D91-48E9-8536-98B9AC6B46FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{252A7C73-5D91-48E9-8536-98B9AC6B46FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{252A7C73-5D91-48E9-8536-98B9AC6B46FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{252A7C73-5D91-48E9-8536-98B9AC6B46FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

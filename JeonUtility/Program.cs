@@ -62,7 +62,7 @@ namespace JeonUtility
 
             #region 메뉴
             #region 메인메뉴 - Main Menu
-            baseMenu = new Menu("ProjectJ", "ProjectJ", true);
+            baseMenu = new Menu("JeonUtility", "JeonUtility", true);
             baseMenu.AddToMainMenu();
             baseMenu.AddItem(new MenuItem("base_stat", "Status on hud").SetValue(true));
             baseMenu.AddItem(new MenuItem("x", "x").SetValue(new Slider(600, 0, Monitor.Width)));

@@ -33,7 +33,7 @@ namespace JeonComboScriptor
             float Player_totalAP = Player.FlatMagicDamageMod;
             #endregion
 
-
+           
             double[] spell_basedamage = {   0,
                                             Spell.DmgLv1,
                                             Spell.DmgLv1 + Spell.DmgPer * 1,

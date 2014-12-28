@@ -78,25 +78,7 @@ namespace JeonComboScriptor
                     return true;
             }
         }
-        public static void GetSettingValue_Combo(String Section, String Key, String iniPath)
-        {
-            String temp = GetSettingValue_String(Section, Key, iniPath);
-            int i=0;
-            try
-            {
 
-                foreach (var a in temp.Split('-'))
-                {
-                    Program.Misc.Combo[i] = Convert.ToByte(a);
-                    i++;
-                }
-            }
-            catch
-            {
-                //Game.PrintChat("Error {0} : Cant load Values", temp.ToString());
-                Console.WriteLine("Error : Cant load Values({0},{1})", Key, temp.ToString());
-            }
-        }
         public static void SetSettingValue(String Section, String Key, String Value, String iniPath)
         {
             WritePrivateProfileString(Section, Key, Value, iniPath);
