@@ -39,6 +39,27 @@ namespace JeonUtility
 
         public static int req_ignitelevel { get { return Jlib.getm_value("igniteLv"); } }
 
+        public static int[] pastTime = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+        public static Vector3 Dragon = new Vector3(9836f, 4408f, -71.24f); public static int Dragon_spawntime = 0;
+        public static Vector3 Baron = new Vector3(4910f, 10268f, -71.24f); public static int Baron_spawntime = 0;
+        public static Vector3 top_crub = new Vector3(4266f, 9634f, -67.87f); public static int top_crub_spawntime = 0;
+        public static Vector3 down_crub = new Vector3(10524f, 5116f, -62.81f); public static int down_crub_spawntime = 0;
+        
+        public static Vector3 bteam_Razorbeak = new Vector3(6974f, 5460f, 54f); public static int bteam_Razorbeak_spawntime = 0;
+        public static Vector3 bteam_Red = new Vector3(7796f, 4028f, 54f); public static int bteam_Red_spawntime = 0;
+        public static Vector3 bteam_Krug = new Vector3(8394f, 2750f, 50f); public static int bteam_Krug_spawntime = 0;
+        public static Vector3 bteam_Blue = new Vector3(3832f, 7996f, 52f); public static int bteam_Blue_spawntime = 0;
+        public static Vector3 bteam_Gromp = new Vector3(2112f, 8372f, 51.7f); public static int bteam_Gromp_spawntime = 0;
+        public static Vector3 bteam_Wolf = new Vector3(3844f,6474f,52.46f); public static int bteam_Wolf_spawntime = 0;
+
+        public static Vector3 pteam_Razorbeak = new Vector3(7856f,9492f,52.33f); public static int pteam_Razorbeak_spawntime = 0;
+        public static Vector3 pteam_Red = new Vector3(7124f,10856f,56.34f); public static int pteam_Red_spawntime = 0;
+        public static Vector3 pteam_Krug = new Vector3(6495f,12227f,56.47f); public static int pteam_Krug_spawntime = 0;
+        public static Vector3 pteam_Blue = new Vector3(10850f,6938f,51.72f); public static int pteam_Blue_spawntime = 0;
+        public static Vector3 pteam_Gromp = new Vector3(12766f, 6464f, 51.66f); public static int pteam_Gromp_spawntime = 0;
+        public static Vector3 pteam_Wolf = new Vector3(10958f,8286f,62.46f); public static int pteam_Wolf_spawntime = 0;
+
 
 
         public static String[] DefSpellstr = { "barrier", "heal" };
@@ -75,6 +96,7 @@ namespace JeonUtility
             var menu_st = new Menu("Stacks", "Stacks");
             var menu_ins = new Menu("Item&Spell", "Item & Spell");
             var menu_noti = new Menu("Notifier", "Notifier");
+            var menu_jtimer = new Menu("JungleTimer", "JungleTimer");
             #endregion
 
             #region 스마이트 메뉴 - menu for smite
@@ -190,6 +212,14 @@ namespace JeonUtility
             menu_noti.AddItem(new MenuItem("noti_shen", "ShenUlt").SetValue(true));
             menu_noti.AddItem(new MenuItem("noti_shenhp", "Notice On Hp(%)").SetValue(new Slider(10, 0, 100)));
             #endregion
+
+            #region 정글타이머 메뉴 - menu for JungleTimer
+            baseMenu.AddSubMenu(menu_jtimer);
+            menu_jtimer.AddItem(new MenuItem("jt_active", "Active").SetValue(true));
+
+
+            #endregion
+
             #endregion
 
             Game.OnGameUpdate += OnGameUpdate;
@@ -206,31 +236,6 @@ namespace JeonUtility
             float Player_totalAP = Player.FlatMagicDamageMod;
             #endregion
 
-            #region 오토스마이트-AutoSmite
-            if (Jlib.getm_bool("AutoSmite") && smiteSlot != SpellSlot.Unknown)
-            {
-                if ((baseMenu.Item("smite_holdkey").GetValue<KeyBind>().Active || baseMenu.Item("smite_enablekey").GetValue<KeyBind>().Active))
-                {
-                    double smitedamage;
-                    bool smiteReady = false;
-                    smitedamage = setSmiteDamage();
-                    Drawing.DrawText(Player.HPBarPosition.X + 55, Player.HPBarPosition.Y + 25, System.Drawing.Color.Red, "AutoSmite!");
-
-                    Obj_AI_Base mob = GetNearest(Player.ServerPosition);
-
-                    if (Player.Spellbook.CanUseSpell(smiteSlot) == SpellState.Ready && Vector3.Distance(Player.ServerPosition, mob.ServerPosition) < smite.Range)
-                    {
-                        smiteReady = true;
-                    }
-
-                    if (smiteReady && mob.Health < smitedamage)
-                    {
-                        setIgniteSlot();
-                        Player.Spellbook.CastSpell(smiteSlot, mob);
-                    }
-                }
-            }
-            #endregion
 
             #region 오토이그나이트-AutoIgnite
             if (Jlib.getm_bool("AutoIgnite") && igniteSlot != SpellSlot.Unknown &&
@@ -645,6 +650,34 @@ namespace JeonUtility
             #endregion
 
 
+            #region 정글타이머 - JungleTimer
+            if (Jlib.getm_bool("jt_active"))
+            {
+
+                JungetTimer(ref pastTime[0], "SRU_Dragon", Dragon, ref Dragon_spawntime, 360);
+                JungetTimer(ref pastTime[1], "SRU_BaronSpawn", Baron, ref Baron_spawntime, 420);
+
+                JungetTimer(ref pastTime[2], "SRU_Razorbeak", bteam_Razorbeak, ref bteam_Razorbeak_spawntime, 100);
+                JungetTimer(ref pastTime[3], "SRU_Red", bteam_Red, ref bteam_Red_spawntime, 300);
+                JungetTimer(ref pastTime[4], "SRU_Krug", bteam_Krug, ref bteam_Krug_spawntime, 100);
+                JungetTimer(ref pastTime[5], "SRU_Blue", bteam_Blue, ref bteam_Blue_spawntime, 300);
+                JungetTimer(ref pastTime[6], "SRU_Gromp", bteam_Gromp, ref bteam_Gromp_spawntime, 100);
+                JungetTimer(ref pastTime[7], "SRU_Murkwolf", bteam_Wolf, ref bteam_Wolf_spawntime, 100);
+
+                JungetTimer(ref pastTime[8], "Sru_Crab", top_crub, ref top_crub_spawntime, 100, 3000);
+                JungetTimer(ref pastTime[9], "Sru_Crab", down_crub, ref down_crub_spawntime, 100, 3000);
+
+                JungetTimer(ref pastTime[10], "SRU_Razorbeak", pteam_Razorbeak, ref pteam_Razorbeak_spawntime, 100);
+                JungetTimer(ref pastTime[11], "SRU_Red", pteam_Red, ref pteam_Red_spawntime, 300);
+                JungetTimer(ref pastTime[12], "SRU_Krug", pteam_Krug, ref pteam_Krug_spawntime, 100);
+                JungetTimer(ref pastTime[13], "SRU_Blue", pteam_Blue, ref pteam_Blue_spawntime, 300);
+                JungetTimer(ref pastTime[14], "SRU_Gromp", pteam_Gromp, ref pteam_Gromp_spawntime, 100);
+                JungetTimer(ref pastTime[15], "SRU_Murkwolf", pteam_Wolf, ref pteam_Wolf_spawntime, 100);
+
+            }
+            #endregion
+
+
             #region Status on hud
             if (Jlib.getm_bool("base_stat"))
             {
@@ -773,6 +806,32 @@ namespace JeonUtility
                 baseMenu.Item("test").SetValue<bool>(false);
             }
              */
+            #endregion
+
+            #region 오토스마이트-AutoSmite
+            if (Jlib.getm_bool("AutoSmite") && smiteSlot != SpellSlot.Unknown)
+            {
+                if ((baseMenu.Item("smite_holdkey").GetValue<KeyBind>().Active || baseMenu.Item("smite_enablekey").GetValue<KeyBind>().Active))
+                {
+                    double smitedamage;
+                    bool smiteReady = false;
+                    smitedamage = setSmiteDamage();
+                    Drawing.DrawText(Player.HPBarPosition.X + 55, Player.HPBarPosition.Y + 25, System.Drawing.Color.Red, "AutoSmite!");
+
+                    Obj_AI_Base mob = GetNearest(Player.ServerPosition);
+
+                    if (Player.Spellbook.CanUseSpell(smiteSlot) == SpellState.Ready && Vector3.Distance(Player.ServerPosition, mob.ServerPosition) < smite.Range)
+                    {
+                        smiteReady = true;
+                    }
+
+                    if (smiteReady && mob.Health < smitedamage)
+                    {
+                        setIgniteSlot();
+                        Player.Spellbook.CastSpell(smiteSlot, mob);
+                    }
+                }
+            }
             #endregion
         }
 
@@ -1030,6 +1089,41 @@ namespace JeonUtility
             double[] spell_stackdamage = { 0, 15, 20, 25, 30, 35 };
             double eDmg = spell_basedamage[s_level] + count * (spell_stackdamage[s_level] + (AP * 0.2) + (AD * 0.25));
             return Player.CalcDamage(target, Damage.DamageType.Physical, eDmg);
+        }
+        #endregion
+
+        #region 정글타이머함수 - JungleTimer
+        public static void JungetTimer(ref int pastTime,String TargetName,Vector3 BasePosition, ref int spawntime, int spawntime_default,
+            int Range = 1000)
+        {
+            
+            var minions = ObjectManager.Get<Obj_AI_Minion>()
+                .Where(minion => minion.IsValid && !minion.IsDead && minion.Name.StartsWith(TargetName));
+            var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
+
+            if (!objAiMinions.Any(m => m.Distance(BasePosition) < Range))
+            {
+                var vec2 = Drawing.WorldToScreen(BasePosition);
+
+                var min = spawntime / 60;
+                var sec = spawntime - min * 60;
+
+
+                if (spawntime > 0)
+                {
+                    Drawing.DrawText(vec2.X, vec2.Y, Color.Red, String.Format("{0:00}:{1:00}", min, sec));
+
+                    if (Environment.TickCount - pastTime >= 1000)
+                    {
+                        pastTime = Environment.TickCount;
+                        spawntime -= 1;
+                    }
+                }
+            }
+            else
+            {
+                spawntime = spawntime_default;
+            }
         }
         #endregion
 
