@@ -39,7 +39,7 @@ namespace JeonUtility
 
         public static int req_ignitelevel { get { return Jlib.getm_value("igniteLv"); } }
 
-        public static int[] pastTime = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        public static float[] pastTime = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
         public static Vector3 Dragon = new Vector3(9836f, 4408f, -71.24f); public static int Dragon_spawntime = 0;
         public static Vector3 Baron = new Vector3(4910f, 10268f, -71.24f); public static int Baron_spawntime = 0;
@@ -1093,7 +1093,7 @@ namespace JeonUtility
         #endregion
 
         #region 정글타이머함수 - JungleTimer
-        public static void JungetTimer(ref int pastTime,String TargetName,Vector3 BasePosition, ref int spawntime, int spawntime_default,
+        public static void JungetTimer(ref float pastTime,String TargetName,Vector3 BasePosition, ref int spawntime, int spawntime_default,
             int Range = 1000)
         {
             
@@ -1113,16 +1113,16 @@ namespace JeonUtility
                 {
                     Drawing.DrawText(vec2.X, vec2.Y, Color.Red, String.Format("{0:00}:{1:00}", min, sec));
 
-                    if (Environment.TickCount - pastTime >= 1000)
+                    if (Game.Time - pastTime >= 1.0f)
                     {
-                        pastTime = Environment.TickCount;
+                        pastTime = Game.Time;
                         spawntime -= 1;
                     }
                 }
             }
             else
             {
-                spawntime = spawntime_default;
+                spawntime = spawntime_default+1;
             }
         }
         #endregion
