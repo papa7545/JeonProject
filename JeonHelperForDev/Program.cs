@@ -66,17 +66,29 @@ namespace JeonHelperForDev
             var menu_positions = new Menu("DrawingPositions", "DrawingPositions");
             baseMenu.AddSubMenu(menu_positions);
             menu_positions.AddItem(new MenuItem("item_positions_key", "Key : ").SetValue<KeyBind>(new KeyBind('T', KeyBindType.Toggle)));
+            menu_positions.AddItem(new MenuItem("item_positions_click", "Click ").SetValue<bool>(false));
             menu_positions.AddItem(new MenuItem("item_positions_undo", "UndoKey : ").SetValue<KeyBind>(new KeyBind('K', KeyBindType.Toggle)));
             menu_positions.AddItem(new MenuItem("item_positions_clear", "Clear").SetValue<bool>(false));
+            menu_positions.AddItem(new MenuItem("item_positions_range", "CircleRange").SetValue(new Slider(100, 0, 10000)));
            
 
             var menu_ts = new Menu("TargetSelector", "TargetSelector");
             TargetSelector.AddToMenu(menu_ts);
             Game.OnGameUpdate += OnGameUpdate;
             Drawing.OnEndScene += Drawing_OnDraw;
+            Game.OnWndProc += OnWndProc;
 
         }
-
+        private static void OnWndProc(WndEventArgs args)
+        {
+            if (baseMenu.Item("item_positions_click").GetValue<bool>() && args.Msg == 513)
+            {
+                PositionInfo temp = new PositionInfo();
+                temp.count = (byte)(positions.Count + 1);
+                temp.Position = Game.CursorPos;
+                positions.Add(temp);
+            }
+        }
         private static void OnGameUpdate(EventArgs args)
         {
 
@@ -239,7 +251,8 @@ namespace JeonHelperForDev
             foreach(var position in positions)
             {
                 Vector2 text = Drawing.WorldToScreen(position.Position);
-                Utility.DrawCircle(position.Position, 100, System.Drawing.Color.Blue);
+                Utility.DrawCircle(position.Position, baseMenu.Item("item_positions_range").GetValue<Slider>().Value
+                    , System.Drawing.Color.Blue);
             }
         }
     }
