@@ -262,14 +262,14 @@ namespace JeonAutoSoraka
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
-            if (Game.Time > 50 && StartBuy)
+
+            if (!(Items.HasItem(3301) || Items.HasItem(3096) || Items.HasItem(3069)))
             {
                 ObjectManager.Player.BuyItem(JeonItem.GetItemIdbyInt(3301));
                 ObjectManager.Player.BuyItem(JeonItem.GetItemIdbyInt(3340));
                 ObjectManager.Player.BuyItem(JeonItem.GetItemIdbyInt(2003));
                 ObjectManager.Player.BuyItem(JeonItem.GetItemIdbyInt(2003));
                 ObjectManager.Player.BuyItem(JeonItem.GetItemIdbyInt(2003));
-                StartBuy = false;
             }
 
 
@@ -308,7 +308,6 @@ namespace JeonAutoSoraka
                 }
                 if (follow == null)
                 {
-                    Game.PrintChat("cast4");
                     follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
                 }
 
@@ -323,6 +322,7 @@ namespace JeonAutoSoraka
                 i++;
                 gamestart = Game.Time;
             }
+
             if (Game.Time - followtime > 40 && followpos.Distance(follow.Position) <= 100)
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly && ap.Contains(x.ChampionName)) ?? ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly && bruiser.Contains(x.ChampionName));
