@@ -664,8 +664,8 @@ namespace JeonUtility
                 JungetTimer(ref pastTime[6], "SRU_Gromp", bteam_Gromp, ref bteam_Gromp_spawntime, 100);
                 JungetTimer(ref pastTime[7], "SRU_Murkwolf", bteam_Wolf, ref bteam_Wolf_spawntime, 100);
 
-                JungetTimer(ref pastTime[8], "Sru_Crab", top_crub, ref top_crub_spawntime, 100, 3000);
-                JungetTimer(ref pastTime[9], "Sru_Crab", down_crub, ref down_crub_spawntime, 100, 3000);
+                JungetTimer(ref pastTime[8], "Sru_Crab", top_crub, ref top_crub_spawntime, 180, 3000);
+                JungetTimer(ref pastTime[9], "Sru_Crab", down_crub, ref down_crub_spawntime, 180, 3000);
 
                 JungetTimer(ref pastTime[10], "SRU_Razorbeak", pteam_Razorbeak, ref pteam_Razorbeak_spawntime, 100);
                 JungetTimer(ref pastTime[11], "SRU_Red", pteam_Red, ref pteam_Red_spawntime, 300);
