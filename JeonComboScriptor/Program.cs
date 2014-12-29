@@ -33,10 +33,7 @@ namespace JeonComboScriptor
                                                     "LeeSin","Elise","Jayce","Nidalee","RekSai"
                                                 };
         public static Bool IsChangeable = ChangeableHero.Contains(cName);
-        public static Bool IsCharging = false;
-        public static double ChargingRange = 0,speed = 0;
-        public static Bool ChargingRange_set= false;
-        public static int pastTime;
+
 
 
         public static DirectoryInfo dir = new DirectoryInfo(Config.LeagueSharpDirectory.ToString() + @"\JeonScriptor");
@@ -145,6 +142,23 @@ namespace JeonComboScriptor
 
         private static void OnGameUpdate(EventArgs args)
         {
+            Readini.GetSpellRange(ref Q);
+            Readini.GetSpellRange(ref W);
+            Readini.GetSpellRange(ref E);
+            Readini.GetSpellRange(ref R);
+
+            foreach(var t in c_Spells)
+            {
+                if (t.Slot == SpellSlot.Q)
+                    t.Range = Q.Range;
+                if (t.Slot == SpellSlot.W)
+                    t.Range = W.Range;
+                if (t.Slot == SpellSlot.E)
+                    t.Range = E.Range;
+                if (t.Slot == SpellSlot.R)
+                    t.Range = R.Range;
+            }
+
             h_chance = Menus.GetHitchanceByInt(baseMenu.Item("HitChance").GetValue<Slider>().Value);
 
 
@@ -167,14 +181,14 @@ namespace JeonComboScriptor
             if (Misc.DrawR)
             {
                 Utility.DrawCircle(Player.Position, R.Range, Color.Red, 1, 20);
-                if (R.Range > 3000)
+                if (R.Range > 3000 && R.Range < 10000)
                     Utility.DrawCircle(Player.Position, R.Range, Color.White, 1, 20, true);
             }
 
             if (SelectedC != null && SelectedC.IsVisible && !SelectedC.IsDead)
                 Utility.DrawCircle(SelectedC.Position, 75, Color.Red, 30, 10);
 
-            Drawing.DrawCircle(Player.Position, (float)ChargingRange, Color.Red);
+
         }
         private static void OnWndProc(WndEventArgs args)
         {
