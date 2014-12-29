@@ -81,15 +81,31 @@ namespace JeonComboScriptor
             targetSpell.slot = GetSpellSlotByString(name);
             targetSpell.level = ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).Level;
             targetSpell.manacost = ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).ManaCost;
-            
-            GetSpellRange(ref targetSpell);
 
+            if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride[0] == 0)
+            {
+                if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius[0] == 0)
+                {
+                    targetSpell.Range =
+                        (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRange[0];
+                }
+                else
+                {
+                    targetSpell.Range =
+                        (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius[0];
+                }
+            }
+            else
+                targetSpell.Range =
+                    (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride[0];
+            
             targetSpell.name[0] = ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).Name.Replace(Player.BaseSkinName,"");
             targetSpell.name[1] = GetChangeableSpellName(targetSpell.slot);
 
         }
         public static void GetMisc()
         {
+
             Misc.textCombo = GetSettingValue_String("Misc", "Combo", setFile.FullName)
                 .Replace("1", "Q").Replace("2", "W").Replace("3", "E").Replace("4", "R")
                 .Replace("5", "Q2").Replace("6","W2").Replace("7","E2");
@@ -98,31 +114,12 @@ namespace JeonComboScriptor
             Misc.DrawE = GetSettingValue_Bool("Misc", "DrawE", setFile.FullName);
             Misc.DrawR = GetSettingValue_Bool("Misc", "DrawR", setFile.FullName);
 
+
+
             Misc.Combo = Misc.textCombo.Split('-');
+
         }
-        public static void GetSpellRange(ref SpellStatus targetSpell)
-        {
-            if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride[0] <= 0)
-            {
-                if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRange[0] <= 0)
-                {
-                    targetSpell.Range =
-                        (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius[0];
-                }
-                else
-                {
-                    if (!targetSpell.IsCharging)
-                        targetSpell.Range =
-                            (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRange[0];
-                    else
-                        targetSpell.Range =
-                            (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius[0];
-                }
-            }
-            else
-                targetSpell.Range =
-                    (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride[0];
-        }
+
         private static SpellSlot GetSpellSlotByString(String temp)
         {
             if (temp == "Q")

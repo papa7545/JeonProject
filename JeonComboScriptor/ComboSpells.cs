@@ -49,10 +49,13 @@ namespace JeonComboScriptor
                         }
                         else if (!baseMenu.Item("IgnorePrediction").GetValue<bool>())
                         {
+                            Game.PrintChat(spell.Type.ToString());
+                            Game.PrintChat(h_chance.ToString());
                             if (spell.GetPrediction(target).Hitchance >= h_chance)
                             {
                                 var pos = spell.GetPrediction(target);
                                 spell.Cast(pos.CastPosition);
+                                Drawing.DrawCircle(target.Position, 300, Color.Blue);
                             }
                         }                        
                         else
@@ -274,13 +277,37 @@ namespace JeonComboScriptor
         public static void CastChargedSpell(Spell spell,Obj_AI_Hero target)
         {
 
-            if (Player.IsCharging)
+            if (IsCharging)
             {
+                if (Environment.TickCount - pastTime < 10)
+                    return;
 
+                var speed = (spell.ChargedMaxRange - spell.ChargedMinRange) / Q.ChargingTime /100;
+                if(!ChargingRange_set)
+                {
+                    ChargingRange = spell.ChargedMinRange;
+                    ChargingRange_set = true;
+                }
+
+                ChargingRange += speed;
+                //Game.PrintChat(String.Format("speed:{0} range:{1}", speed, ChargingRange));
+                pastTime = Environment.TickCount;
+
+                var Target = TargetSelector.GetTarget((float)ChargingRange, TargetSelector.DamageType.Physical);
+                if(Target != null)
+                {
+                    Game.PrintChat("Cast : {0}", Target.BaseSkinName);
+                    ChargingRange = 0;
+                    IsCharging = false;
+                    ChargingRange_set = true;
+                    ChargingRange = spell.ChargedMinRange;
+                }
             }
             else
             {
-
+                spell.StartCharging();
+                Game.PrintChat("charging");
+                IsCharging = true;
             }
         }
     }
