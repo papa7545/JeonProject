@@ -339,7 +339,7 @@ namespace JeonUtility
 
                 if (Jlib.getm_bool("j2w_info"))
                 {
-                    Game.PrintChat("Champion : " + Player.BaseSkinName);
+                    Game.PrintChat("Champion : " + Player.ChampionName);
                     Game.PrintChat("Can? : " + canw2j);
                     Game.PrintChat("Spell : " + jumpspell.Slot.ToString());
                     Game.PrintChat("WardStack : " + Items.GetWardSlot().Stacks);
@@ -351,7 +351,7 @@ namespace JeonUtility
             #endregion
 
             #region 스택 - Stacks
-            if (Jlib.getm_bool("st_twitch") && Player.BaseSkinName == "Twitch")
+            if (Jlib.getm_bool("st_twitch") && Player.ChampionName == "Twitch")
             {
                     Spell E = new Spell(SpellSlot.E, 1200);
                     var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
@@ -373,7 +373,7 @@ namespace JeonUtility
                     }
             }
 
-            if (Jlib.getm_bool("st_kalista") && Player.BaseSkinName == "Kalista")
+            if (Jlib.getm_bool("st_kalista") && Player.ChampionName == "Kalista")
             {
                 Spell E = new Spell(SpellSlot.E, 900);
                 if (E.IsReady())
@@ -546,7 +546,7 @@ namespace JeonUtility
 
             #region ultnotifier
             //Karthus
-            if (Player.BaseSkinName == "Karthus")
+            if (Player.ChampionName == "Karthus")
             {
                 if (Jlib.getm_bool("noti_karthus") && Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready)
                 {
@@ -569,7 +569,7 @@ namespace JeonUtility
                 }
             }
             //cait
-            if (Player.BaseSkinName == "Caitlyn")
+            if (Player.ChampionName == "Caitlyn")
             {
                 if (Jlib.getm_bool("noti_cait") && Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready)
                 {
@@ -595,7 +595,7 @@ namespace JeonUtility
                 }
             }
             //ez
-            if (Player.BaseSkinName == "Ezreal")
+            if (Player.ChampionName == "Ezreal")
             {
                 if (Jlib.getm_bool("noti_ez") && Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready)
                 {
@@ -619,7 +619,7 @@ namespace JeonUtility
                 }
             }
             //shen
-            if (Player.BaseSkinName == "Shen")
+            if (Player.ChampionName == "Shen")
             {
                 if (Jlib.getm_bool("noti_shen") && Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready)
                 {
@@ -695,7 +695,7 @@ namespace JeonUtility
                 int interval = 20;
                 int i = 0;
 
-                Drawing.DrawText(x, y, Color.Wheat, "Champion : " + Player.BaseSkinName);
+                Drawing.DrawText(x, y, Color.Wheat, "Champion : " + Player.ChampionName);
                 i++;
 
 
@@ -764,31 +764,31 @@ namespace JeonUtility
                 }
                 //champ
                 #region stack
-                if (Player.BaseSkinName == "Twitch")
+                if (Player.ChampionName == "Twitch")
                 {
                     addText(y + (interval * i), (Jlib.getm_bool("st_twitch")), "CastTwitchE");
                     i++;
                 }
-                if (Player.BaseSkinName == "Kalista")
+                if (Player.ChampionName == "Kalista")
                 {
                     addText(y + (interval * i), (Jlib.getm_bool("st_kalista")), "CastKalistaE");
                     i++;
                 }
                 #endregion
                 #region notifier
-                if (Player.BaseSkinName == "Karthus")
+                if (Player.ChampionName == "Karthus")
                 {
                     addText(y + (interval * i), (Jlib.getm_bool("noti_karthus")), "UltNotifiler");
                 }
-                if (Player.BaseSkinName == "Ezreal")
+                if (Player.ChampionName == "Ezreal")
                 {
                     addText(y + (interval * i), (Jlib.getm_bool("noti_ez")), "UltNotifiler");
                 }
-                if (Player.BaseSkinName == "Caitlyn")
+                if (Player.ChampionName == "Caitlyn")
                 {
                     addText(y + (interval * i), (Jlib.getm_bool("noti_cait")), "UltNotifiler");
                 }
-                if (Player.BaseSkinName == "Shen")
+                if (Player.ChampionName == "Shen")
                 {
                     addText(y + (interval * i), (Jlib.getm_bool("noti_shen")), "UltNotifiler");
                 }
@@ -976,7 +976,7 @@ namespace JeonUtility
         {
             foreach (String champname in a)
             {
-                if (champname == Player.BaseSkinName)
+                if (champname == Player.ChampionName)
                 {
                     canw2j = true;
                     switch (champname)
@@ -996,7 +996,7 @@ namespace JeonUtility
         }
         public static void checkE()
         {
-            if (Player.BaseSkinName == "LeeSin")
+            if (Player.ChampionName == "LeeSin")
             {
                 rdyw2j = jumpspell.IsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name == "BlindMonkWOne";
             }

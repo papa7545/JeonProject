@@ -231,22 +231,21 @@ namespace JeonHelperForDev
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-                foreach (var missile in ObjectManager.Get<Obj_SpellLineMissile>())
-                {
+                //foreach (var missile in ObjectManager.Get<Obj_SpellLineMissile>())
+                //{
 
 
-                    Vector2 startPos = Drawing.WorldToScreen(missile.SpellCaster.Position);
-                    Vector2 endPos = Drawing.WorldToScreen(missile.EndPosition);
+                //    Vector2 startPos = Drawing.WorldToScreen(missile.SpellCaster.Position);
+                //    Vector2 endPos = Drawing.WorldToScreen(missile.EndPosition);
                     
                     
-                    Drawing.DrawLine(startPos, endPos, 1.5f, System.Drawing.Color.Red);
+                //    Drawing.DrawLine(startPos, endPos, 1.5f, System.Drawing.Color.Red);
                     
 
-                    Utility.DrawCircle(missile.SpellCaster.Position, 100, System.Drawing.Color.Blue);
-                    Utility.DrawCircle(missile.EndPosition, 100, System.Drawing.Color.Red);
-                    Utility.DrawCircle(missile.StartPosition, 100, System.Drawing.Color.White);
-                    
-                }
+                //    Utility.DrawCircle(missile.SpellCaster.Position, 100, System.Drawing.Color.Blue);
+                //    Utility.DrawCircle(missile.EndPosition, 100, System.Drawing.Color.Red);
+                //    Utility.DrawCircle(missile.StartPosition, 100, System.Drawing.Color.White);
+                //}
 
             foreach(var position in positions)
             {

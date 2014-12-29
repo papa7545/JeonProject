@@ -84,7 +84,7 @@ namespace JeonComboScriptor
             
             GetSpellRange(ref targetSpell);
 
-            targetSpell.name[0] = ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).Name.Replace(Player.BaseSkinName,"");
+            targetSpell.name[0] = ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).Name.Replace(Player.ChampionName,"");
             targetSpell.name[1] = GetChangeableSpellName(targetSpell.slot);
 
         }

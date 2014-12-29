@@ -28,7 +28,7 @@ namespace JeonComboScriptor
 
         public static Obj_AI_Hero Player = ObjectManager.Player;
         public static Obj_AI_Hero SelectedC = null;
-        public static String cName = Player.BaseSkinName;
+        public static String cName = Player.ChampionName;
         public static String[] ChangeableHero = {
                                                     "LeeSin","Elise","Jayce","Nidalee","RekSai"
                                                 };
@@ -99,12 +99,12 @@ namespace JeonComboScriptor
                     Readini.SetSpellstatus("W");
                     Readini.SetSpellstatus("E");
                     Readini.SetSpellstatus("R");
-                    if (IsChangeable)
-                    {
-                        Readini.SetSpellstatus("Q2");
-                        Readini.SetSpellstatus("W2");
-                        Readini.SetSpellstatus("E2");
-                    }
+                    //if (IsChangeable)
+                    //{
+                    //    Readini.SetSpellstatus("Q2");
+                    //    Readini.SetSpellstatus("W2");
+                    //    Readini.SetSpellstatus("E2");
+                    //}
                     Readini.SetMisc();
                 }
 
@@ -203,12 +203,12 @@ namespace JeonComboScriptor
             Readini.GetSpellstatus(ref W, "W");
             Readini.GetSpellstatus(ref E, "E");
             Readini.GetSpellstatus(ref R, "R");
-            if (IsChangeable)
-            {
-                Readini.GetSpellstatus(ref Q2, "Q2");
-                Readini.GetSpellstatus(ref W2, "W2");
-                Readini.GetSpellstatus(ref E2, "E2");
-            }
+            //if (IsChangeable)
+            //{
+            //    Readini.GetSpellstatus(ref Q2, "Q2");
+            //    Readini.GetSpellstatus(ref W2, "W2");
+            //    Readini.GetSpellstatus(ref E2, "E2");
+            //}
         }
 
         public static Obj_AI_Hero GetSelectedTarget()

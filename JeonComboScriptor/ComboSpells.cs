@@ -24,7 +24,7 @@ namespace JeonComboScriptor
         public static void CastComboSpells(Obj_AI_Hero target) // Combo 발사
         {
             spell_ordernum = 0;
-            if (target == null)
+            if (target == null || target.IsDead)
                 return;
 
             foreach(var spell in c_Spells)
