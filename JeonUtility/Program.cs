@@ -39,27 +39,11 @@ namespace JeonUtility
 
         public static int req_ignitelevel { get { return Jlib.getm_value("igniteLv"); } }
 
-        public static float[] pastTime = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        public static float pastTime = 0;
 
-        public static Vector3 Dragon = new Vector3(9836f, 4408f, -71.24f); public static int Dragon_spawntime = 0;
-        public static Vector3 Baron = new Vector3(4910f, 10268f, -71.24f); public static int Baron_spawntime = 0;
-        public static Vector3 top_crub = new Vector3(4266f, 9634f, -67.87f); public static int top_crub_spawntime = 0;
-        public static Vector3 down_crub = new Vector3(10524f, 5116f, -62.81f); public static int down_crub_spawntime = 0;
+        public static List<timer_clock> timerlist = new List<timer_clock>();
+ 
         
-        public static Vector3 bteam_Razorbeak = new Vector3(6974f, 5460f, 54f); public static int bteam_Razorbeak_spawntime = 0;
-        public static Vector3 bteam_Red = new Vector3(7796f, 4028f, 54f); public static int bteam_Red_spawntime = 0;
-        public static Vector3 bteam_Krug = new Vector3(8394f, 2750f, 50f); public static int bteam_Krug_spawntime = 0;
-        public static Vector3 bteam_Blue = new Vector3(3832f, 7996f, 52f); public static int bteam_Blue_spawntime = 0;
-        public static Vector3 bteam_Gromp = new Vector3(2112f, 8372f, 51.7f); public static int bteam_Gromp_spawntime = 0;
-        public static Vector3 bteam_Wolf = new Vector3(3844f,6474f,52.46f); public static int bteam_Wolf_spawntime = 0;
-
-        public static Vector3 pteam_Razorbeak = new Vector3(7856f,9492f,52.33f); public static int pteam_Razorbeak_spawntime = 0;
-        public static Vector3 pteam_Red = new Vector3(7124f,10856f,56.34f); public static int pteam_Red_spawntime = 0;
-        public static Vector3 pteam_Krug = new Vector3(6495f,12227f,56.47f); public static int pteam_Krug_spawntime = 0;
-        public static Vector3 pteam_Blue = new Vector3(10850f,6938f,51.72f); public static int pteam_Blue_spawntime = 0;
-        public static Vector3 pteam_Gromp = new Vector3(12766f, 6464f, 51.66f); public static int pteam_Gromp_spawntime = 0;
-        public static Vector3 pteam_Wolf = new Vector3(10958f,8286f,62.46f); public static int pteam_Wolf_spawntime = 0;
-
 
 
         public static String[] DefSpellstr = { "barrier", "heal" };
@@ -86,8 +70,8 @@ namespace JeonUtility
             baseMenu = new Menu("JeonUtility", "JeonUtility", true);
             baseMenu.AddToMainMenu();
             baseMenu.AddItem(new MenuItem("base_stat", "Status on hud").SetValue(true));
-            baseMenu.AddItem(new MenuItem("x", "x").SetValue(new Slider(600, 0, Monitor.Width)));
-            baseMenu.AddItem(new MenuItem("y", "y").SetValue(new Slider(250, 0, Monitor.Height)));
+            baseMenu.AddItem(new MenuItem("x", "HUD_X").SetValue(new Slider(600, 0, Monitor.Width)));
+            baseMenu.AddItem(new MenuItem("y", "HUD_Y").SetValue(new Slider(250, 0, Monitor.Height)));
 
             var menu_smite = new Menu("Smite", "Smite");
             var menu_ignite = new Menu("Ignite", "Ignite");
@@ -216,9 +200,62 @@ namespace JeonUtility
             #region 정글타이머 메뉴 - menu for JungleTimer
             baseMenu.AddSubMenu(menu_jtimer);
             menu_jtimer.AddItem(new MenuItem("jt_active", "Active").SetValue(true));
+            menu_jtimer.AddItem(new MenuItem("jt_active_minimap", "Draw On Minimap").SetValue(true));
+            menu_jtimer.AddItem(new MenuItem("jt_font_size", "Font Size(need F5)").SetValue(new Slider(32, 8, 72)));
+            menu_jtimer.AddItem(new MenuItem("jt_font_size_minimap", "MinimapFont Size").SetValue(new Slider(10, 8, 32)));
 
 
             #endregion
+
+            #endregion
+
+            #region 타이머
+            timer_clock Baron = new timer_clock { Position = new Vector3(4910f, 10268f, -71.24f),name = "SRU_BaronSpawn",
+                respawntime = 420};
+            timer_clock Dragon = new timer_clock { Position = new Vector3(9836f, 4408f, -71.24f), name = "SRU_Dragon" ,
+                respawntime = 360};
+            timer_clock top_crab = new timer_clock { Position = new Vector3(4266f, 9634f, -67.87f), name = "Sru_Crab",
+                respawntime = 180,Range=3000};
+            timer_clock down_crab = new timer_clock { Position = new Vector3(10524f, 5116f, -62.81f), name = "Sru_Crab",
+                respawntime = 180,Range=3000};
+
+            timer_clock bteam_Razorbeak = new timer_clock { Position = new Vector3(6974f, 5460f, 54f), name = "SRU_Razorbeak" };
+            timer_clock bteam_Red = new timer_clock { Position = new Vector3(7796f, 4028f, 54f), name = "SRU_Red",
+                respawntime = 300};
+            timer_clock bteam_Krug = new timer_clock { Position = new Vector3(8394f, 2750f, 50f), name = "SRU_Krug" };
+            timer_clock bteam_Blue = new timer_clock { Position = new Vector3(3832f, 7996f, 52f), name = "SRU_Blue",
+                respawntime = 300 };
+            timer_clock bteam_Gromp = new timer_clock { Position = new Vector3(2112f, 8372f, 51.7f), name = "SRU_Gromp" };
+            timer_clock bteam_Wolf = new timer_clock { Position = new Vector3(3844f, 6474f, 52.46f), name = "SRU_Murkwolf" };
+
+            timer_clock pteam_Razorbeak = new timer_clock { Position = new Vector3(7856f, 9492f, 52.33f), name = "SRU_Razorbeak" };
+            timer_clock pteam_Red = new timer_clock { Position = new Vector3(7124f, 10856f, 56.34f), name = "SRU_Red",
+                respawntime = 300 };
+            timer_clock pteam_Krug = new timer_clock { Position = new Vector3(6495f, 12227f, 56.47f), name = "SRU_Krug" };
+            timer_clock pteam_Blue = new timer_clock { Position = new Vector3(10850f, 6938f, 51.72f), name = "SRU_Blue",
+                respawntime = 300 };
+            timer_clock pteam_Gromp = new timer_clock { Position = new Vector3(12766f, 6464f, 51.66f), name = "SRU_Gromp" };
+            timer_clock pteam_Wolf = new timer_clock { Position = new Vector3(10958f, 8286f, 62.46f), name = "SRU_Murkwolf" };
+
+        //    public Vector3 Dragon = new Vector3(9836f, 4408f, -71.24f); public int Dragon_spawntime = 0;
+        //    public Vector3 Baron = new Vector3(4910f, 10268f, -71.24f); public int Baron_spawntime = 0;
+        //public Vector3 top_crub = new Vector3(4266f, 9634f, -67.87f); public int top_crub_spawntime = 0;
+        //public Vector3 down_crub = new Vector3(10524f, 5116f, -62.81f); public int down_crub_spawntime = 0;
+
+        //public Vector3 bteam_Razorbeak = new Vector3(6974f, 5460f, 54f); public int bteam_Razorbeak_spawntime = 0;
+        //public Vector3 bteam_Red = new Vector3(7796f, 4028f, 54f); public int bteam_Red_spawntime = 0;
+        //public Vector3 bteam_Krug = new Vector3(8394f, 2750f, 50f); public int bteam_Krug_spawntime = 0;
+        //public Vector3 bteam_Blue = new Vector3(3832f, 7996f, 52f); public int bteam_Blue_spawntime = 0;
+        //public Vector3 bteam_Gromp = new Vector3(2112f, 8372f, 51.7f); public int bteam_Gromp_spawntime = 0;
+        //public Vector3 bteam_Wolf = new Vector3(3844f, 6474f, 52.46f); public int bteam_Wolf_spawntime = 0;
+
+        //public Vector3 pteam_Razorbeak = new Vector3(7856f, 9492f, 52.33f); public int pteam_Razorbeak_spawntime = 0;
+        //public Vector3 pteam_Red = new Vector3(7124f, 10856f, 56.34f); public int pteam_Red_spawntime = 0;
+        //public Vector3 pteam_Krug = new Vector3(6495f, 12227f, 56.47f); public int pteam_Krug_spawntime = 0;
+        //public Vector3 pteam_Blue = new Vector3(10850f, 6938f, 51.72f); public int pteam_Blue_spawntime = 0;
+        //public Vector3 pteam_Gromp = new Vector3(12766f, 6464f, 51.66f); public int pteam_Gromp_spawntime = 0;
+        //public Vector3 pteam_Wolf = new Vector3(10958f, 8286f, 62.46f); public int pteam_Wolf_spawntime = 0;
+
 
             #endregion
 
@@ -235,7 +272,7 @@ namespace JeonUtility
             float Player_totalAD = Player_baseAD + Player_addAD;
             float Player_totalAP = Player.FlatMagicDamageMod;
             #endregion
-
+            
 
             #region 오토이그나이트-AutoIgnite
             if (Jlib.getm_bool("AutoIgnite") && igniteSlot != SpellSlot.Unknown &&
@@ -651,30 +688,59 @@ namespace JeonUtility
 
 
             #region 정글타이머 - JungleTimer
-            if (Jlib.getm_bool("jt_active"))
+
+            if (Game.Time - pastTime >= 1)
             {
+                pastTime = Game.Time;
+                foreach (var t in timerlist)
+                {
+                    if (CheckMonster(t.name, t.Position,t.Range))
+                    {
+                        t.spawntime = t.respawntime;
+                        t.show = false;
+                    }
+                    else
+                    {
+                        t.spawntime -= 1;
 
-                JungetTimer(ref pastTime[0], "SRU_Dragon", Dragon, ref Dragon_spawntime, 360);
-                JungetTimer(ref pastTime[1], "SRU_BaronSpawn", Baron, ref Baron_spawntime, 420);
+                        if (t.show)
+                        {
+                            if (!baseMenu.Item("jt_active").GetValue<bool>())
+                                t.show = false;
+                        }
+                        else if (baseMenu.Item("jt_active").GetValue<bool>())
+                            t.show = true;
+                    }
 
-                JungetTimer(ref pastTime[2], "SRU_Razorbeak", bteam_Razorbeak, ref bteam_Razorbeak_spawntime, 100);
-                JungetTimer(ref pastTime[3], "SRU_Red", bteam_Red, ref bteam_Red_spawntime, 300);
-                JungetTimer(ref pastTime[4], "SRU_Krug", bteam_Krug, ref bteam_Krug_spawntime, 100);
-                JungetTimer(ref pastTime[5], "SRU_Blue", bteam_Blue, ref bteam_Blue_spawntime, 300);
-                JungetTimer(ref pastTime[6], "SRU_Gromp", bteam_Gromp, ref bteam_Gromp_spawntime, 100);
-                JungetTimer(ref pastTime[7], "SRU_Murkwolf", bteam_Wolf, ref bteam_Wolf_spawntime, 100);
 
-                JungetTimer(ref pastTime[8], "Sru_Crab", top_crub, ref top_crub_spawntime, 180, 3000);
-                JungetTimer(ref pastTime[9], "Sru_Crab", down_crub, ref down_crub_spawntime, 180, 3000);
-
-                JungetTimer(ref pastTime[10], "SRU_Razorbeak", pteam_Razorbeak, ref pteam_Razorbeak_spawntime, 100);
-                JungetTimer(ref pastTime[11], "SRU_Red", pteam_Red, ref pteam_Red_spawntime, 300);
-                JungetTimer(ref pastTime[12], "SRU_Krug", pteam_Krug, ref pteam_Krug_spawntime, 100);
-                JungetTimer(ref pastTime[13], "SRU_Blue", pteam_Blue, ref pteam_Blue_spawntime, 300);
-                JungetTimer(ref pastTime[14], "SRU_Gromp", pteam_Gromp, ref pteam_Gromp_spawntime, 100);
-                JungetTimer(ref pastTime[15], "SRU_Murkwolf", pteam_Wolf, ref pteam_Wolf_spawntime, 100);
-
+                    if (!baseMenu.Item("jt_active_minimap").GetValue<bool>())
+                        t.minimap_show = false;
+                    else
+                        t.minimap_show = true;
+                }
             }
+
+
+
+                //JungetTimer(ref pastTime[0], "SRU_Dragon", Dragon, ref Dragon_spawntime, 360);
+                //JungetTimer(ref pastTime[1], "SRU_BaronSpawn", Baron, ref Baron_spawntime, 420);
+
+                //JungetTimer(ref pastTime[2], "SRU_Razorbeak", bteam_Razorbeak, ref bteam_Razorbeak_spawntime, 100);
+                //JungetTimer(ref pastTime[3], "SRU_Red", bteam_Red, ref bteam_Red_spawntime, 300);
+                //JungetTimer(ref pastTime[4], "SRU_Krug", bteam_Krug, ref bteam_Krug_spawntime, 100);
+                //JungetTimer(ref pastTime[5], "SRU_Blue", bteam_Blue, ref bteam_Blue_spawntime, 300);
+                //JungetTimer(ref pastTime[6], "SRU_Gromp", bteam_Gromp, ref bteam_Gromp_spawntime, 100);
+                //JungetTimer(ref pastTime[7], "SRU_Murkwolf", bteam_Wolf, ref bteam_Wolf_spawntime, 100);
+
+                //JungetTimer(ref pastTime[8], "Sru_Crab", top_crub, ref top_crub_spawntime, 180, 3000);
+                //JungetTimer(ref pastTime[9], "Sru_Crab", down_crub, ref down_crub_spawntime, 180, 3000);
+
+                //JungetTimer(ref pastTime[10], "SRU_Razorbeak", pteam_Razorbeak, ref pteam_Razorbeak_spawntime, 100);
+                //JungetTimer(ref pastTime[11], "SRU_Red", pteam_Red, ref pteam_Red_spawntime, 300);
+                //JungetTimer(ref pastTime[12], "SRU_Krug", pteam_Krug, ref pteam_Krug_spawntime, 100);
+                //JungetTimer(ref pastTime[13], "SRU_Blue", pteam_Blue, ref pteam_Blue_spawntime, 300);
+                //JungetTimer(ref pastTime[14], "SRU_Gromp", pteam_Gromp, ref pteam_Gromp_spawntime, 100);
+                //JungetTimer(ref pastTime[15], "SRU_Murkwolf", pteam_Wolf, ref pteam_Wolf_spawntime, 100);
             #endregion
 
 
@@ -827,7 +893,7 @@ namespace JeonUtility
 
                     if (smiteReady && mob.Health < smitedamage)
                     {
-                        setIgniteSlot();
+                        setSmiteSlot();
                         Player.Spellbook.CastSpell(smiteSlot, mob);
                     }
                 }
@@ -1093,36 +1159,88 @@ namespace JeonUtility
         #endregion
 
         #region 정글타이머함수 - JungleTimer
-        public static void JungetTimer(ref float pastTime,String TargetName,Vector3 BasePosition, ref int spawntime, int spawntime_default,
-            int Range = 1000)
+        public static bool CheckMonster(String TargetName, Vector3 BasePosition ,int Range = 1000)
         {
-            
+
             var minions = ObjectManager.Get<Obj_AI_Minion>()
                 .Where(minion => minion.IsValid && !minion.IsDead && minion.Name.StartsWith(TargetName));
             var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
 
             if (!objAiMinions.Any(m => m.Distance(BasePosition) < Range))
             {
-                var vec2 = Drawing.WorldToScreen(BasePosition);
-
-                var min = spawntime / 60;
-                var sec = spawntime - min * 60;
-
-
-                if (spawntime > 0)
-                {
-                    Drawing.DrawText(vec2.X, vec2.Y, Color.Red, String.Format("{0:00}:{1:00}", min, sec));
-
-                    if (Game.Time - pastTime >= 1.0f)
-                    {
-                        pastTime = Game.Time;
-                        spawntime -= 1;
-                    }
-                }
+                return false;
             }
             else
             {
-                spawntime = spawntime_default+1;
+                return true;
+            }
+        }
+        public static String Clockstring(int spawntime)
+        {
+            var min = spawntime / 60;
+            var sec = spawntime - min * 60;
+            if (spawntime > 0)
+            {
+                return String.Format("{0:00}:{1:00}", min, sec);
+            }
+            else
+                return "";
+        }
+
+        public class timer_clock
+        {
+            public Vector3 Position;
+            public string name;
+            public bool show = false;
+            public bool minimap_show = true;
+            public int respawntime = 100;
+            public int spawntime = 0;
+            public int Range = 1000;
+            public Render.Text timer { get; set; }
+            public Render.Text timer_minimap { get; set; }
+
+            public timer_clock()
+            {
+
+                timer = new Render.Text(Position.To2D(), "", baseMenu.Item("jt_font_size").GetValue<Slider>().Value
+                    , SharpDX.Color.White)
+                {
+                    VisibleCondition =
+                    condition =>
+                          show,
+
+                    PositionUpdate = delegate
+                    {
+                        Vector2 vec2 = Drawing.WorldToScreen(Position);
+                        return vec2;
+                    },
+                    TextUpdate = () => Clockstring(spawntime),
+                    OutLined = true,
+                    Centered = true
+                };
+
+                timer_minimap = new Render.Text(Position.To2D(), "", 
+                    baseMenu.Item("jt_font_size_minimap").GetValue<Slider>().Value
+                    , SharpDX.Color.White)
+                {
+                    VisibleCondition =
+                    condition =>
+                          show && minimap_show,
+
+                    PositionUpdate = delegate
+                    {
+                        Vector2 v2 = Drawing.WorldToMinimap(Position);
+                        return v2;
+                    },
+                    TextUpdate = () => Clockstring(spawntime),
+                    OutLined = true,
+                    Centered = true
+                };
+                timer_minimap.Add();
+
+                timer.Add();
+                timer_minimap.Add();
+                timerlist.Add(this);
             }
         }
         #endregion
@@ -1136,7 +1254,6 @@ namespace JeonUtility
         #endregion
 
 
-        
     }
 }
 
