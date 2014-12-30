@@ -456,7 +456,8 @@ namespace JeonUtility
             {
                 foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Zhonyas_Hourglass))
                 {
-                    if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_zhonya"))
+                    if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_zhonya")
+                        && !Player.Buffs.Any(buff => buff.DisplayName == "Chrono Shift"))
                         Player.Spellbook.CastSpell(p_item.SpellSlot);
                 }
             }
