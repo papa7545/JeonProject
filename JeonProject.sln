@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonHelperForDev", "JeonHel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonAutoSoraka", "JeonAutoSoraka\JeonAutoSoraka.csproj", "{476F7E38-696B-47DC-8189-9AB8C9DAF59B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonCassiopeia", "JeonCassiopeia\JeonCassiopeia.csproj", "{333D5EED-F717-4809-8C9F-48E00DA7462C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{476F7E38-696B-47DC-8189-9AB8C9DAF59B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{476F7E38-696B-47DC-8189-9AB8C9DAF59B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{476F7E38-696B-47DC-8189-9AB8C9DAF59B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{333D5EED-F717-4809-8C9F-48E00DA7462C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{333D5EED-F717-4809-8C9F-48E00DA7462C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{333D5EED-F717-4809-8C9F-48E00DA7462C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{333D5EED-F717-4809-8C9F-48E00DA7462C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
