@@ -115,20 +115,20 @@ namespace JeonAutoSoraka
                 },
                 new ItemToShop()
                 {
-                    goldReach = 360,
+                    goldReach = 180,
                     itemsMustHave = new List<ItemId>{JeonItem.GetItemIdbyInt(3096)},
-                    itemIds = new List<ItemId>{JeonItem.GetItemIdbyInt(1004),JeonItem.GetItemIdbyInt(1004)}
+                    itemIds = new List<ItemId>{JeonItem.GetItemIdbyInt(1004)}
                 },
                 new ItemToShop()
                 {
-                    goldReach = 500,
-                    itemsMustHave = new List<ItemId>{JeonItem.GetItemIdbyInt(1004),JeonItem.GetItemIdbyInt(1004)},
+                    goldReach = 500+180,
+                    itemsMustHave = new List<ItemId>{JeonItem.GetItemIdbyInt(1004)},
                     itemIds = new List<ItemId>{JeonItem.GetItemIdbyInt(1033)}
                 },
                 new ItemToShop()
                 {
-                    goldReach = 180,
-                    itemsMustHave = new List<ItemId>{JeonItem.GetItemIdbyInt(1033),JeonItem.GetItemIdbyInt(1004),JeonItem.GetItemIdbyInt(1004)},
+                    goldReach = 180+180,
+                    itemsMustHave = new List<ItemId>{JeonItem.GetItemIdbyInt(1033),JeonItem.GetItemIdbyInt(1004)},
                     itemIds = new List<ItemId>{JeonItem.GetItemIdbyInt(3028)}
                 },
                 new ItemToShop()
@@ -304,7 +304,7 @@ namespace JeonAutoSoraka
             #endregion
 
             #region 상점이용가능할때
-            if (Utility.InShopRange()) 
+            if (Utility.InShopRange() || Player.IsDead) 
             {
                 foreach (var item in nextItem.itemIds)
                 {
@@ -339,8 +339,8 @@ namespace JeonAutoSoraka
             }
             #endregion
 
-            #region 잠수 45초 경과
-            if (afktime > 45 && !stopfollowing) // 
+            #region 잠수 55초 경과
+            if (afktime > 55 && !stopfollowing && spawn.Distance(Player.Position)<1500) // 
             {
                 Game.PrintChat("AFK DETECTED, Change Target");
                 fllowlist.Remove(follow.ChampionName);
@@ -385,20 +385,20 @@ namespace JeonAutoSoraka
             #region follow가 죽었거나. (타겟과의거리가 5000이상이고. 내가 상점범위에 없고.타겟의 포지션이 상점내)이거나. 플레이어의 체력퍼센트가 설정된것 이하 일경우
             if (follow.IsDead ||
                  (follow.Distance(Player.Position) > 5000 && !Utility.InShopRange() &&  spawn.Distance(follow.Position) < 1500) ||
-                 Player.Health / Player.MaxHealth * 100 <
-                 menu.Item("hpb").GetValue<Slider>().Value)
+                 Player.HealthPercentage() <
+                 menu.Item("hpb").GetValue<Slider>().Value && !Player.IsDead)
             {
-                Game.PrintChat("WARNNING! MUST RECALL");
                 if (Game.Time - foundturret > 20 && !recalling)
                 {
+                    Game.PrintChat("WARNNING! MUST RECALL");
                     var turret2 =
                         ObjectManager.Get<Obj_AI_Turret>()
-                            .Where(x => x.Distance(Player.Position) < 3500 && x.IsAlly);
+                            .Where(x => x.IsAlly);
 
                     if (turret2.Any())
                     {
                         stopfollowing = true;
-                        turret = turret2.First();
+                        turret = turret2.OrderBy(x => x.Distance(Player.Position)).First();
                         foundturret = Game.Time;
                     }
                 }
@@ -406,6 +406,7 @@ namespace JeonAutoSoraka
 
                 if (stopfollowing && !recalling)
                 {
+                    Game.PrintChat("WARNNING! MOVE TURRET");
                     Player.IssueOrder(GameObjectOrder.MoveTo, turret);
                     if (Player.Distance(turret.Position) <= 350 && Game.Time - count > 15)
                     {
@@ -419,7 +420,7 @@ namespace JeonAutoSoraka
             #endregion
 
 
-            if ((Game.Time - count > 15 && Game.Time - count < 17))
+            if ((Game.Time - count > 30)) //터렛이동한지 15초~17초 사이일때
             {
                 stopfollowing = false;
                 recalling = false;
