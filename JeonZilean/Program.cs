@@ -13,7 +13,7 @@ namespace JeonZilean
     {
         public static String ChampionName = "Zilean";//ObjectManager.Player.BaseSkinName;
         public static Menu baseMenu;
-        public static List<Spell> ComboSpells;
+        public static List<Spell> ComboSpells = new List<Spell>();
 
         static void Main(string[] args)
         {

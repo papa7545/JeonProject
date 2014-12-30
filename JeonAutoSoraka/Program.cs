@@ -287,8 +287,37 @@ namespace JeonAutoSoraka
                 pastTime = Game.Time;
                 afktime += 1;
                 Game.PrintChat(afktime.ToString());
+                if (afktime > 55) // 잠수 55초 경과
+                {
+                    Player.IssueOrder(GameObjectOrder.AttackTo,
+                        new Vector3(4910f, 10268f, -71.24f));
+                    follow = null;
+                    afktime = 0;
+                }
+
+
+                #region 우물 잠수 45초 경과
+                if (afktime > 45 && spawn.Distance(Player.Position) < 1500)
+                {
+                    Game.PrintChat("AFK DETECTED, Change Target");
+                    if(fllowlist.Contains(follow.ChampionName))
+                        fllowlist.Remove(follow.ChampionName);
+                    follow = null;
+                    afktime = 0;
+                }
+                #endregion
             }
             //////////////////////////////////////////////////////
+
+            if (fllowlist.Count == 0)
+            {
+                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
+                {
+                    fllowlist.Add(ally.ChampionName);
+                    Game.PrintChat("Follow LIST is NULL. ADD ALLY CHAMPIONS");
+                }
+            }
+
 
 
 
@@ -304,7 +333,7 @@ namespace JeonAutoSoraka
             #endregion
 
             #region 상점이용가능할때
-            if (Utility.InShopRange() || Player.IsDead) 
+            if (Utility.InShop(Player) || Player.IsDead) 
             {
                 foreach (var item in nextItem.itemIds)
                 {
@@ -339,24 +368,8 @@ namespace JeonAutoSoraka
             }
             #endregion
 
-            #region 잠수 55초 경과
-            if (afktime > 55 && !stopfollowing && spawn.Distance(Player.Position)<1500) // 
-            {
-                Game.PrintChat("AFK DETECTED, Change Target");
-                fllowlist.Remove(follow.ChampionName);
-                follow = null;
-                afktime = 0;
-            }
-            #endregion
 
-            if (fllowlist.Count == 0)
-            {
-                foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
-                {
-                    fllowlist.Add(ally.ChampionName);
-                    Game.PrintChat("Follow LIST is NULL. ADD ALLY CHAMPIONS");
-                }
-            }
+
 
 
             if (Game.Time - foundturret > 25) // 터렛발견하고 25초 경과 
@@ -384,7 +397,7 @@ namespace JeonAutoSoraka
 
             #region follow가 죽었거나. (타겟과의거리가 5000이상이고. 내가 상점범위에 없고.타겟의 포지션이 상점내)이거나. 플레이어의 체력퍼센트가 설정된것 이하 일경우
             if (follow.IsDead ||
-                 (follow.Distance(Player.Position) > 5000 && !Utility.InShopRange() &&  spawn.Distance(follow.Position) < 1500) ||
+                 (follow.Distance(Player.Position) > 5000 && !Utility.InShop(Player) &&  spawn.Distance(follow.Position) < 1500) ||
                  Player.HealthPercentage() <
                  menu.Item("hpb").GetValue<Slider>().Value && !Player.IsDead)
             {
@@ -419,48 +432,52 @@ namespace JeonAutoSoraka
             }
             #endregion
 
+            
 
-            if ((Game.Time - count > 30)) //터렛이동한지 15초~17초 사이일때
+            if ((Game.Time - count > 15)) //터렛이동한지 15초~17초 사이일때
             {
                 stopfollowing = false;
                 recalling = false;
             }
 
-            #region W발동부분 - 아군
-            if (!recalling && !stopfollowing && W.IsReady())
+            if (Player.ChampionName.ToUpper() == "SORAKA")
             {
 
-                var allies2 =
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(
-                            x =>
-                                x.IsAlly && x.Health / x.MaxHealth * 100 < menu.Item("allyhpw").GetValue<Slider>().Value &&
-                                !x.IsDead && x.Distance(Player.Position) < 550);
-                var objAiHeroes = allies2 as Obj_AI_Hero[] ?? allies2.ToArray();
-                if (objAiHeroes.Any() &&
-                    Player.Health / Player.MaxHealth * 100 >
-                    menu.Item("wabovehp").GetValue<Slider>().Value)
-                    W.Cast(objAiHeroes.First());
-            }
-            #endregion
-
-            #region R발동
-            if (menu.Item("user").GetValue<bool>() && R.IsReady())
-            {
-                var allies =
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(
-                            x =>
-                                x.IsAlly && x.Health / x.MaxHealth * 100 < menu.Item("allyhpr").GetValue<Slider>().Value &&
-                                !x.IsDead);
-                if (allies.Any())
+                #region W발동부분 - 아군
+                if (!recalling && !stopfollowing && W.IsReady())
                 {
-                    if (R.IsReady())
-                        R.Cast();
-                }
-            }
-            #endregion
 
+                    var allies2 =
+                        ObjectManager.Get<Obj_AI_Hero>()
+                            .Where(
+                                x =>
+                                    x.IsAlly && x.Health / x.MaxHealth * 100 < menu.Item("allyhpw").GetValue<Slider>().Value &&
+                                    !x.IsDead && x.Distance(Player.Position) < 550);
+                    var objAiHeroes = allies2 as Obj_AI_Hero[] ?? allies2.ToArray();
+                    if (objAiHeroes.Any() &&
+                        Player.Health / Player.MaxHealth * 100 >
+                        menu.Item("wabovehp").GetValue<Slider>().Value)
+                        W.Cast(objAiHeroes.First());
+                }
+                #endregion
+                
+                #region R발동
+                if (menu.Item("user").GetValue<bool>() && R.IsReady())
+                {
+                    var allies =
+                        ObjectManager.Get<Obj_AI_Hero>()
+                            .Where(
+                                x =>
+                                    x.IsAlly && x.Health / x.MaxHealth * 100 < menu.Item("allyhpr").GetValue<Slider>().Value &&
+                                    !x.IsDead);
+                    if (allies.Any())
+                    {
+                        if (R.IsReady())
+                            R.Cast();
+                    }
+                }
+                #endregion
+            }
             #region 리콜중도 아니고 따라다니는중일때
             if (!recalling && !stopfollowing)
             {
@@ -477,7 +494,6 @@ namespace JeonAutoSoraka
                 {
                     if(spawn.Distance(follow.Position) <= 3000) // 타겟이 기지에 있다
                     {
-                        Game.PrintChat("Target is in of base");
                         Random y = new Random();
                         var turret =
                             ObjectManager.Get<Obj_AI_Turret>().First(x => x.Distance(Player.Position) < 3500 && x.IsAlly);
@@ -494,7 +510,6 @@ namespace JeonAutoSoraka
                     }
                     else // 타겟이 기지 밖에 있다
                     {
-                        Game.PrintChat("Target is out of base");
                         Player.IssueOrder(GameObjectOrder.MoveTo, follow);
                         afktime = 0;
                     }
@@ -504,65 +519,82 @@ namespace JeonAutoSoraka
                 #region 타겟이 죽지않았을때 (평상시)
                 if (!follow.IsDead)
                 {
-                    #region W발동-타겟만
-                    if (W.IsReady() && menu.Item("usew").GetValue<bool>() &&
-                        Player.Health / Player.MaxHealth * 100 >
-                        menu.Item("wabovehp").GetValue<Slider>().Value)
+                    if (Player.ChampionName.ToUpper() == "SORAKA")
                     {
-                        if (follow.Health / follow.MaxHealth * 100 < menu.Item("allyhpw").GetValue<Slider>().Value &&
-                            follow.Distance(Player.Position) < 550 &&
+                        #region W발동-타겟만
+                        if (W.IsReady() && menu.Item("usew").GetValue<bool>() &&
                             Player.Health / Player.MaxHealth * 100 >
                             menu.Item("wabovehp").GetValue<Slider>().Value)
                         {
-                            W.Cast(follow);
-                            afktime = 0;
+                            if (follow.Health / follow.MaxHealth * 100 < menu.Item("allyhpw").GetValue<Slider>().Value &&
+                                follow.Distance(Player.Position) < 550 &&
+                                Player.Health / Player.MaxHealth * 100 >
+                                menu.Item("wabovehp").GetValue<Slider>().Value)
+                            {
+                                W.Cast(follow);
+                                afktime = 0;
+                            }
+                            else if (follow.Health / follow.MaxHealth * 100 < menu.Item("allyhpw").GetValue<Slider>().Value &&
+                                     follow.Distance(Player.Position) > 550)
+                            {
+                                Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position);
+                                afktime = 0;
+                            }
                         }
-                        else if (follow.Health / follow.MaxHealth * 100 < menu.Item("allyhpw").GetValue<Slider>().Value &&
-                                 follow.Distance(Player.Position) > 550)
+                        #endregion
+
+                        #region 오토Q
+                        if (Q.IsReady() && !Utility.UnderTurret(Player, true))
                         {
-                            Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position);
+                            var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+                            Q.Cast(target);
                             afktime = 0;
                         }
-                    }
-                    #endregion
+                        #endregion
 
-                    #region 오토Q
-                    if (Q.IsReady() && !Utility.UnderTurret(Player, true))
+                        #region 오토E
+                        if (E.IsReady() && !Utility.UnderTurret(Player, true))
+                        {
+
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+                            E.Cast(target);
+                            afktime = 0;
+                        }
+                        #endregion
+                    }
+                    else
                     {
-                        var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                        Q.Cast(target);
-                        afktime = 0;
-                    }
-                    #endregion
+                        var qTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+                        var wTarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
+                        var eTarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+                        var rTarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
 
-                    #region 오토E
-                    if (E.IsReady() && !Utility.UnderTurret(Player, true))
-                    {
-
-                        var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                        E.Cast(target);
-                        afktime = 0;
+                        if (Q.CanCast(qTarget))
+                            Q.Cast(qTarget);
+                        if (W.CanCast(qTarget))
+                            W.Cast(qTarget);
+                        if (E.CanCast(qTarget))
+                            E.Cast(qTarget);
+                        if (R.CanCast(qTarget))
+                            R.Cast(qTarget);
                     }
-                    #endregion
                 }
                 #endregion
 
                 #region 타겟이 죽었을때
                 else
                 {
-                    Random y = new Random();
-                    var turret =
-                        ObjectManager.Get<Obj_AI_Turret>()
-                            .First(x => x.Distance(Player.Position) < 3500 && x.IsAlly);
-                    var xPos = ((spawn.X - turret.Position.X) / Vector3.Distance(turret.Position, spawn)) * 300 +
-                               turret.Position.X -
-                               y.Next(25, 150);
-                    var yPos = ((spawn.Y - turret.Position.Y) / Vector3.Distance(turret.Position, spawn)) * 300 +
-                               turret.Position.Y -
-                               y.Next(25, 150);
-
-                    var vec = new Vector3(xPos, yPos, follow.Position.Z);
-                    Player.IssueOrder(GameObjectOrder.MoveTo, vec);
+                    Game.PrintChat("Target is dead. Change Targeting");
+                    if (ObjectManager.Get<Obj_AI_Hero>().Any(x => !x.IsMe && x.IsAlly && !x.IsDead && x.Distance(Player.Position) < 1800))
+                    {
+                        follow =
+                            ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly && !x.IsDead && x.Distance(Player.Position) < 1800);
+                    }
+                    else
+                    {
+                        follow =
+                            ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly && !x.IsDead);
+                    }
                 }
                 #endregion
             }

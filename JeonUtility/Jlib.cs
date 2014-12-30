@@ -25,7 +25,6 @@ namespace JeonUtility
             show_mebuff
         }
 
-        public static int pastTime = 0;
 
         public static bool getm_bool(String menu)
         {
