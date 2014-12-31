@@ -33,12 +33,10 @@ namespace JeonAutoSoraka
         private static List<Obj_AI_Hero> allies;
         private static float pastTime, afktime;
 
-
-
         private static List<string> ad = new List<string>
         {
             "Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "KogMaw",
-            "MissFortune", "Quinn", "Sivir", "Tristana", "Twitch", "Varus", "Vayne", "Jinx", "Lucian"
+            "MissFortune", "Quinn", "Sivir", "Tristana", "Twitch", "Varus", "Vayne", "Jinx", "Lucian", "Kalista"
         };
 
         private static List<string> ap = new List<string>
@@ -71,6 +69,8 @@ namespace JeonAutoSoraka
 
         private static void Game_OnGameLoad(EventArgs args)
         {
+
+
             if (Player.Team.ToString() == "Chaos")
             {
                 spawn = new Vector3(14318f, 14354, 171.97f);
@@ -196,14 +196,37 @@ namespace JeonAutoSoraka
         private static void OnDraw_EndScene(EventArgs args)
         {
             if (follow != null)
-                Utility.DrawCircle(follow.Position, 100, System.Drawing.Color.Red,15,30);
+                Utility.DrawCircle(follow.Position, 100, System.Drawing.Color.Red,5,5);
 
-                Utility.DrawCircle(turret.Position, 100, System.Drawing.Color.Blue, 15, 30);
+            
+
+
+            foreach (var t in ObjectManager.Get<Obj_AI_Turret>().Where(t => !t.IsDead && t.IsEnemy))
+            {
+                Utility.DrawCircle(t.Position, 775, System.Drawing.Color.Blue, 5, 5);
+                if(Player.Distance(t.Position) <= 755 && follow.Distance(t.Position) >755)
+                    Player.IssueOrder(GameObjectOrder.MoveTo, spawn);
+            }
+
+
+            Utility.DrawCircle(turret.Position, 100, System.Drawing.Color.Blue, 5, 5);
         }
 
 
         private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
         {
+
+            if (args.PacketData[0] == Packet.S2C.TowerAggro.Header)
+            {
+                Packet.S2C.TowerAggro.Struct aggroPacket = Packet.S2C.TowerAggro.Decoded(args.PacketData);
+                Obj_AI_Turret turret = ObjectManager.Get<Obj_AI_Turret>().First(t => t.NetworkId == aggroPacket.TurretNetworkId);
+                Obj_AI_Base target = ObjectManager.Get<Obj_AI_Base>().First(t => t.NetworkId == aggroPacket.TargetNetworkId);
+
+                Game.PrintChat(turret.BaseSkinName + target.BaseSkinName);
+            }
+
+
+
             GamePacket p = new GamePacket(args.PacketData);
             if (p.Header != Packet.S2C.TowerAggro.Header) return;
             if (Packet.S2C.TowerAggro.Decoded(args.PacketData).TargetNetworkId != Player.NetworkId)
@@ -309,6 +332,13 @@ namespace JeonAutoSoraka
             }
             //////////////////////////////////////////////////////
 
+
+            //////////////////check player in turret range///////////////////////
+
+
+
+
+            ////////////////////////////////////////////////////////////////
             if (fllowlist.Count == 0)
             {
                 foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
@@ -482,10 +512,14 @@ namespace JeonAutoSoraka
             if (!recalling && !stopfollowing)
             {
                 #region 거리가 500이상 5500이하일때
-                if (follow.Distance(Player.Position) > 500 && follow.Distance(Player.Position) < 5500)
+                if (follow.Distance(Player.Position) > 300 && follow.Distance(Player.Position) < 5500)
                 {
-                    Player.IssueOrder(GameObjectOrder.MoveTo, follow);
+                    Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position.To2D().Extend(spawn.To2D(), 200).To3D());
                     afktime = 0;
+                }
+                else // 거리가 안으로 도달했을때 위치설정
+                {
+                    
                 }
                 #endregion
 
