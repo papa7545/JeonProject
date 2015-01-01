@@ -477,6 +477,8 @@ namespace JeonJunglePlay
             JeonAutoJungleMenu = new Menu("JeonAutoJungle", "JeonAutoJungle", true);
             JeonAutoJungleMenu.AddItem(new MenuItem("isActive", "Activate")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 150)));
+            JeonAutoJungleMenu.AddItem(new MenuItem("autorecallheal", "Recall[for heal]")).SetValue(true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("autorecallitem", "Recall[for item]")).SetValue(true);
             JeonAutoJungleMenu.AddToMainMenu();
 
             setSmiteSlot();
@@ -748,14 +750,16 @@ namespace JeonJunglePlay
                             afktime = 0;
                             DoCast_Hero();
 
-                            if (Player.HealthPercentage() < 25 && !Player.IsDead) // HP LESS THAN 25%
+                            if (Player.HealthPercentage() < 25 && !Player.IsDead
+                                && JeonAutoJungleMenu.Item("autorecallheal").GetValue<Boolean>()) // HP LESS THAN 25%
                             {
                                 Game.PrintChat("YOUR HP IS SO LOW. RECALL!");
                                 Player.Spellbook.CastSpell(SpellSlot.Recall);
                                 recall = true;
                             }
 
-                            else if (Player.Gold > buyThings.First().Price)
+                            else if (Player.Gold > buyThings.First().Price
+                                && JeonAutoJungleMenu.Item("autorecallitem").GetValue<Boolean>()) // HP LESS THAN 25%
                             {
                                 Game.PrintChat("CAN BUY " + buyThings.First().item.ToString() + ". RECALL!");
                                 Player.Spellbook.CastSpell(SpellSlot.Recall);
