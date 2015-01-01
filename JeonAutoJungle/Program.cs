@@ -567,13 +567,20 @@ namespace JeonJunglePlay
 
 
             #region 현재 아이템 단계 설정 - 도중 리로드시 필요
-            if (buyThings.First().needItem != buyThings.Last(h => Items.HasItem(Convert.ToInt32(h.needItem))).needItem)
-            {
-                var lastitem = buyThings.Last(h => Items.HasItem(Convert.ToInt32(h.needItem)));
-                List<ItemToShop> newlist = buyThings.Where(t => t.index >= lastitem.index).ToList();
-                buyThings.Clear();
-                buyThings = newlist;
 
+            if(buyThings.Any(h => Items.HasItem(Convert.ToInt32(h.needItem))))
+            {
+                if (buyThings.First().needItem != buyThings.Last(h => Items.HasItem(Convert.ToInt32(h.needItem))).needItem)
+                {
+                    var lastitem = buyThings.Last(h => Items.HasItem(Convert.ToInt32(h.needItem)));
+
+                    Game.PrintChat("Find new ItemList");
+
+                    List<ItemToShop> newlist = buyThings.Where(t => t.index >= lastitem.index).ToList();
+
+                    buyThings.Clear();
+                    buyThings = newlist;
+                }
             }
             #endregion
 
@@ -592,15 +599,17 @@ namespace JeonJunglePlay
 
             setSmiteSlot();
 
-
+            
             #region 0.5초마다 발동 //  오류 없애줌
             if (Environment.TickCount - pastTime <= 500) return;
             pastTime = Environment.TickCount;
             #endregion
 
-
-            if (Game.Time >= 150)
-                IsStart = fale;
+            if (Game.Time >= 180 && IsStart)
+            {
+                Game.PrintChat("You did reload");
+                IsStart = false;
+            }
 
             #region 상점이용가능할때 // when you are in shop range or dead
             #region 시작아이템 사기 // startup
