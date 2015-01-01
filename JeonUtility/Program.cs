@@ -52,6 +52,55 @@ namespace JeonUtility
         public static Render.Text text_notifier = new Render.Text("Can Ult to kill!", Player, new Vector2(0, 50), (int)32, ColorBGRA.FromRgba(0xFF00FFBB));
         public static Render.Text text_help = new Render.Text("Somebody Need Help!", Player, new Vector2(0, 50), (int)32, ColorBGRA.FromRgba(0xFF00FFBB));
         public static Render.Text text_smite = new Render.Text("AutoSmite!", Player, new Vector2(55, 50), (int)30, ColorBGRA.FromRgba(0xFF0000FF));
+
+        #region wardtracker
+        public static List<Ward> wardlist = new List<Ward>();
+        public static string[] wardnames = { "SightWard", "VisionWard", "Jack In The Box", "Cupcake Trap", "Noxious Trap" };
+        public enum wardtype
+        {
+            Pink,
+            Green,
+            Mushroom,
+            ShacoBox,
+            Trap
+        }
+
+        public class Ward
+        {
+            public wardtype type;
+            public int id;
+            public float time;
+            public Vector3 position;
+            public bool show = true;
+            public float endtiem;
+
+            public Render.Text timer { get; set; }
+
+            public Ward()
+            {
+                timer = new Render.Text("", new Vector2(0, 0), 32
+                    , SharpDX.Color.White)
+                {
+                    VisibleCondition =
+                    condition =>
+                          (int)(endtiem - Game.Time) > 0 && show,
+
+                    PositionUpdate = delegate
+                    {
+                        Vector2 vec2 = Drawing.WorldToScreen(new Vector3(position.X, position.Y + 25, position.Z));
+                        return vec2;
+                    },
+                    TextUpdate = () => Convert.ToString((int)(endtiem - Game.Time)),
+                    OutLined = true,
+                    Centered = true
+                };
+
+                timer.Add();
+                if (!show)
+                    timer.Remove();
+            }
+        }
+        #endregion wardtracker
         #endregion
 
         private static void Main(string[] args)
@@ -61,7 +110,8 @@ namespace JeonUtility
 
         private static void OnGameLoad(EventArgs args)
         {
-            Game.PrintChat("<font color ='#33FFFF'>JeonUtility v1.0 </font>Loaded!");
+            string version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            Game.PrintChat("<font color ='#33FFFF'>JeonUtility v" +version+" </font>Loaded!");
             setSmiteSlot();
             setIgniteSlot();
             setDefSpellSlot();
@@ -250,7 +300,7 @@ namespace JeonUtility
 
             Game.OnGameUpdate += OnGameUpdate;
             GameObject.OnCreate += OnCreate;
-            //GameObject.OnDelete += OnDelete;
+            GameObject.OnDelete += OnDelete;
             Drawing.OnEndScene += OnDraw_EndScene;
             //Drawing.OnDraw += OnDraw;
         }
@@ -261,15 +311,53 @@ namespace JeonUtility
             {
                 foreach (var t in ObjectManager.Get<Obj_AI_Turret>().Where(t => !t.IsDead && t.IsEnemy))
                 {
-                    Utility.DrawCircle(t.Position, 775, System.Drawing.Color.White, 5,20);
+                    Drawing.DrawCircle(t.Position, 775, System.Drawing.Color.White);
                 }
             }
-            #region 와드트레커-와드트레커
-            if (Jlib.getm_bool("tracker_ward"))
-            {
 
+            #region wardtracker
+            foreach (var ward in wardlist)
+            {
+                var ratio = (int)(ward.endtiem - Game.Time) / ward.time;
+
+                var bar_start = new Vector2(Drawing.WorldToScreen(ward.position).X - 25, Drawing.WorldToScreen(ward.position).Y);
+                var bar_end = new Vector2(bar_start.X + (50 * ratio), bar_start.Y);
+
+                var bar_out_start = new Vector2(bar_start.X - 1, bar_end.Y - 1);
+                var bar_out_end = new Vector2(bar_start.X + 52, bar_start.Y - 1);
+
+                if (ward.endtiem <= Game.Time)
+                    wardlist.Remove(ward);
+
+                Color color = Color.Pink;
+
+                switch (ward.type)
+                {
+                    case wardtype.Green:
+                        color = Color.Green;
+                        break;
+                    case wardtype.Pink:
+                        color = Color.Pink;
+                        break;
+                    case wardtype.ShacoBox:
+                        color = Color.Red;
+                        break;
+                    case wardtype.Mushroom:
+                        color = Color.Purple;
+                        break;
+                    case wardtype.Trap:
+                        color = Color.White;
+                        break;
+                }
+                Utility.DrawCircle(ward.position, 60, color, 5, 5);
+                Utility.DrawCircle(ward.position, 60, color, 5, 5, true);
+                if (ward.type != wardtype.Pink)
+                {
+                    Drawing.DrawLine(bar_out_start, bar_out_end, 10, Color.Black);
+                    Drawing.DrawLine(bar_start, bar_end, 8, Color.Gray);
+                }
             }
-            #endregion
+            #endregion wardtracker
         }
         private static void OnGameUpdate(EventArgs args)
         {
@@ -281,8 +369,6 @@ namespace JeonUtility
             float Player_totalAP = Player.FlatMagicDamageMod;
             #endregion
 
-            try
-            {
                 #region 오토이그나이트-AutoIgnite
                 if (Jlib.getm_bool("AutoIgnite") && igniteSlot != SpellSlot.Unknown &&
                     Player.Level >= req_ignitelevel)
@@ -307,13 +393,7 @@ namespace JeonUtility
                     }
                 }
                 #endregion
-            }
-            catch
-            {
-                Console.WriteLine("Bug in autoignite");
-            }
-            try
-            {
+
                 #region 스펠트레커-Spelltracker
                 if (Jlib.getm_bool("tracker_enemyspells"))
                 {
@@ -358,14 +438,70 @@ namespace JeonUtility
                 }
 
                 #endregion
-            }
-            catch
-            {
-                Console.WriteLine("Bug in spells");
-            }
+ 
+   
 
-            try
-            {
+                #region ward tracker
+                foreach (var ward in ObjectManager.Get<Obj_AI_Base>().Where(t => wardnames.Contains(t.Name) && t.IsEnemy))
+                {
+                    if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Mana > 0 && ward.MaxHealth == 3)
+                    {
+                        wardlist.Add(new Ward
+                        {
+                            position = ward.Position,
+                            type = wardtype.Green,
+                            id = ward.NetworkId,
+                            time = ward.MaxMana,
+                            endtiem = Game.Time + ward.Mana
+                        });
+                    }
+                    if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.MaxHealth == 5)
+                    {
+                        wardlist.Add(new Ward
+                        {
+                            position = ward.Position,
+                            type = wardtype.Pink,
+                            id = ward.NetworkId,
+                            time = ward.MaxMana,
+                            endtiem = float.MaxValue
+                        });
+                    }
+                    if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Name == "Jack In The Box")
+                    {
+                        wardlist.Add(new Ward
+                        {
+                            position = ward.Position,
+                            type = wardtype.ShacoBox,
+                            id = ward.NetworkId,
+                            time = ward.MaxMana,
+                            endtiem = Game.Time + ward.Mana
+                        });
+                    }
+                    if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Name == "Cupcake Trap")
+                    {
+                        wardlist.Add(new Ward
+                        {
+                            position = ward.Position,
+                            type = wardtype.Trap,
+                            id = ward.NetworkId,
+                            time = 4 * 60,
+                            endtiem = Game.Time + 240
+                        });
+                    }
+                    if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Name == "Noxious Trap")
+                    {
+                        wardlist.Add(new Ward
+                        {
+                            position = ward.Position,
+                            type = wardtype.Mushroom,
+                            id = ward.NetworkId,
+                            time = ward.MaxMana,
+                            endtiem = Game.Time + ward.Mana
+                        });
+                    }
+                }
+            #endregion wardtracker
+
                 #region 점프와드- Jump2Ward (Jax,Kata,LeeSin)
                 if (Jlib.getm_bool("j2w_bool"))
                 {
@@ -408,13 +544,7 @@ namespace JeonUtility
                 }
 
                 #endregion
-            }
-            catch
-            {
-                Console.WriteLine("Bug in J2W");
-            }
-            try
-            {
+
                 #region 스택 - Stacks
                 if (Jlib.getm_bool("st_twitch") && Player.ChampionName == "Twitch")
                 {
@@ -476,13 +606,7 @@ namespace JeonUtility
                     }
                 }
                 #endregion
-            }
-            catch
-            {
-                Console.WriteLine("Bug in stacks");
-            }
-            try
-            {
+
                 #region Items&spells
                 //item
                 int tempItemid = 3157;
@@ -616,13 +740,7 @@ namespace JeonUtility
                 }
 
                 #endregion
-            }
-            catch
-            {
-                Console.WriteLine("Bug in i&s");
-            }
-            try
-            {
+
                 #region ultnotifier
                 //Karthus
                 if (Player.ChampionName == "Karthus")
@@ -728,13 +846,6 @@ namespace JeonUtility
                 }
                 #endregion
 
-            }
-            catch
-            {
-                Console.WriteLine("Bug in ultnotifier");
-            }
-            try
-            {
                 #region 정글타이머 - JungleTimer
 
                 if (Game.Time - pastTime >= 1)
@@ -768,14 +879,7 @@ namespace JeonUtility
                     }
                 }
                 #endregion
-            }
-            catch
-            {
-                Console.WriteLine("BUG IN TIMER");
-            }
 
-            try
-            {
                 #region Status on hud
                 if (Jlib.getm_bool("base_stat"))
                 {
@@ -893,14 +997,7 @@ namespace JeonUtility
                     #endregion
                 }
                 #endregion
-            }
-            catch
-            {
-                Console.WriteLine("BUG IN STATUS");
-            }
 
-            try
-            {
                 #region 오토스마이트-AutoSmite
                 if (Jlib.getm_bool("AutoSmite") && smiteSlot != SpellSlot.Unknown)
                 {
@@ -926,11 +1023,7 @@ namespace JeonUtility
                     }
                 }
                 #endregion
-            }
-            catch
-            {
-                Console.WriteLine("BUG IN SMITE");
-            }
+
         }
 
         // Addional Function //
@@ -1060,6 +1153,18 @@ namespace JeonUtility
         private static void OnCreate(GameObject sender, EventArgs args)
         {
 
+        }
+
+        private static void OnDelete(GameObject sender, EventArgs args)
+        {
+            if (wardnames.Contains(sender.Name))
+            {
+                foreach (var ward in wardlist.Where(w => w.id == sender.NetworkId))
+                {
+                    ward.show = false;
+                    wardlist.Remove(ward);
+                }
+            }
         }
         #endregion
 
