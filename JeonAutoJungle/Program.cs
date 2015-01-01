@@ -715,7 +715,6 @@ namespace JeonJunglePlay
                         else
                         {
                             now += 1;
-                            Game.PrintChat("NEXT!");
 
                             if (now > max)
                                 now = 1;
