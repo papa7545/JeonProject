@@ -609,6 +609,7 @@ namespace JeonJunglePlay
                     }
                 }
             }
+            recall = Player.IsRecalling();
             if (recall && Player.HealthPercentage() >= 100f) // 체력 100%될떄까지 시작안함
             {
                 recall = false;
@@ -832,7 +833,6 @@ namespace JeonJunglePlay
         "TT_Spiderboss", "TTNGolem", "TTNWolf", "TTNWraith",
             "SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon", "SRU_BaronSpawn", "Sru_Crab"
         };
-
 
         public static void setSmiteSlot()
         {
