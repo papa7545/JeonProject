@@ -458,7 +458,7 @@ namespace JeonJunglePlay
         private static void Game_OnGameLoad(EventArgs args)
         {
             
-            JeonAutoJungleMenu = new Menu("sidebar", "sidebar", true);
+            JeonAutoJungleMenu = new Menu("JeonAutoJungle", "JeonAutoJungle", true);
             JeonAutoJungleMenu.AddItem(new MenuItem("Activate", "Activate")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 70)));
             JeonAutoJungleMenu.AddToMainMenu();
