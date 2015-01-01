@@ -21,7 +21,7 @@ namespace JeonJunglePlay
         private static Vector3 spawn;
         private static Vector3 enemy_spawn;
 
-        private static float gamestart,pastTime;
+        private static float gamestart,pastTime,afktime;
         public static List<MonsterINFO> MonsterList = new List<MonsterINFO>();
         public static int now=1;
         public static int max=20;
@@ -599,6 +599,17 @@ namespace JeonJunglePlay
 
             setSmiteSlot();
 
+            if (Game.Time - pastTime >= 1 && !Player.IsDead && !Player.IsRecalling())
+            {
+                pastTime = Game.Time;
+                afktime += 1;
+                if (afktime > 55) // 잠수 55초 경과
+                {
+                    Player.IssueOrder(GameObjectOrder.AttackTo,
+                        new Vector3(4910f, 10268f, -71.24f));
+                    afktime = 0;
+                }
+            }
             
             #region 0.5초마다 발동 //  오류 없애줌
             if (Environment.TickCount - pastTime <= 500) return;
@@ -673,6 +684,7 @@ namespace JeonJunglePlay
                     if (Game.Time - gamestart >= 0)
                     {
                         Player.IssueOrder(GameObjectOrder.MoveTo, MonsterList.First(t => t.order == 1).Position);
+                        afktime = 0;
                     }
                     if (Player.Distance(MonsterList.First(t => t.order == 1).Position) <= 100)
                     {
@@ -693,6 +705,7 @@ namespace JeonJunglePlay
                         if (!recall && !Player.IsRecalling())
                         {
                             Player.IssueOrder(GameObjectOrder.MoveTo, target.Position);
+                            afktime = 0;
                             DoCast_Hero();
 
                             if (Player.HealthPercentage() < 25) // HP LESS THAN 25%
@@ -718,6 +731,7 @@ namespace JeonJunglePlay
                         {
                             DoCast();
                             Player.IssueOrder(GameObjectOrder.AttackUnit, GetNearest(Player.Position));
+                            afktime = 0;
                             if (smite.Slot != SpellSlot.Unknown && smite.IsReady())
                                 DoSmite();
                         }
@@ -732,7 +746,7 @@ namespace JeonJunglePlay
                 }
             }
             recall = Player.IsRecalling();
-            if (recall && Player.HealthPercentage() >= 100f) // 체력 100%될떄까지 시작안함
+            if (recall && Player.HealthPercentage() >= 90f) // 체력 100%될떄까지 시작안함
             {
                 recall = false;
             }
@@ -755,6 +769,7 @@ namespace JeonJunglePlay
             {
                 DoCast_Hero();
                 Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
+                afktime = 0;
             }
             
             if(IsAttackedByTurret)
@@ -825,6 +840,7 @@ namespace JeonJunglePlay
             if (Player.ChampionName.ToUpper() == "NUNU"&&Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
                 Player.IssueOrder(GameObjectOrder.MoveTo, mob1.ServerPosition.Extend(Player.ServerPosition, 10));
 
+
             if (ObjectManager.Get<Obj_AI_Minion>().Any(t => !t.IsMinion && Player.Distance(t.Position) <= 700))
                 castspell(mob1);
         }
@@ -838,7 +854,6 @@ namespace JeonJunglePlay
                 var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(target.Position)).
                     Where(tur => tur.IsEnemy && !tur.IsDead).First(); // 타겟과 가장 가까운터렛
 
-                Game.PrintChat(turret.Distance(target.Position).ToString());
                 if (turret.Distance(target.Position) > 755) // 터렛 사정거리 밖에있어야만 공격함.
                     castspell(target);
 
@@ -846,6 +861,8 @@ namespace JeonJunglePlay
         }
         public static void castspell(Obj_AI_Base mob1)
         {
+            afktime = 0;
+
             if (Player.ChampionName.ToUpper() == "NUNU")
             {
                 if (Q.IsReady())
