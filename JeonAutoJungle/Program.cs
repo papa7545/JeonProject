@@ -151,119 +151,119 @@ namespace JeonJunglePlay
                 Price = 350,
                 needItem = ItemId.Hunters_Machete,
                 item = ItemId.Rangers_Trailblazer,
-                index = num +1
+                index = 1
             },
             new ItemToShop()
             {
                 Price = 450,
                 needItem = ItemId.Rangers_Trailblazer,
                 item = ItemId.Dagger,
-                index = num +1
+                index = 2
             },
             new ItemToShop()
             {
                 Price = 1050,
                 needItem = ItemId.Dagger,
                 item = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
-                index = num +1
+                index = 3
             },
             new ItemToShop()
             {
                 Price = 325,
                 needItem = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
                 item = ItemId.Boots_of_Speed,
-                index = num +1
+                index = 4
             },
             new ItemToShop()
             {
                 Price = 775,
                 needItem = ItemId.Boots_of_Speed,
                 item = ItemId.Ionian_Boots_of_Lucidity,
-                index = num +1
+                index = 5
             },
             new ItemToShop()
             {
                 Price = 400,
                 needItem = ItemId.Ionian_Boots_of_Lucidity,
                 item = ItemId.Sapphire_Crystal,
-                index = num +1
+                index = 6
             },
             new ItemToShop()
             {
                 Price = 140+180,
                 needItem = ItemId.Sapphire_Crystal,
                 item = ItemId.Tear_of_the_Goddess,
-                index = num +1
+                index = 7
             },
             new ItemToShop()
             {
                 Price = 435,
                 needItem = ItemId.Tear_of_the_Goddess,
                 item = ItemId.Amplifying_Tome,
-                index = num +1
+                index = 8
             },
             new ItemToShop()
             {
                 Price = 300+465,
                 needItem = ItemId.Amplifying_Tome,
                 item = ItemId.Seekers_Armguard,
-                index = num +1
+                index = 9
             },
             new ItemToShop()
             {
                 Price = 1600,
                 needItem = ItemId.Seekers_Armguard,
                 item = ItemId.Needlessly_Large_Rod,
-                index = num +1
+                index = 10
             },
             new ItemToShop()
             {
                 Price = 500,
                 needItem = ItemId.Needlessly_Large_Rod,
                 item = ItemId.Zhonyas_Hourglass,
-                index = num +1
+                index = 11
             },
             new ItemToShop()
             {
                 Price = 860,
                 needItem = ItemId.Zhonyas_Hourglass,
                 item = ItemId.Blasting_Wand,
-                index = num +1
+                index = 12
             },
             new ItemToShop()
             {
                 Price = 1600,
                 needItem = ItemId.Blasting_Wand,
                 item = ItemId.Needlessly_Large_Rod,
-                index = num +1
+                index = 13
             },
             new ItemToShop()
             {
                 Price = 840,
                 needItem = ItemId.Needlessly_Large_Rod,
                 item = ItemId.Rabadons_Deathcap,
-                index = num +1
+                index = 14
             },
             new ItemToShop()
             {
                 Price = 860,
                 needItem = ItemId.Rabadons_Deathcap,
                 item = ItemId.Blasting_Wand,
-                index = num +1
+                index = 15
             },
             new ItemToShop()
             {
                 Price = 860,
                 needItem = ItemId.Blasting_Wand,
                 item = ItemId.Archangels_Staff,
-                index = num +1
+                index = 16
             },
             new ItemToShop()
             {
                 Price = 2295,
                 needItem = ItemId.Archangels_Staff,
                 item = ItemId.Void_Staff,
-                index = num +1
+                index = 17
             }
         };
 #endregion
@@ -275,88 +275,87 @@ namespace JeonJunglePlay
                 Price = 350,
                 needItem = ItemId.Hunters_Machete,
                 item = ItemId.Rangers_Trailblazer,
-                index = num +1
+                index = 1
             },
             new ItemToShop()
             {
                 Price = 450,
                 needItem = ItemId.Rangers_Trailblazer,
                 item = ItemId.Dagger,
-                index = num +1
+                index = 2
             },
             new ItemToShop()
             {
                 Price = 1050,
                 needItem = ItemId.Dagger,
                 item = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
-                index = num +1
+                index = 3
             },
             new ItemToShop()
             {
                 Price = 325,
                 needItem = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
                 item = ItemId.Boots_of_Speed,
-                index = num +1
+                index = 4
             },
             new ItemToShop()
             {
                 Price = 675,
                 needItem = ItemId.Boots_of_Speed,
                 item = ItemId.Boots_of_Swiftness,
-                index = num +1
+                index = 5
             },
             new ItemToShop()
             {
                 Price = 1400,
                 needItem = ItemId.Boots_of_Swiftness,
                 item = ItemId.Bilgewater_Cutlass,
-                index = num +1
+                index = 6
             },
             new ItemToShop()
             {
                 Price = 1800,
                 needItem = ItemId.Bilgewater_Cutlass,
                 item = ItemId.Blade_of_the_Ruined_King,
-                index = num +1
+                index = 7
             },
             new ItemToShop()
             {
                 Price = 1100,
                 needItem = ItemId.Blade_of_the_Ruined_King,
                 item = ItemId.Zeal,
-                index = num +1
+                index = 8
             },
             new ItemToShop()
             {
                 Price = 1700,
                 needItem = ItemId.Zeal,
                 item = ItemId.Phantom_Dancer,
-                index = num +1
+                index = 9
             },
             new ItemToShop()
             {
                 Price = 1550,
                 needItem = ItemId.Phantom_Dancer,
                 item = ItemId.B_F_Sword,
-                index = num +1
+                index = 10
             },
             new ItemToShop()
             {
                 Price = 2250,
                 needItem = ItemId.B_F_Sword,
                 item = ItemId.Infinity_Edge,
-                index = num +1
+                index = 11
             },
             new ItemToShop()
             {
                 Price = 2900,
                 needItem = ItemId.Infinity_Edge,
                 item = ItemId.Last_Whisper,
-                index = num +1
+                index = 12
             }
         };
         #endregion
-
         #region as
         public static List<ItemToShop> buyThings_AS = new List<ItemToShop>
         {
@@ -365,84 +364,84 @@ namespace JeonJunglePlay
                 Price = 350,
                 needItem = ItemId.Hunters_Machete,
                 item = ItemId.Rangers_Trailblazer,
-                index = num +1
+                index = 1
             },
             new ItemToShop()
             {
                 Price = 450,
                 needItem = ItemId.Rangers_Trailblazer,
                 item = ItemId.Dagger,
-                index = num +1
+                index = 2
             },
             new ItemToShop()
             {
                 Price = 1050,
                 needItem = ItemId.Dagger,
                 item = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
-                index = num +1
+                index = 3
             },
             new ItemToShop()
             {
                 Price = 325,
                 needItem = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
                 item = ItemId.Boots_of_Speed,
-                index = num +1
+                index = 4
             },
             new ItemToShop()
             {
                 Price = 675,
                 needItem = ItemId.Boots_of_Speed,
                 item = ItemId.Boots_of_Swiftness,
-                index = num +1
+                index = 5
             },
             new ItemToShop()
             {
                 Price = 1400,
                 needItem = ItemId.Boots_of_Swiftness,
                 item = ItemId.Bilgewater_Cutlass,
-                index = num +1
+                index = 6
             },
             new ItemToShop()
             {
                 Price = 1800,
                 needItem = ItemId.Bilgewater_Cutlass,
                 item = ItemId.Blade_of_the_Ruined_King,
-                index = num +1
+                index = 7
             },
             new ItemToShop()
             {
                 Price = 900,
                 needItem = ItemId.Blade_of_the_Ruined_King,
                 item = ItemId.Recurve_Bow,
-                index = num +1
+                index = 8
             },
             new ItemToShop()
             {
                 Price = 500+750+450,
                 needItem = ItemId.Recurve_Bow,
                 item = ItemId.Wits_End,
-                index = num +1
+                index = 9
             },
             new ItemToShop()
             {
                 Price = 1900,
                 needItem = ItemId.Wits_End,
                 item = ItemId.Tiamat_Melee_Only,
-                index = num +1
+                index = 10
             },
             new ItemToShop()
             {
                 Price = 800+600,
                 needItem = ItemId.Tiamat_Melee_Only,
                 item = ItemId.Ravenous_Hydra_Melee_Only,
-                index = num +1
+                index = 11
             },
             new ItemToShop()
             {
                 Price = 2900,
                 needItem = ItemId.Ravenous_Hydra_Melee_Only,
                 item = ItemId.Last_Whisper,
-                index = num +1
+                index = 12
             }
         };
         #endregion
@@ -566,6 +565,18 @@ namespace JeonJunglePlay
             R = new Spell(SpellSlot.R, GetSpellRange(Rdata));
             #endregion
 
+
+            #region 현재 아이템 단계 설정 - 도중 리로드시 필요
+            if (buyThings.First().needItem != buyThings.Last(h => Items.HasItem(Convert.ToInt32(h.needItem))).needItem)
+            {
+                var lastitem = buyThings.Last(h => Items.HasItem(Convert.ToInt32(h.needItem)));
+                List<ItemToShop> newlist = buyThings.Where(t => t.index >= lastitem.index).ToList();
+                buyThings.Clear();
+                buyThings = newlist;
+
+            }
+            #endregion
+
             gamestart = Game.Time; // 시작시간 설정
 
             Game.OnGameUpdate += Game_OnGameUpdate;
@@ -587,6 +598,8 @@ namespace JeonJunglePlay
             pastTime = Environment.TickCount;
             #endregion
 
+
+
             #region 상점이용가능할때 // when you are in shop range or dead
             #region 시작아이템 사기 // startup
             if (Utility.InShop(Player) || Player.IsDead)
@@ -606,6 +619,9 @@ namespace JeonJunglePlay
                 //Game.PrintChat("Gold:" + Player.Gold);
                 //Game.PrintChat("NeedItem:" + buyThings.First().needItem.ToString());
                 //Game.PrintChat("BuyItem:" + buyThings.First().item.ToString());
+
+
+
                 #region 아이템트리 올리기 // item build up
                 if (Items.HasItem(Convert.ToInt32(buyThings.First().needItem)))
                 {
@@ -722,8 +738,7 @@ namespace JeonJunglePlay
                 }
             }
             #endregion
-
-            
+ 
             #region 공격 모드 - offensive mode
 
             if(IsOVER && !IsAttackedByTurret)
