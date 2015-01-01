@@ -604,7 +604,6 @@ namespace JeonJunglePlay
         {
 
             if(!JeonAutoJungleMenu.Item("isActive").GetValue<Boolean>()) {
-                Game.PrintChat("You stopped");
                 return;
             }
             
