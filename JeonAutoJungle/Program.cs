@@ -143,6 +143,7 @@ namespace JeonJunglePlay
 
 
         #region 아이템
+        #region ap
         public static List<ItemToShop> buyThings_AP = new List<ItemToShop>
         {
             new ItemToShop()
@@ -265,7 +266,8 @@ namespace JeonJunglePlay
                 index = num +1
             }
         };
-
+#endregion
+        #region ad = default
         public static List<ItemToShop> buyThings = new List<ItemToShop>
         {
             new ItemToShop()
@@ -355,6 +357,98 @@ namespace JeonJunglePlay
         };
         #endregion
 
+        #region as
+        public static List<ItemToShop> buyThings_AS = new List<ItemToShop>
+        {
+            new ItemToShop()
+            {
+                Price = 350,
+                needItem = ItemId.Hunters_Machete,
+                item = ItemId.Rangers_Trailblazer,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 450,
+                needItem = ItemId.Rangers_Trailblazer,
+                item = ItemId.Dagger,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 1050,
+                needItem = ItemId.Dagger,
+                item = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 325,
+                needItem = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
+                item = ItemId.Boots_of_Speed,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 675,
+                needItem = ItemId.Boots_of_Speed,
+                item = ItemId.Boots_of_Swiftness,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 1400,
+                needItem = ItemId.Boots_of_Swiftness,
+                item = ItemId.Bilgewater_Cutlass,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 1800,
+                needItem = ItemId.Bilgewater_Cutlass,
+                item = ItemId.Blade_of_the_Ruined_King,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 900,
+                needItem = ItemId.Blade_of_the_Ruined_King,
+                item = ItemId.Recurve_Bow,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 500+750+450,
+                needItem = ItemId.Recurve_Bow,
+                item = ItemId.Wits_End,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 1900,
+                needItem = ItemId.Wits_End,
+                item = ItemId.Tiamat_Melee_Only,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 800+600,
+                needItem = ItemId.Tiamat_Melee_Only,
+                item = ItemId.Ravenous_Hydra_Melee_Only,
+                index = num +1
+            },
+            new ItemToShop()
+            {
+                Price = 2900,
+                needItem = ItemId.Ravenous_Hydra_Melee_Only,
+                item = ItemId.Last_Whisper,
+                index = num +1
+            }
+        };
+        #endregion
+
+        #endregion
+
 
         private static void Main(string[] args)
         {
@@ -435,6 +529,8 @@ namespace JeonJunglePlay
             else if (Player.ChampionName.ToUpper() == "WARWICK")
             {
                 Game.PrintChat("WARWICK BOT ACTIVE");
+                buyThings.Clear();
+                buyThings = buyThings_AS;
                 var myAutoLevel = new AutoLevel(new[] { 1, 2, 3, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3 });
             }
             else if (Player.ChampionName.ToUpper() == "MASTERYI")
@@ -746,7 +842,7 @@ namespace JeonJunglePlay
                     Q.CastOnUnit(mob1);
                 if (W.IsReady())
                     W.Cast();
-                if (R.IsReady()&& mob1.IsValid<Obj_AI_Hero>())
+                if (R.IsReady())
                     R.CastOnUnit(mob1);
             }
             else if (Player.ChampionName.ToUpper() == "MASTERYI")
