@@ -716,7 +716,7 @@ namespace JeonJunglePlay
                 var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(target.Position)).First(); // 타겟과 가장 가까운터렛
 
                 if (turret.Distance(target.Position) > 755) // 터렛 사정거리 밖에있어야만 공격함.
-                    castspell(ObjectManager.Get<Obj_AI_Hero>().OrderBy(t => Player.Distance(t.Position)).First());
+                    castspell(target);
 
             }
         }
