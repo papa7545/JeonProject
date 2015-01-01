@@ -589,6 +589,7 @@ namespace JeonJunglePlay
             JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 150)));
             JeonAutoJungleMenu.AddItem(new MenuItem("autorecallheal", "Recall[for heal]")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("autorecallitem", "Recall[for item]")).SetValue(true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("evading", "Detect TurretAttack")).SetValue(true);
             JeonAutoJungleMenu.AddToMainMenu();
 
             setSmiteSlot();
@@ -974,7 +975,7 @@ namespace JeonJunglePlay
                 var m = (Obj_SpellMissile)sender;
 
                 if (m.SpellCaster.IsValid<Obj_AI_Turret>() && m.SpellCaster.IsEnemy &&
-                    m.Target.IsValid<Obj_AI_Hero>() && m.Target.IsMe)
+                    m.Target.IsValid<Obj_AI_Hero>() && m.Target.IsMe && JeonAutoJungleMenu.Item("evading").GetValue<Boolean>())
                 {
                     Game.PrintChat("OOPS YOU ARE ATTACKED BY TURRET!");
                     Player.IssueOrder(GameObjectOrder.MoveTo, spawn);
@@ -1002,7 +1003,7 @@ namespace JeonJunglePlay
                     "Turret_T1_C_07_A"
                 };
 
-                    if (turrest.Contains(sender.Name))
+                    if (turrest.Contains(sender.Name) && JeonAutoJungleMenu.Item("evading").GetValue<Boolean>())
                     {
                         Game.PrintChat("OOPS YOU ARE ATTACKED BY INHIBIT TURRET!");
                         Player.IssueOrder(GameObjectOrder.MoveTo, spawn);
