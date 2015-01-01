@@ -614,6 +614,9 @@ namespace JeonJunglePlay
             GameObject.OnCreate += OnCreate;
             Obj_AI_Base.OnProcessSpellCast += OnSpell;
 
+            if (smiteSlot == SpellSlot.Unknown)
+                Game.PrintChat("YOU ARE NOT JUNGLER(NO SMITE)");
+
         }
 
 
@@ -622,6 +625,7 @@ namespace JeonJunglePlay
         {
 
             setSmiteSlot();
+
             if (!JeonAutoJungleMenu.Item("isActive").GetValue<Boolean>() || smiteSlot == SpellSlot.Unknown)
                 return;
 
