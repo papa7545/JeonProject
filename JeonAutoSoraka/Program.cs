@@ -540,11 +540,12 @@ namespace JeonAutoSoraka
                                y.Next(25, 150);
                         
                         var vec = new Vector3(xPos, yPos, follow.Position.Z);
+                        Player.IssueOrder(GameObjectOrder.MoveTo, vec);
                         afktime = 0;
                     }
                     else // 타겟이 기지 밖에 있다
                     {
-                        Player.IssueOrder(GameObjectOrder.MoveTo, follow);
+                        Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position.To2D().Extend(spawn.To2D(), 200).To3D());
                         afktime = 0;
                     }
                 }
