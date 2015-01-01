@@ -459,7 +459,6 @@ namespace JeonJunglePlay
         {
             
             JeonAutoJungleMenu = new Menu("sidebar", "sidebar", true);
-            JeonAutoJungleMenu.AddSubMenu(Leftbar);
             JeonAutoJungleMenu.AddItem(new MenuItem("Activate", "Activate")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 70)));
             JeonAutoJungleMenu.AddToMainMenu();
