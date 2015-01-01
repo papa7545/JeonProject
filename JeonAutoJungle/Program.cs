@@ -603,7 +603,7 @@ namespace JeonJunglePlay
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
-            if(JeonAutoJungleMenu.Item("isActive").GetValue<Boolean>().Value) {
+            if(JeonAutoJungleMenu.Item("isActive").GetValue()) {
                 return;
             }
             
