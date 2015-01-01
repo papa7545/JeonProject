@@ -753,8 +753,8 @@ namespace JeonJunglePlay
 
             if(IsOVER && !IsAttackedByTurret)
             {
-                Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
                 DoCast_Hero();
+                Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
             }
             
             if(IsAttackedByTurret)
@@ -831,11 +831,14 @@ namespace JeonJunglePlay
 
         public static void DoCast_Hero()
         {
-            if (ObjectManager.Get<Obj_AI_Hero>().Any(t => t.IsEnemy && Player.Distance(t.Position) <= 700))//플레이어와거리 700
+            if (ObjectManager.Get<Obj_AI_Hero>().Any(t => t.IsEnemy && Player.Distance(t.Position) <= 700))
             {
-                var target = ObjectManager.Get<Obj_AI_Hero>().OrderBy(t => t.Distance(Player.Position)).First(); // 플레이어와 가장 가까운타겟
-                var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(target.Position)).First(); // 타겟과 가장 가까운터렛
+                var target = ObjectManager.Get<Obj_AI_Hero>().OrderBy(t => t.Distance(Player.Position)).
+                    Where(tar => tar.IsEnemy && !tar.IsMe && !tar.IsDead).First(); // 플레이어와 가장 가까운타겟
+                var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(target.Position)).
+                    Where(tur => tur.IsEnemy && !tur.IsDead).First(); // 타겟과 가장 가까운터렛
 
+                Game.PrintChat(turret.Distance(target.Position).ToString());
                 if (turret.Distance(target.Position) > 755) // 터렛 사정거리 밖에있어야만 공격함.
                     castspell(target);
 
@@ -918,6 +921,8 @@ namespace JeonJunglePlay
                     R.Cast(mob1.Position);
             }
         }
+        
+        
         public static float GetSpellRange(SpellDataInst targetSpell, bool IsChargedSkill = false)
         {
             if (targetSpell.SData.CastRangeDisplayOverride[0] <= 0)
