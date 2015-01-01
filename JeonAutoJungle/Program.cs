@@ -15,20 +15,21 @@ namespace JeonJunglePlay
 {
     public class Program
     {
-        public static int maxstack = 50;
+
         public static Obj_AI_Hero Player = ObjectManager.Player;
         private static Spell Q, W, E, R;
         private static Vector3 spawn;
         private static Vector3 enemy_spawn;
+        public static Menu JeonAutoJungleMenu;
 
-        private static float gamestart,pastTime,afktime;
+        private static float gamestart, pastTime, afktime;
         public static List<MonsterINFO> MonsterList = new List<MonsterINFO>();
-        public static int now=1;
-        public static int max=20;
-        public static int num=0;
-        public static bool recall = false, IsOVER = false,IsAttackedByTurret = false;
+        public static int now = 1;
+        public static int max = 20;
+        public static int num = 0;
+        public static bool recall = false, IsOVER = false, IsAttackedByTurret = false;
 
-        public static bool canBuyItems = true, IsBlueTeam, IsStart = true, IsFind=false;
+        public static bool canBuyItems = true, IsBlueTeam, IsStart = true, IsFind = false;
 
 
         public static SpellSlot smiteSlot = SpellSlot.Unknown;
@@ -55,10 +56,10 @@ namespace JeonJunglePlay
             }
 
         }
-        
+
         public class ItemToShop
         {
-            public int Price,index;
+            public int Price, index;
             public ItemId item;
             public ItemId needItem;
             public ItemToShop()
@@ -266,7 +267,7 @@ namespace JeonJunglePlay
                 index = 17
             }
         };
-#endregion
+        #endregion
         #region ad = default
         public static List<ItemToShop> buyThings = new List<ItemToShop>
         {
@@ -457,6 +458,11 @@ namespace JeonJunglePlay
         private static void Game_OnGameLoad(EventArgs args)
         {
 
+            JeonAutoJungleMenu = new Menu("JeonAutoJungle", "JeonAutoJungle", true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("isActive", "Activate")).SetValue(true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 70)));
+            JeonAutoJungleMenu.AddToMainMenu();
+
             setSmiteSlot();
 
             #region 지점 설정
@@ -466,7 +472,7 @@ namespace JeonJunglePlay
                 enemy_spawn = new Vector3(415.33f, 453.38f, 182.66f);
                 Game.PrintChat("Set PurpleTeam Spawn");
                 IsBlueTeam = false;
-                
+
                 MonsterList.First(temp => temp.ID == pteam_Gromp.ID).order = 1;
                 MonsterList.First(temp => temp.ID == pteam_Blue.ID).order = 2;
                 MonsterList.First(temp => temp.ID == pteam_Wolf.ID).order = 3;
@@ -568,7 +574,7 @@ namespace JeonJunglePlay
 
             #region 현재 아이템 단계 설정 - 도중 리로드시 필요
 
-            if(buyThings.Any(h => Items.HasItem(Convert.ToInt32(h.needItem))))
+            if (buyThings.Any(h => Items.HasItem(Convert.ToInt32(h.needItem))))
             {
                 if (buyThings.First().needItem != buyThings.Last(h => Items.HasItem(Convert.ToInt32(h.needItem))).needItem)
                 {
@@ -598,6 +604,9 @@ namespace JeonJunglePlay
         {
 
             setSmiteSlot();
+            if (!JeonAutoJungleMenu.Item("isActive").GetValue<Boolean>() || smiteSlot == SpellSlot.Unknown)
+                return;
+
 
             #region detect afk
             if (Game.Time - pastTime >= 1 && !Player.IsDead && !Player.IsRecalling())
@@ -618,7 +627,7 @@ namespace JeonJunglePlay
             pastTime = Environment.TickCount;
             #endregion
 
-            if (Game.Time >= 180 && IsStart)
+            if (Game.Time >= 300 && IsStart)
             {
                 Game.PrintChat("You did reload");
                 IsStart = false;
@@ -717,10 +726,10 @@ namespace JeonJunglePlay
                                 recall = true;
                             }
 
-                            else if (Player.Gold > buyThings.First().Price && now <=6) 
-                                // CAN BUY AND TARGET IS ON ALLY JUNGLE
+                            else if (Player.Gold > buyThings.First().Price && now <= 6)
+                            // CAN BUY AND TARGET IS ON ALLY JUNGLE
                             {
-                               
+
                                 Game.PrintChat("CAN BUY " + buyThings.First().item.ToString() + ". RECALL!");
                                 Player.Spellbook.CastSpell(SpellSlot.Recall);
                                 recall = true;
@@ -747,7 +756,7 @@ namespace JeonJunglePlay
                     }
                 }
             }
-            recall = Player.IsRecalling();
+            recall = Utility.InShop(Player);
             if (recall && Player.HealthPercentage() >= 90f) // 체력 100%될떄까지 시작안함
             {
                 recall = false;
@@ -757,24 +766,30 @@ namespace JeonJunglePlay
             #region 스택이 넘는지 체크 - check ur stacks
             foreach (var buff in Player.Buffs.Where(b => b.DisplayName == "Enchantment_Slayer_Stacks"))
             {
-                if(buff.Count >= maxstack && !IsOVER) //--테스트
+                int maxstacks = JeonAutoJungleMenu.Item("maxstacks").GetValue<Slider>().Value;
+                if (buff.Count >= maxstacks && !IsOVER) //--테스트
                 {
                     IsOVER = true;
-                    Game.PrintChat("Stacks Over 50. Now Going to be offense.");
+                    Game.PrintChat("Stacks Over " + maxstacks + ". Now Going to be offense.");
+                }
+                if (buff.Count < maxstacks && IsOVER) //-- I don't speak korean :D
+                {
+                    Game.PrintChat("Stacks under " + maxstacks + ". Going back to farm.");
+                    IsOVER = false;
                 }
             }
             #endregion
- 
+
             #region 공격 모드 - offensive mode
 
-            if(IsOVER && !IsAttackedByTurret)
+            if (IsOVER && !IsAttackedByTurret)
             {
                 DoCast_Hero();
                 Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
                 afktime = 0;
             }
-            
-            if(IsAttackedByTurret)
+
+            if (IsAttackedByTurret)
             {
                 var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(Player.Position)).First();
                 if (turret.Distance(Player.Position) > 755)
@@ -794,7 +809,7 @@ namespace JeonJunglePlay
                     m.Target.IsValid<Obj_AI_Hero>() && m.Target.IsMe)
                 {
                     Game.PrintChat("OOPS YOU ARE ATTACKED BY TURRET!");
-                    Player.IssueOrder(GameObjectOrder.MoveTo,spawn);
+                    Player.IssueOrder(GameObjectOrder.MoveTo, spawn);
                     IsAttackedByTurret = true;
                 }
             }
@@ -839,7 +854,7 @@ namespace JeonJunglePlay
         {
             var mob1 = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position)).First();
 
-            if (Player.ChampionName.ToUpper() == "NUNU"&&Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
+            if (Player.ChampionName.ToUpper() == "NUNU" && Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
                 Player.IssueOrder(GameObjectOrder.MoveTo, mob1.ServerPosition.Extend(Player.ServerPosition, 10));
 
 
@@ -940,8 +955,8 @@ namespace JeonJunglePlay
                     R.Cast(mob1.Position);
             }
         }
-        
-        
+
+
         public static float GetSpellRange(SpellDataInst targetSpell, bool IsChargedSkill = false)
         {
             if (targetSpell.SData.CastRangeDisplayOverride[0] <= 0)
@@ -1040,7 +1055,7 @@ namespace JeonJunglePlay
                     sMinion = minion;
                 }
             }
-                return sMinion;
+            return sMinion;
         }
 
         public static Obj_AI_Minion GetNearest_big(Vector3 pos)
