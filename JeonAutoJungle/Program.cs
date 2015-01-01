@@ -599,6 +599,7 @@ namespace JeonJunglePlay
 
             setSmiteSlot();
 
+            #region detect afk
             if (Game.Time - pastTime >= 1 && !Player.IsDead && !Player.IsRecalling())
             {
                 pastTime = Game.Time;
@@ -610,7 +611,8 @@ namespace JeonJunglePlay
                     afktime = 0;
                 }
             }
-            
+            #endregion
+
             #region 0.5초마다 발동 //  오류 없애줌
             if (Environment.TickCount - pastTime <= 500) return;
             pastTime = Environment.TickCount;
