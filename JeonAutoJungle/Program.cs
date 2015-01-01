@@ -1182,7 +1182,7 @@ namespace JeonJunglePlay
             else if (Player.ChampionName.ToUpper() == "NASUS")
             {
 
-                if (Q.IsReady() && Q.GetDamage(mob1) >= mob1.Health)
+                if (Q.IsReady() && CheckNasusQDamage(mob1))
                     Q.CastOnUnit(mob1);
                 if (W.IsReady() && mob1.IsValid<Obj_AI_Hero>())
                     W.CastOnUnit(mob1);
@@ -1212,6 +1212,14 @@ namespace JeonJunglePlay
                 if (E.IsReady())
                     E.Cast(mob1.Position);
             }
+        }
+        public static bool CheckNasusQDamage(Obj_AI_Base target)
+        {
+            float QDmg = Convert.ToSingle(Q.GetDamage(target) + Player.CalcDamage(target, Damage.DamageType.Physical, Player.BaseAttackDamage + Player.FlatPhysicalDamageMod));
+            if (QDmg >= target.Health)
+                return true;
+            else
+                return false;
         }
 
         public static float GetSpellRange(SpellDataInst targetSpell, bool IsChargedSkill = false)
