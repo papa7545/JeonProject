@@ -91,6 +91,22 @@ namespace JeonJunglePlay
             respawntime = 180,
             Range = 3000
         };
+        public static MonsterINFO BLUE_MID = new MonsterINFO
+        {
+            ID = "MID",
+            Position = new Vector3(5294.531f, 5537.924f, 50.46155f),
+            name = "noneuses",
+            respawntime = 180,
+            Range = 3000
+        };
+        public static MonsterINFO PURPLE_MID = new MonsterINFO
+        {
+            ID = "MID",
+            Position = new Vector3(9443.35f, 9339.06f, 53.30994f),
+            name = "noneuses",
+            respawntime = 180,
+            Range = 3000
+        };
         public static MonsterINFO down_crab = new MonsterINFO
         {
             ID = "down_crab",
@@ -460,7 +476,7 @@ namespace JeonJunglePlay
 
             JeonAutoJungleMenu = new Menu("JeonAutoJungle", "JeonAutoJungle", true);
             JeonAutoJungleMenu.AddItem(new MenuItem("isActive", "Activate")).SetValue(true);
-            JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 70)));
+            JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 150)));
             JeonAutoJungleMenu.AddToMainMenu();
 
             setSmiteSlot();
@@ -486,11 +502,12 @@ namespace JeonJunglePlay
 
 
                 MonsterList.First(temp => temp.ID == top_crab.ID).order = 10;
-                MonsterList.First(temp => temp.ID == down_crab.ID).order = 11;
+                MonsterList.First(temp => temp.ID == PURPLE_MID.ID).order = 11;
+                MonsterList.First(temp => temp.ID == down_crab.ID).order = 12;
 
-                MonsterList.First(temp => temp.ID == bteam_Razorbeak.ID).order = 12;
-                MonsterList.First(temp => temp.ID == bteam_Red.ID).order = 13;
-                MonsterList.First(temp => temp.ID == bteam_Krug.ID).order = 14;
+                MonsterList.First(temp => temp.ID == bteam_Razorbeak.ID).order = 13;
+                MonsterList.First(temp => temp.ID == bteam_Red.ID).order = 14;
+                MonsterList.First(temp => temp.ID == bteam_Krug.ID).order = 15;
             }
 
             else
@@ -513,11 +530,12 @@ namespace JeonJunglePlay
 
 
                 MonsterList.First(temp => temp.ID == top_crab.ID).order = 10;
-                MonsterList.First(temp => temp.ID == down_crab.ID).order = 11;
+                MonsterList.First(temp => temp.ID == BLUE_MID.ID).order = 11;
+                MonsterList.First(temp => temp.ID == down_crab.ID).order = 12;
 
-                MonsterList.First(temp => temp.ID == pteam_Gromp.ID).order = 12;
-                MonsterList.First(temp => temp.ID == pteam_Blue.ID).order = 13;
-                MonsterList.First(temp => temp.ID == pteam_Wolf.ID).order = 14;
+                MonsterList.First(temp => temp.ID == pteam_Gromp.ID).order = 13;
+                MonsterList.First(temp => temp.ID == pteam_Blue.ID).order = 14;
+                MonsterList.First(temp => temp.ID == pteam_Wolf.ID).order = 15;
             }
             max = MonsterList.OrderByDescending(h => h.order).First().order;
 
@@ -719,7 +737,7 @@ namespace JeonJunglePlay
                             afktime = 0;
                             DoCast_Hero();
 
-                            if (Player.HealthPercentage() < 25) // HP LESS THAN 25%
+                            if (Player.HealthPercentage() < 25 && !Player.IsDead) // HP LESS THAN 25%
                             {
                                 Game.PrintChat("YOUR HP IS SO LOW. RECALL!");
                                 Player.Spellbook.CastSpell(SpellSlot.Recall);
@@ -782,17 +800,19 @@ namespace JeonJunglePlay
 
             #region 공격 모드 - offensive mode
 
-            if (IsOVER && !IsAttackedByTurret)
+            if (IsOVER)
             {
-                DoCast_Hero();
-                Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
-                afktime = 0;
-            }
-
-            if (IsAttackedByTurret)
-            {
+                if (IsOVER && !IsAttackedByTurret)
+                {
+                    DoCast_Hero();
+                    Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
+                    afktime = 0;
+                }
                 var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(Player.Position)).First();
                 if (turret.Distance(Player.Position) > 755)
+                    IsAttackedByTurret = false;
+
+                if (Player.IsDead)
                     IsAttackedByTurret = false;
             }
 
