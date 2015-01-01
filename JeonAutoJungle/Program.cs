@@ -1006,19 +1006,19 @@ namespace JeonJunglePlay
         }
         public static string smitetype()
         {
-            if (SmiteBlue.Any(Items.HasItem))
+            if (Player.InventoryItems.Any(item => SmiteBlue.Any(t => t == Convert.ToInt32(item.Id))))
             {
                 return "s5_summonersmiteplayerganker";
             }
-            if (SmiteRed.Any(Items.HasItem))
+            if (Player.InventoryItems.Any(item => SmiteRed.Any(t => t == Convert.ToInt32(item.Id))))
             {
                 return "s5_summonersmiteduel";
             }
-            if (SmiteGrey.Any(Items.HasItem))
+            if (Player.InventoryItems.Any(item => SmiteGrey.Any(t => t == Convert.ToInt32(item.Id))))
             {
                 return "s5_summonersmitequick";
             }
-            if (SmitePurple.Any(Items.HasItem))
+            if (Player.InventoryItems.Any(item => SmitePurple.Any(t => t == Convert.ToInt32(item.Id))))
             {
                 return "itemsmiteaoe";
             }
