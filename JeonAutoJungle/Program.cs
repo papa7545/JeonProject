@@ -645,11 +645,13 @@ namespace JeonJunglePlay
             pastTime = Environment.TickCount;
             #endregion
 
+            #region detect reload
             if (IsStart && Player.Level > 1)
             {
                 Game.PrintChat("You did reload");
                 IsStart = false;
             }
+            #endregion
 
             #region 상점이용가능할때 // when you are in shop range or dead
             #region 시작아이템 사기 // startup
@@ -749,10 +751,8 @@ namespace JeonJunglePlay
                                 recall = true;
                             }
 
-                            else if (Player.Gold > buyThings.First().Price && now <= 6)
-                            // CAN BUY AND TARGET IS ON ALLY JUNGLE
+                            else if (Player.Gold > buyThings.First().Price)
                             {
-
                                 Game.PrintChat("CAN BUY " + buyThings.First().item.ToString() + ". RECALL!");
                                 Player.Spellbook.CastSpell(SpellSlot.Recall);
                                 recall = true;
@@ -779,11 +779,7 @@ namespace JeonJunglePlay
                     }
                 }
             }
-            recall = Utility.InShop(Player);
-            if (recall && Player.HealthPercentage() >= 90f) // 체력 100%될떄까지 시작안함
-            {
-                recall = false;
-            }
+            recall = Player.IsRecalling() && !Utility.InShop(Player) && Player.HealthPercentage() <= 90f;
             #endregion
 
             #region 스택이 넘는지 체크 - check ur stacks
@@ -799,6 +795,7 @@ namespace JeonJunglePlay
                 {
                     Game.PrintChat("Stacks under " + maxstacks + ". Going back to farm.");
                     IsOVER = false;
+                    IsAttackStart = false;
                 }
             }
             #endregion
@@ -827,6 +824,7 @@ namespace JeonJunglePlay
                     if (IsOVER && !IsAttackedByTurret)
                     {
                         DoCast_Hero();
+                        DoLaneClear();
                         Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
                         afktime = 0;
                     }
@@ -889,11 +887,24 @@ namespace JeonJunglePlay
             }
         }
 
+        public static void DoLaneClear()
+        {
+            var mob1 = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position)).First();
 
+            if (Player.ChampionName.ToUpper() == "NUNU" && Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
+                Player.IssueOrder(GameObjectOrder.MoveTo, mob1.ServerPosition.Extend(Player.ServerPosition, 10));
+
+
+            if (ObjectManager.Get<Obj_AI_Minion>().Any(t => t.IsMinion && Player.Distance(t.Position) <= 700))
+                castspell_laneclear(mob1);
+        }
+
+        #region spell methods
         public static void DoSmite()
         {
             var mob1 = GetNearest_big(Player.Position);
-            smite.CastOnUnit(mob1);
+            if(mob1.IsValid)
+                smite.CastOnUnit(mob1);
         }
         public static void DoCast()
         {
@@ -1001,6 +1012,71 @@ namespace JeonJunglePlay
             }
         }
 
+        public static void castspell_laneclear(Obj_AI_Base mob1)
+        {
+            afktime = 0;
+
+            if (Player.ChampionName.ToUpper() == "NUNU")
+            {
+                if (Q.IsReady())
+                    Q.CastOnUnit(mob1);
+                if (E.IsReady())
+                    E.CastOnUnit(mob1);
+                if (W.IsReady())
+                    W.Cast();
+            }
+            else if (Player.ChampionName.ToUpper() == "CHOGATH")
+            {
+                if (Q.IsReady())
+                    Q.Cast(mob1.Position);
+                if (W.IsReady())
+                    W.Cast(mob1.Position);
+                if (R.IsReady() && R.GetDamage(mob1) >= mob1.Health)
+                    R.CastOnUnit(mob1);
+            }
+            else if (Player.ChampionName.ToUpper() == "WARWICK")
+            {
+                if (W.IsReady())
+                    W.Cast();
+            }
+            else if (Player.ChampionName.ToUpper() == "MASTERYI")
+            {
+                if (Q.IsReady())
+                    Q.CastOnUnit(mob1);
+                if (E.IsReady())
+                    E.Cast();
+            }
+            else if (Player.ChampionName.ToUpper() == "MAOKAI")
+            {
+                if (Q.IsReady())
+                    Q.Cast(mob1.Position);
+                if (E.IsReady())
+                    E.Cast(mob1.Position);
+            }
+            else
+            {
+                if (Q.IsReady())
+                    Q.CastOnUnit(mob1);
+                if (W.IsReady())
+                    W.CastOnUnit(mob1);
+                if (E.IsReady())
+                    E.CastOnUnit(mob1);
+
+                if (Q.IsReady())
+                    Q.Cast();
+                if (W.IsReady())
+                    W.Cast();
+                if (E.IsReady())
+                    E.Cast();
+
+                if (Q.IsReady())
+                    Q.Cast(mob1.Position);
+                if (W.IsReady())
+                    W.Cast(mob1.Position);
+                if (E.IsReady())
+                    E.Cast(mob1.Position);
+            }
+        }
 
         public static float GetSpellRange(SpellDataInst targetSpell, bool IsChargedSkill = false)
         {
@@ -1025,7 +1101,7 @@ namespace JeonJunglePlay
                 return
                     targetSpell.SData.CastRangeDisplayOverride[0];
         }
-
+        #endregion spell methods
 
         #region 스마이트함수 - Smite Function
 
@@ -1122,7 +1198,6 @@ namespace JeonJunglePlay
             }
             return sMinion;
         }
-        #endregion
 
         public static bool CheckMonster(String TargetName, Vector3 BasePosition, int Range = 1000)
         {
@@ -1139,5 +1214,7 @@ namespace JeonJunglePlay
                 return true;
             }
         }
+
+        #endregion
     }
 }
