@@ -599,6 +599,8 @@ namespace JeonJunglePlay
             #endregion
 
 
+            if (Game.Time >= 150)
+                IsStart = fale;
 
             #region 상점이용가능할때 // when you are in shop range or dead
             #region 시작아이템 사기 // startup
