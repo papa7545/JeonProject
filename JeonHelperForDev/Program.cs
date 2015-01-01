@@ -40,12 +40,12 @@ namespace JeonHelperForDev
             baseMenu = new Menu("JeonHelper", "JeonHelper", true);
             baseMenu.AddToMainMenu();
 
-            
+
             var menu_spell_me = new Menu("Spell Info(me)", "Spell Info(me)");
             baseMenu.AddSubMenu(menu_spell_me);
             menu_spell_me.AddItem(new MenuItem("item_spell_me_bool", "Active").SetValue<bool>(true));
             menu_spell_me.AddItem(new MenuItem("item_spell_me_q", "Q").SetValue<bool>(false));
-            menu_spell_me.AddItem(new MenuItem("item_spell_me_q_key", "Key").SetValue<KeyBind>(new KeyBind('Q',KeyBindType.Toggle)));
+            menu_spell_me.AddItem(new MenuItem("item_spell_me_q_key", "Key").SetValue<KeyBind>(new KeyBind('Q', KeyBindType.Toggle)));
             menu_spell_me.AddItem(new MenuItem("item_spell_me_w", "W").SetValue<bool>(false));
             menu_spell_me.AddItem(new MenuItem("item_spell_me_w_key", "Key").SetValue<KeyBind>(new KeyBind('W', KeyBindType.Toggle)));
             menu_spell_me.AddItem(new MenuItem("item_spell_me_e", "E").SetValue<bool>(false));
@@ -70,7 +70,7 @@ namespace JeonHelperForDev
             menu_positions.AddItem(new MenuItem("item_positions_undo", "UndoKey : ").SetValue<KeyBind>(new KeyBind('K', KeyBindType.Toggle)));
             menu_positions.AddItem(new MenuItem("item_positions_clear", "Clear").SetValue<bool>(false));
             menu_positions.AddItem(new MenuItem("item_positions_range", "CircleRange").SetValue(new Slider(100, 0, 10000)));
-           
+
 
             var menu_ts = new Menu("TargetSelector", "TargetSelector");
             TargetSelector.AddToMenu(menu_ts);
@@ -81,6 +81,11 @@ namespace JeonHelperForDev
         }
         private static void OnWndProc(WndEventArgs args)
         {
+            if (args.Msg == 513)
+            {
+                var target = ObjectManager.Get<Obj_AI_Base>().First(v => v.Distance(Game.CursorPos) <= 200);
+                Console.WriteLine("Target:"+target.Name + " MANA OR LIFETIME:"+target.Mana);
+            }
             if (baseMenu.Item("item_positions_click").GetValue<bool>() && args.Msg == 513)
             {
                 PositionInfo temp = new PositionInfo();
@@ -92,7 +97,7 @@ namespace JeonHelperForDev
         private static void OnGameUpdate(EventArgs args)
         {
 
-            if(baseMenu.Item("show_player").GetValue<bool>())
+            if (baseMenu.Item("show_player").GetValue<bool>())
             {
                 Game.PrintChat("Play Champion : {0}", Player.BaseSkinName);
                 Game.PrintChat("Position:{0}", Player.Position);
@@ -179,7 +184,7 @@ namespace JeonHelperForDev
                 Vector2 text = Drawing.WorldToScreen(position.Position);
                 Drawing.DrawText(text.X - 29, text.Y - 14, System.Drawing.Color.Black, position.count.ToString());//shadow
                 Drawing.DrawText(text.X - 30, text.Y - 15, System.Drawing.Color.Red, position.count.ToString());
-                Drawing.DrawText(text.X-30, text.Y, System.Drawing.Color.White, position.Position.ToString());
+                Drawing.DrawText(text.X - 30, text.Y, System.Drawing.Color.White, position.Position.ToString());
             }
         }
 
@@ -194,7 +199,7 @@ namespace JeonHelperForDev
             Game.PrintChat(slot.ToString() + "-Cooldown:{0}  -CastRange: {1}", spell.Cooldown, data.CastRange[3]);
             Game.PrintChat(slot.ToString() + "-MissileSpeed:{0} -CastRadius: {1}", data.MissileSpeed, data.CastRadius[3]);
             Game.PrintChat(slot.ToString() + "-MissileWith:{0} -CastDisplayRange: {1}", data.LineWidth, data.CastRangeDisplayOverride[3]);
-            Game.PrintChat(slot.ToString() + "-SpellCastTime:{0} -SpellCastTotaltime: {1} , {2}", data.SpellCastTime,data.SpellTotalTime,data.CastFrame);
+            Game.PrintChat(slot.ToString() + "-SpellCastTime:{0} -SpellCastTotaltime: {1} , {2}", data.SpellCastTime, data.SpellTotalTime, data.CastFrame);
             Game.PrintChat("<font color ='#FF2222'>____________________________________");
         }
         private static void show_buff_me()
@@ -221,9 +226,9 @@ namespace JeonHelperForDev
                     temp += (buff.DisplayName + "(" + buff.Count + ")" + ", ");
                 else
                     temp += (buff.Name + "(" + buff.Count + ")" + ", ");
-                
+
             }
-            
+
             Game.PrintChat("<font color ='#FF2222'>_______Buff(target) Info____________________");
             Game.PrintChat(temp);
             Game.PrintChat("<font color ='#FF2222'>____________________________________");
@@ -231,23 +236,23 @@ namespace JeonHelperForDev
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-                //foreach (var missile in ObjectManager.Get<Obj_SpellLineMissile>())
-                //{
+            //foreach (var missile in ObjectManager.Get<Obj_SpellLineMissile>())
+            //{
 
 
-                //    Vector2 startPos = Drawing.WorldToScreen(missile.SpellCaster.Position);
-                //    Vector2 endPos = Drawing.WorldToScreen(missile.EndPosition);
-                    
-                    
-                //    Drawing.DrawLine(startPos, endPos, 1.5f, System.Drawing.Color.Red);
-                    
+            //    Vector2 startPos = Drawing.WorldToScreen(missile.SpellCaster.Position);
+            //    Vector2 endPos = Drawing.WorldToScreen(missile.EndPosition);
 
-                //    Utility.DrawCircle(missile.SpellCaster.Position, 100, System.Drawing.Color.Blue);
-                //    Utility.DrawCircle(missile.EndPosition, 100, System.Drawing.Color.Red);
-                //    Utility.DrawCircle(missile.StartPosition, 100, System.Drawing.Color.White);
-                //}
 
-            foreach(var position in positions)
+            //    Drawing.DrawLine(startPos, endPos, 1.5f, System.Drawing.Color.Red);
+
+
+            //    Utility.DrawCircle(missile.SpellCaster.Position, 100, System.Drawing.Color.Blue);
+            //    Utility.DrawCircle(missile.EndPosition, 100, System.Drawing.Color.Red);
+            //    Utility.DrawCircle(missile.StartPosition, 100, System.Drawing.Color.White);
+            //}
+
+            foreach (var position in positions)
             {
                 Vector2 text = Drawing.WorldToScreen(position.Position);
                 Utility.DrawCircle(position.Position, baseMenu.Item("item_positions_range").GetValue<Slider>().Value

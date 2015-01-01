@@ -462,6 +462,116 @@ namespace JeonJunglePlay
             }
         };
         #endregion
+        #region tanky
+        public static List<ItemToShop> buyThings_TANK = new List<ItemToShop>
+        {
+            new ItemToShop()
+            {
+                Price = 350,
+                needItem = ItemId.Hunters_Machete,
+                item = ItemId.Rangers_Trailblazer,
+                index = 1
+            },
+            new ItemToShop()
+            {
+                Price = 450,
+                needItem = ItemId.Rangers_Trailblazer,
+                item = ItemId.Dagger,
+                index = 2
+            },
+            new ItemToShop()
+            {
+                Price = 1050,
+                needItem = ItemId.Dagger,
+                item = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
+                index = 3
+            },
+            new ItemToShop()
+            {
+                Price = 325,
+                needItem = ItemId.Rangers_Trailblazer_Enchantment_Devourer,
+                item = ItemId.Boots_of_Speed,
+                index = 4
+            },
+            new ItemToShop()
+            {
+                Price = 775,
+                needItem = ItemId.Boots_of_Speed,
+                item = ItemId.Ninja_Tabi,
+                index = 5
+            },
+            new ItemToShop()
+            {
+                Price = 400,
+                needItem = ItemId.Ninja_Tabi,
+                item = ItemId.Ruby_Crystal,
+                index = 6
+            },
+            new ItemToShop()
+            {
+                Price = 500+180+820,
+                needItem = ItemId.Ruby_Crystal,
+                item = ItemId.Aegis_of_the_Legion,
+                index = 7
+            },
+            new ItemToShop()
+            {
+                Price = 900,
+                needItem = ItemId.Aegis_of_the_Legion,
+                item = ItemId.Locket_of_the_Iron_Solari,
+                index = 8
+            },
+            new ItemToShop()
+            {
+                Price = 950,
+                needItem = ItemId.Locket_of_the_Iron_Solari,
+                item = ItemId.Glacial_Shroud,
+                index = 9
+            },
+            new ItemToShop()
+            {
+                Price = 1050+450,
+                needItem = ItemId.Glacial_Shroud,
+                item = ItemId.Frozen_Heart,
+                index = 10
+            },
+            new ItemToShop()
+            {
+                Price = 500,
+                needItem = ItemId.Frozen_Heart,
+                item = ItemId.Null_Magic_Mantle,
+                index = 11
+            },
+            new ItemToShop()
+            {
+                Price = 400+1150,
+                needItem = ItemId.Null_Magic_Mantle,
+                item = ItemId.Banshees_Veil,
+                index = 12
+            },
+            new ItemToShop()
+            {
+                Price = 1200,
+                needItem = ItemId.Banshees_Veil,
+                item = ItemId.Sheen,
+                index = 13
+            },
+            new ItemToShop()
+            {
+                Price = 1325,
+                needItem = ItemId.Sheen,
+                item = ItemId.Phage,
+                index = 14
+            },
+            new ItemToShop()
+            {
+                Price = 1178,
+                needItem = ItemId.Phage,
+                item = ItemId.Trinity_Force,
+                index = 15
+            },
+        };
+        #endregion
 
         #endregion
 
@@ -576,6 +686,13 @@ namespace JeonJunglePlay
                 buyThings = buyThings_AP;
                 Game.PrintChat("MAOKAI BOT ACTIVE");
                 var myAutoLevel = new AutoLevel(new[] { 1, 2, 3, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3 });
+            }
+            else if (Player.ChampionName.ToUpper() == "NASUS")
+            {
+                buyThings.Clear();
+                buyThings = buyThings_TANK;
+                Game.PrintChat("NASUS BOT ACTIVE");
+                var myAutoLevel = new AutoLevel(new[] { 1, 3, 3, 2, 3, 4, 3, 1, 3, 1, 4, 1, 1, 2, 2, 4, 2, 2 });
             }
             else
             {
@@ -1058,6 +1175,16 @@ namespace JeonJunglePlay
             {
                 if (Q.IsReady())
                     Q.Cast(mob1.Position);
+                if (E.IsReady())
+                    E.Cast(mob1.Position);
+            }
+            else if (Player.ChampionName.ToUpper() == "NASUS")
+            {
+
+                if (Q.IsReady() && Q.GetDamage(mob1) >= mob1.Health)
+                    Q.CastOnUnit(mob1);
+                if (W.IsReady() && mob1.IsValid<Obj_AI_Hero>())
+                    W.CastOnUnit(mob1);
                 if (E.IsReady())
                     E.Cast(mob1.Position);
             }
