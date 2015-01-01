@@ -27,7 +27,7 @@ namespace JeonJunglePlay
         public static int now = 1;
         public static int max = 20;
         public static int num = 0;
-        public static bool recall = false, IsOVER = false, IsAttackedByTurret = false;
+        public static bool recall = false, IsOVER = false, IsAttackedByTurret = false, IsAttackStart = false;
 
         public static bool canBuyItems = true, IsBlueTeam, IsStart = true, IsFind = false;
 
@@ -645,7 +645,7 @@ namespace JeonJunglePlay
             pastTime = Environment.TickCount;
             #endregion
 
-            if (Game.Time >= 300 && IsStart)
+            if (IsStart && Player.Level > 1)
             {
                 Game.PrintChat("You did reload");
                 IsStart = false;
@@ -727,6 +727,11 @@ namespace JeonJunglePlay
                 }
                 else
                 {
+                    if (Player.IsDead && now >= 7 && now <= 9)
+                        now = 5;
+                    if (Player.IsDead && now > 12)
+                        now = 12;
+
                     MonsterINFO target = MonsterList.First(t => t.order == now);
 
                     if (Player.Position.Distance(target.Position) >= 300)
@@ -802,18 +807,38 @@ namespace JeonJunglePlay
 
             if (IsOVER)
             {
-                if (IsOVER && !IsAttackedByTurret)
+                if (!IsAttackStart)
                 {
-                    DoCast_Hero();
-                    Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
-                    afktime = 0;
+                    if (IsBlueTeam)
+                    {
+                        Player.IssueOrder(GameObjectOrder.MoveTo, BLUE_MID.Position);
+                        if (Player.Distance(BLUE_MID.Position) <= 100)
+                            IsAttackStart = true;
+                    }
+                    else
+                    {
+                        Player.IssueOrder(GameObjectOrder.MoveTo, PURPLE_MID.Position);
+                        if (Player.Distance(PURPLE_MID.Position) <= 100)
+                            IsAttackStart = true;
+                    }
                 }
-                var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(Player.Position)).First();
-                if (turret.Distance(Player.Position) > 755)
-                    IsAttackedByTurret = false;
+                else
+                {
+                    if (IsOVER && !IsAttackedByTurret)
+                    {
+                        DoCast_Hero();
+                        Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
+                        afktime = 0;
+                    }
 
-                if (Player.IsDead)
-                    IsAttackedByTurret = false;
+                    var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(Player.Position)).First(t => t.IsEnemy);
+
+                    if (turret.Distance(Player.Position) > 755)
+                        IsAttackedByTurret = false;
+
+                    if (Player.IsDead)
+                        IsAttackedByTurret = false;
+                }
             }
 
             #endregion
