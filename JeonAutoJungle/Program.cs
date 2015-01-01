@@ -15,7 +15,7 @@ namespace JeonJunglePlay
 {
     public class Program
     {
-        public static int maxstack = 50;
+        public static int maxstack = 25;
         public static Obj_AI_Hero Player = ObjectManager.Player;
         private static Spell Q, W, E, R;
         private static Vector3 spawn;
