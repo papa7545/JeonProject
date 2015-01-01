@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("JeonJunglePlay")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft Corporation")]
+[assembly: AssemblyCompany("Meh Meh Meh")]
 [assembly: AssemblyProduct("JeonJunglePlay")]
-[assembly: AssemblyCopyright("Copyright © Microsoft Corporation 2014")]
+[assembly: AssemblyCopyright("Copyright © Hell No 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // 모든 값을 지정하거나 아래와 같이 '*'를 사용하여 빌드 번호 및 수정 버전이 자동으로
 // 지정되도록 할 수 있습니다.
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.21.1.1")]
-[assembly: AssemblyFileVersion("4.21.1.1")]
+[assembly: AssemblyVersion("4.21.1.2")]
+[assembly: AssemblyFileVersion("4.21.1.2")]
