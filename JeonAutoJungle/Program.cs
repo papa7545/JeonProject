@@ -15,11 +15,12 @@ namespace JeonJunglePlay
 {
     public class Program
     {
-        public static int maxstack = 50;
+        
         public static Obj_AI_Hero Player = ObjectManager.Player;
         private static Spell Q, W, E, R;
         private static Vector3 spawn;
         private static Vector3 enemy_spawn;
+        public static Menu JeonAutoJungleMenu;
 
         private static float gamestart,pastTime,afktime;
         public static List<MonsterINFO> MonsterList = new List<MonsterINFO>();
@@ -456,6 +457,11 @@ namespace JeonJunglePlay
 
         private static void Game_OnGameLoad(EventArgs args)
         {
+            
+            JeonAutoJungleMenu = new Menu("JeonAutoJungle", "JeonAutoJungle", true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("isActive", "Activate")).SetValue(true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 70)));
+            JeonAutoJungleMenu.AddToMainMenu();
 
             setSmiteSlot();
 
@@ -597,6 +603,10 @@ namespace JeonJunglePlay
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
+            if(!JeonAutoJungleMenu.Item("isActive").GetValue<Boolean>()) {
+                return;
+            }
+            
             setSmiteSlot();
 
             #region detect afk
@@ -757,10 +767,16 @@ namespace JeonJunglePlay
             #region 스택이 넘는지 체크 - check ur stacks
             foreach (var buff in Player.Buffs.Where(b => b.DisplayName == "Enchantment_Slayer_Stacks"))
             {
-                if(buff.Count >= maxstack && !IsOVER) //--테스트
+                int maxstacks = JeonAutoJungleMenu.Item("maxstacks").GetValue<Slider>().Value;
+                if(buff.Count >= maxstacks && !IsOVER) //--테스트
                 {
                     IsOVER = true;
-                    Game.PrintChat("Stacks Over 50. Now Going to be offense.");
+                    Game.PrintChat("Stacks Over " + maxstacks + ". Now Going to be offense.");
+                }
+                if(buff.Count < maxstacks && IsOVER) //-- I don't speak korean :D
+                {
+                    Game.PrintChat("Stacks under " + maxstacks + ". Going back to farm.");
+                    IsOVER = false;
                 }
             }
             #endregion
