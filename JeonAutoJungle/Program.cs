@@ -459,7 +459,7 @@ namespace JeonJunglePlay
         {
             
             JeonAutoJungleMenu = new Menu("JeonAutoJungle", "JeonAutoJungle", true);
-            JeonAutoJungleMenu.AddItem(new MenuItem("Activate", "Activate")).SetValue(true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("isActive", "Activate")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 70)));
             JeonAutoJungleMenu.AddToMainMenu();
 
@@ -603,6 +603,10 @@ namespace JeonJunglePlay
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
+            if(JeonAutoJungleMenu.Item("isActive").GetValue<Boolean>().Value) {
+                return;
+            }
+            
             setSmiteSlot();
 
             #region detect afk
