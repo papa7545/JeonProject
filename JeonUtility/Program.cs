@@ -723,7 +723,7 @@ namespace JeonUtility
                 {
                     foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Mana_Potion && !Player.HasBuff("Mana Potion") && !Player.HasBuff("ItemCrystalFlask")))
                     {
-                        if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_mana") && Utility.InShop(Player))
+                        if (Player.ManaPercentage() <= (float)Jlib.getm_value("useitem_p_mana") && Utility.InShop(Player))
                         {
                             Player.Spellbook.CastSpell(p_item.SpellSlot);
                         }
