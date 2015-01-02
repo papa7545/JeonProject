@@ -93,7 +93,7 @@ namespace JeonJunglePlay
         };
         public static MonsterINFO BLUE_MID = new MonsterINFO
         {
-            ID = "MID",
+            ID = "blue_MID",
             Position = new Vector3(5294.531f, 5537.924f, 50.46155f),
             name = "noneuses",
             respawntime = 180,
@@ -101,7 +101,7 @@ namespace JeonJunglePlay
         };
         public static MonsterINFO PURPLE_MID = new MonsterINFO
         {
-            ID = "MID",
+            ID = "purple_MID",
             Position = new Vector3(9443.35f, 9339.06f, 53.30994f),
             name = "noneuses",
             respawntime = 180,
@@ -1036,7 +1036,7 @@ namespace JeonJunglePlay
         {
             var mob1 = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position)).First();
 
-            if (Player.ChampionName.ToUpper() == "NUNU" && Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
+            //if (Player.ChampionName.ToUpper() == "NUNU" && Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
                 Player.IssueOrder(GameObjectOrder.MoveTo, mob1.ServerPosition.Extend(Player.ServerPosition, 10));
 
 
