@@ -701,7 +701,7 @@ namespace JeonUtility
                 {
                     foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Crystalline_Flask && !Player.HasBuff("ItemCrystalFlask")))
                     {
-                        if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_fla"))
+                        if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_fla") && Utility.InShop(Player))
                             Player.Spellbook.CastSpell(p_item.SpellSlot);
                     }
                 }
@@ -710,7 +710,7 @@ namespace JeonUtility
                 {
                     foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Health_Potion && !Player.HasBuff("Health Potion") && !Player.HasBuff("ItemCrystalFlask")))
                     {
-                        if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_hp"))
+                        if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_hp") && Utility.InShop(Player))
                         {
                             Player.Spellbook.CastSpell(p_item.SpellSlot);
                         }
@@ -723,7 +723,7 @@ namespace JeonUtility
                 {
                     foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Mana_Potion && !Player.HasBuff("Mana Potion") && !Player.HasBuff("ItemCrystalFlask")))
                     {
-                        if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_mana"))
+                        if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_mana") && Utility.InShop(Player))
                         {
                             Player.Spellbook.CastSpell(p_item.SpellSlot);
                         }
