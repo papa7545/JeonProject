@@ -686,12 +686,10 @@ namespace JeonUtility
                                 {
                                     if (bufflist.Any(b => b == buff.Type))
                                         Player.Spellbook.CastSpell(p_item.SpellSlot);
-                                    if (buff.DisplayName == "zedulttargetmark")
-                                        Game.PrintChat("zed! {0}", buff.Type.ToString());
-                                    if (buff.DisplayName == "fizzmarinerdoombomb")
-                                        Game.PrintChat("fizz! {0}", buff.Type.ToString());
-                                    if (buff.DisplayName == "SoulShackles")
-                                        Game.PrintChat("fizz! {0}", buff.Type.ToString());
+                                    if (buff.DisplayName == "ZedUltExecute")
+                                        Player.Spellbook.CastSpell(p_item.SpellSlot);
+                                    if (buff.DisplayName == "FizzChurnTheWatersCling")
+                                        Player.Spellbook.CastSpell(p_item.SpellSlot);
                                 });
                             }
                         }
