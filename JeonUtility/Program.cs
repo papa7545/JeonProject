@@ -706,14 +706,19 @@ namespace JeonUtility
                     }
                 }
                 tempItemid = Convert.ToInt32(ItemId.Health_Potion);
-                if (Jlib.getm_bool("useitem_hppotion") && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
+                if (Jlib.getm_bool("useitem_hppotion"))
                 {
-                    foreach (var p_item in Player.InventoryItems.Where(item => (item.Id == ItemId.Health_Potion|| Convert.ToInt32(item.Id) == 2010) && !Player.HasBuff("Health Potion") && !Player.HasBuff("ItemCrystalFlask")))
+                    ItemId item = ItemId.Health_Potion;
+                    if (Player.InventoryItems.First(t => (t.Id == ItemId.Health_Potion || Convert.ToInt32(t.Id) == 2010)).Id != ItemId.Health_Potion)
+                        item = ItemId.Unknown;
+
+                    if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_hp") && Player.InventoryItems.Any(t => (t.Id == ItemId.Health_Potion || Convert.ToInt32(t.Id) == 2010)))
                     {
-                        if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_hp") && !Utility.InShop(Player))
-                        {
-                            Player.Spellbook.CastSpell(p_item.SpellSlot);
-                        }
+                        if (!Player.HasBuff("ItemMiniRegenPotion") && item == ItemId.Unknown)
+                            Player.Spellbook.CastSpell(Player.InventoryItems.First(t => Convert.ToInt32(t.Id) == 2010).SpellSlot);
+                        if (!Player.HasBuff("Health Potion") && item == ItemId.Health_Potion)
+                            Player.Spellbook.CastSpell(Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).SpellSlot);
+
                     }
                 }
 

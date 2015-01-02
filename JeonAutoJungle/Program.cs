@@ -827,8 +827,23 @@ namespace JeonJunglePlay
             #endregion
 
             #region 자동포션사용 - auto use potions
-            if (Player.HealthPercentage() <= 60 && !Player.HasBuff("Health Potion") && Player.InventoryItems.Any(t => (t.Id == ItemId.Health_Potion || Convert.ToInt32(t.Id) == 2010)))
-                Player.Spellbook.CastSpell(Player.InventoryItems.First(t => (t.Id == ItemId.Health_Potion || Convert.ToInt32(t.Id) == 2010)).SpellSlot);
+            if (Player.HealthPercentage() <= 60)
+            {
+                ItemId item = ItemId.Health_Potion;
+                if (Player.InventoryItems.First(t => (t.Id == ItemId.Health_Potion || Convert.ToInt32(t.Id) == 2010)).Id != ItemId.Health_Potion)
+                    item = ItemId.Unknown;
+
+                if (Player.InventoryItems.Any(t => (t.Id == ItemId.Health_Potion || Convert.ToInt32(t.Id) == 2010)))
+                {
+                    if (!Player.HasBuff("ItemMiniRegenPotion") && item == ItemId.Unknown)
+                        Player.Spellbook.CastSpell(Player.InventoryItems.First(t => Convert.ToInt32(t.Id) == 2010).SpellSlot);
+                    if (!Player.HasBuff("Health Potion") && item == ItemId.Health_Potion)
+                        Player.Spellbook.CastSpell(Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).SpellSlot);
+
+                }
+            }
+
+
             #endregion
 
             #region 오토 플레이 - auto play
