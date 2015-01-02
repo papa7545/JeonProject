@@ -1015,9 +1015,9 @@ namespace JeonJunglePlay
 
         public static void DoLaneClear()
         {
-            var mob1 = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position)).First();
+            var mob1 = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position)).First(t => t.IsEnemy);
 
-            if (Player.ChampionName.ToUpper() == "NUNU" && Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
+            //if (Player.ChampionName.ToUpper() == "NUNU" && Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
                 Player.IssueOrder(GameObjectOrder.MoveTo, mob1.ServerPosition.Extend(Player.ServerPosition, 10));
 
 
