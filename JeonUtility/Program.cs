@@ -708,7 +708,7 @@ namespace JeonUtility
                 tempItemid = Convert.ToInt32(ItemId.Health_Potion);
                 if (Jlib.getm_bool("useitem_hppotion") && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
                 {
-                    foreach (var p_item in Player.InventoryItems.Where(item => item.Id == ItemId.Health_Potion && !Player.HasBuff("Health Potion") && !Player.HasBuff("ItemCrystalFlask")))
+                    foreach (var p_item in Player.InventoryItems.Where(item => (item.Id == ItemId.Health_Potion|| Convert.ToInt32(item.Id) == 2010) && !Player.HasBuff("Health Potion") && !Player.HasBuff("ItemCrystalFlask")))
                     {
                         if (Player.HealthPercentage() <= (float)Jlib.getm_value("useitem_p_hp") && !Utility.InShop(Player))
                         {
