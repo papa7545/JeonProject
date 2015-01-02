@@ -751,14 +751,17 @@ namespace JeonJunglePlay
 
 
             #region detect afk
-            if (Game.Time - pastTime >= 1 && !Player.IsDead && !Player.IsRecalling())
+            if (Game.Time - pastTime >= 1 && !Player.IsDead && !Player.IsRecalling() && !IsStart && !IsOVER)
             {
                 pastTime = Game.Time;
                 afktime += 1;
-                if (afktime > 55) // 잠수 55초 경과
+                if (afktime > 10) // 잠수 10초 경과
                 {
+                    if(Player.InShop())
                     Player.IssueOrder(GameObjectOrder.AttackTo,
                         new Vector3(4910f, 10268f, -71.24f));
+                    else
+                        Player.Spellbook.CastSpell(SpellSlot.Recall);
                     afktime = 0;
                 }
             }
