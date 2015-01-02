@@ -319,13 +319,13 @@ namespace JeonJunglePlay
             {
                 Price = 675,
                 needItem = ItemId.Boots_of_Speed,
-                item = ItemId.Boots_of_Swiftness,
+                item = ItemId.Berserkers_Greaves,
                 index = 5
             },
             new ItemToShop()
             {
                 Price = 1400,
-                needItem = ItemId.Boots_of_Swiftness,
+                needItem = ItemId.Berserkers_Greaves,
                 item = ItemId.Bilgewater_Cutlass,
                 index = 6
             },
