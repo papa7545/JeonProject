@@ -906,7 +906,7 @@ namespace JeonJunglePlay
                     }
                     else
                     {
-                        if (CheckMonster(target.name, target.Position, target.Range)) //해당지점에 몬스터가 있는지
+                        if (CheckMonster(target.name, target.Position, 500)) //해당지점에 몬스터가 있는지
                         {
                             DoCast();
                             Player.IssueOrder(GameObjectOrder.AttackUnit, GetNearest(Player.Position));
@@ -1362,7 +1362,7 @@ namespace JeonJunglePlay
             return sMinion;
         }
 
-        public static bool CheckMonster(String TargetName, Vector3 BasePosition, int Range = 1000)
+        public static bool CheckMonster(String TargetName, Vector3 BasePosition, int Range = 500)
         {
             var minions = ObjectManager.Get<Obj_AI_Minion>()
                 .Where(minion => minion.IsValid && !minion.IsDead && minion.Name.StartsWith(TargetName));
