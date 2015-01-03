@@ -442,7 +442,6 @@ namespace JeonUtility
 
                 #endregion
 
-
                 #region ward tracker
                 foreach (var ward in ObjectManager.Get<Obj_AI_Base>().Where(t => wardnames.Any(a => a == t.Name) && t.IsEnemy))
                 {

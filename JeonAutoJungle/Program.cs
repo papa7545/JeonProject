@@ -803,13 +803,16 @@ namespace JeonJunglePlay
 
 
                 #region 아이템트리 올리기 // item build up
-                if (Items.HasItem(Convert.ToInt32(buyThings.First().needItem)))
+                if (buyThings.Any())
                 {
-                    if (Player.Gold > buyThings.First().Price)
+                    if (Items.HasItem(Convert.ToInt32(buyThings.First().needItem)))
                     {
-                        Player.BuyItem(buyThings.First().item);
-                        buyThings.Remove(buyThings.First());
+                        if (Player.Gold > buyThings.First().Price)
+                        {
+                            Player.BuyItem(buyThings.First().item);
+                            buyThings.Remove(buyThings.First());
 
+                        }
                     }
                 }
                 #endregion
