@@ -311,7 +311,7 @@ namespace JeonUtility
             {
                 foreach (var t in ObjectManager.Get<Obj_AI_Turret>().Where(t => !t.IsDead && t.IsEnemy))
                 {
-                    Drawing.DrawCircle(t.Position, 775, System.Drawing.Color.White);
+                    Drawing.DrawCircle(t.Position, 875, System.Drawing.Color.White);
                 }
             }
 
