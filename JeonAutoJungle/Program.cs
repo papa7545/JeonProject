@@ -616,6 +616,7 @@ namespace JeonJunglePlay
             JeonAutoJungleMenu.AddItem(new MenuItem("isActive", "Activate")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("maxstacks", "Max Stacks").SetValue(new Slider(30, 1, 150)));
             JeonAutoJungleMenu.AddItem(new MenuItem("autorecallheal", "Recall[for heal]")).SetValue(true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("hpper", "Recall on HP(%)").SetValue(new Slider(50, 0, 100)));
             JeonAutoJungleMenu.AddItem(new MenuItem("autorecallitem", "Recall[for item]")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("evading", "Detect TurretAttack")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("Invade", "InvadeEnemyJungle?")).SetValue(true);
@@ -1021,7 +1022,7 @@ namespace JeonJunglePlay
                             afktime = 0;
                             DoCast_Hero();
 
-                            if (Player.HealthPercentage() < 25 && !Player.IsDead
+                            if (Player.HealthPercentage() < JeonAutoJungleMenu.Item("hpper").GetValue<Slider>().Value && !Player.IsDead//hpper
                                 && JeonAutoJungleMenu.Item("autorecallheal").GetValue<Boolean>()) // HP LESS THAN 25%
                             {
                                 Game.PrintChat("YOUR HP IS SO LOW. RECALL!");
