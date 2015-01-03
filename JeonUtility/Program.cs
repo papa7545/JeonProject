@@ -1296,7 +1296,8 @@ namespace JeonUtility
             double eDmg = AD * 0.60 + spell_basedamage[s_level];
             count -= 1;
             eDmg = eDmg + count*(eDmg * spell_perdamage[s_level]);
-            return Player.CalcDamage(target, Damage.DamageType.Physical,eDmg);
+            return ObjectManager.Player.GetSpellDamage(target, SpellSlot.E);
+            //return Player.CalcDamage(target, Damage.DamageType.Physical,eDmg);
         }
         public static double getTwitEDmg(Obj_AI_Base target, int count, double AD,double AP, int s_level)
         {
