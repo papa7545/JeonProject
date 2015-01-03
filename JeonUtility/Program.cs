@@ -73,6 +73,7 @@ namespace JeonUtility
             public Vector3 position;
             public bool show = true;
             public float endtiem;
+            public Obj_AI_Base target;
 
             public Render.Text timer { get; set; }
 
@@ -83,7 +84,8 @@ namespace JeonUtility
                 {
                     VisibleCondition =
                     condition =>
-                          (int)(endtiem - Game.Time) > 0 && show,
+                          (int)(endtiem - Game.Time) > 0 && show && 
+                          !target.IsDead,
 
                     PositionUpdate = delegate
                     {
@@ -94,10 +96,7 @@ namespace JeonUtility
                     OutLined = true,
                     Centered = true
                 };
-
                 timer.Add();
-                if (!show)
-                    timer.Remove();
             }
         }
         #endregion wardtracker
@@ -320,11 +319,11 @@ namespace JeonUtility
             {
                 var ratio = (int)(ward.endtiem - Game.Time) / ward.time;
 
-                var bar_start = new Vector2(Drawing.WorldToScreen(ward.position).X - 25, Drawing.WorldToScreen(ward.position).Y);
-                var bar_end = new Vector2(bar_start.X + (50 * ratio), bar_start.Y);
+                var bar_start = new Vector2(Drawing.WorldToScreen(ward.position).X - 20, Drawing.WorldToScreen(ward.position).Y);
+                var bar_end = new Vector2(bar_start.X + (40 * ratio), bar_start.Y);
 
                 var bar_out_start = new Vector2(bar_start.X - 1, bar_end.Y - 1);
-                var bar_out_end = new Vector2(bar_start.X + 52, bar_start.Y - 1);
+                var bar_out_end = new Vector2(bar_start.X + 42, bar_start.Y - 1);
 
                 if (ward.endtiem <= Game.Time)
                     wardlist.Remove(ward);
@@ -349,12 +348,16 @@ namespace JeonUtility
                         color = Color.White;
                         break;
                 }
-                Utility.DrawCircle(ward.position, 60, color, 5, 5);
-                Utility.DrawCircle(ward.position, 60, color, 5, 5, true);
-                if (ward.type != wardtype.Pink)
+
+                if (!ward.target.IsDead)
                 {
-                    Drawing.DrawLine(bar_out_start, bar_out_end, 10, Color.Black);
-                    Drawing.DrawLine(bar_start, bar_end, 8, Color.Gray);
+                    Utility.DrawCircle(ward.position, 60, color, 5, 5);
+                    Utility.DrawCircle(ward.position, 60, color, 5, 5, true);
+                    if (ward.type != wardtype.Pink)
+                    {
+                        Drawing.DrawLine(bar_out_start, bar_out_end, 5, Color.Black);
+                        Drawing.DrawLine(bar_start, bar_end, 3, Color.White);
+                    }
                 }
             }
             #endregion wardtracker
@@ -441,7 +444,7 @@ namespace JeonUtility
 
 
                 #region ward tracker
-                foreach (var ward in ObjectManager.Get<Obj_AI_Base>().Where(t => wardnames.Contains(t.Name) && t.IsEnemy))
+                foreach (var ward in ObjectManager.Get<Obj_AI_Base>().Where(t => wardnames.Any(a => a == t.Name) && !t.IsEnemy))
                 {
                     if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Mana > 0 && ward.MaxHealth == 3)
                     {
@@ -451,7 +454,8 @@ namespace JeonUtility
                             type = wardtype.Green,
                             id = ward.NetworkId,
                             time = ward.MaxMana,
-                            endtiem = Game.Time + ward.Mana
+                            endtiem = Game.Time + ward.Mana,
+                            target = ward
                         });
                     }
                     if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.MaxHealth == 5)
@@ -462,7 +466,8 @@ namespace JeonUtility
                             type = wardtype.Pink,
                             id = ward.NetworkId,
                             time = ward.MaxMana,
-                            endtiem = float.MaxValue
+                            endtiem = float.MaxValue,
+                            target = ward
                         });
                     }
                     if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Name == "Jack In The Box")
@@ -473,7 +478,8 @@ namespace JeonUtility
                             type = wardtype.ShacoBox,
                             id = ward.NetworkId,
                             time = ward.MaxMana,
-                            endtiem = Game.Time + ward.Mana
+                            endtiem = Game.Time + ward.Mana,
+                            target = ward
                         });
                     }
                     if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Name == "Cupcake Trap")
@@ -484,7 +490,8 @@ namespace JeonUtility
                             type = wardtype.Trap,
                             id = ward.NetworkId,
                             time = 4 * 60,
-                            endtiem = Game.Time + 240
+                            endtiem = Game.Time + 240,
+                            target = ward
                         });
                     }
                     if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Name == "Noxious Trap")
@@ -495,7 +502,8 @@ namespace JeonUtility
                             type = wardtype.Mushroom,
                             id = ward.NetworkId,
                             time = ward.MaxMana,
-                            endtiem = Game.Time + ward.Mana
+                            endtiem = Game.Time + ward.Mana,
+                            target = ward
                         });
                     }
                 }
