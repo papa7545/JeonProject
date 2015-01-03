@@ -16,8 +16,9 @@ namespace JeonJunglePlay
     public class Program
     {
 
+
         public static Obj_AI_Hero Player = ObjectManager.Player;
-        private static Spell Q, W, E, R;
+        public static Spell Q, W, E, R;
         private static Vector3 spawn;
         private static Vector3 enemy_spawn;
         public static Menu JeonAutoJungleMenu;
@@ -40,6 +41,10 @@ namespace JeonJunglePlay
         public static SpellDataInst Edata = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E);
         public static SpellDataInst Rdata = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R);
 
+
+        public static List<Spell> cast2mob = new List<Spell>();
+        public static List<Spell> cast2hero = new List<Spell>();
+        public static List<Spell> cast4laneclear = new List<Spell>();
 
         public class MonsterINFO
         {
@@ -583,6 +588,29 @@ namespace JeonJunglePlay
 
         private static void Game_OnGameLoad(EventArgs args)
         {
+            ////////////////////customizing//////////////////
+            
+            var dir = new DirectoryInfo(Config.LeagueSharpDirectory.ToString() + @"\JeonAutoJungle");
+            var setFile = new FileInfo(dir + "/" + Player.ChampionName + ".ini");
+
+            #region File Stream
+            try
+            {
+                if (!dir.Exists)
+                    dir.Create();
+
+                if (!setFile.Exists)
+                {
+                    Readini.Setini(setFile.FullName);
+                }
+            }
+            catch
+            { }
+            #endregion
+
+            
+            ////////////////////////////////////////////////
+
 
             JeonAutoJungleMenu = new Menu("JeonAutoJungle", "JeonAutoJungle", true);
             JeonAutoJungleMenu.AddItem(new MenuItem("isActive", "Activate")).SetValue(true);
@@ -590,9 +618,17 @@ namespace JeonJunglePlay
             JeonAutoJungleMenu.AddItem(new MenuItem("autorecallheal", "Recall[for heal]")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("autorecallitem", "Recall[for item]")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("evading", "Detect TurretAttack")).SetValue(true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("Invade", "InvadeEnemyJungle?")).SetValue(true);
             JeonAutoJungleMenu.AddToMainMenu();
 
             setSmiteSlot();
+
+            #region 스펠설정
+            Q = new Spell(SpellSlot.Q, GetSpellRange(Qdata));
+            W = new Spell(SpellSlot.W, GetSpellRange(Wdata));
+            E = new Spell(SpellSlot.E, GetSpellRange(Edata));
+            R = new Spell(SpellSlot.R, GetSpellRange(Rdata));
+            #endregion
 
             #region 지점 설정
             if (Player.Team.ToString() == "Chaos")
@@ -622,7 +658,6 @@ namespace JeonJunglePlay
                 MonsterList.First(temp => temp.ID == bteam_Red.ID).order = 14;
                 MonsterList.First(temp => temp.ID == bteam_Krug.ID).order = 15;
             }
-
             else
             {
                 spawn = new Vector3(415.33f, 453.38f, 182.66f);
@@ -697,18 +732,43 @@ namespace JeonJunglePlay
             }
             else
             {
-                Game.PrintChat("There are not support. setting default");
-                var myAutoLevel = new AutoLevel(new[] { 1, 2, 3, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3 });
+                #region Read ini
+                Game.PrintChat("Read ini file");
+                Readini.GetSpelltree(setFile.FullName);
+
+                if (Readini.GetItemTreetype(setFile.FullName) == "AP")
+                {
+                    buyThings.Clear();
+                    buyThings = buyThings_AP;
+                    Game.PrintChat("Set ItemTree for AP - Finished");
+                }
+                else if (Readini.GetItemTreetype(setFile.FullName) == "AS")
+                {
+                    buyThings.Clear();
+                    buyThings = buyThings_AS;
+                    Game.PrintChat("Set ItemTree for AS - Finished");
+                }
+                else if (Readini.GetItemTreetype(setFile.FullName) == "TANK")
+                {
+                    buyThings.Clear();
+                    buyThings = buyThings_TANK;
+                    Game.PrintChat("Set ItemTree for TANK - Finished");
+                }
+                else if (Readini.GetItemTreetype(setFile.FullName) == "X")
+                {
+                    Game.PrintChat("PLZ TYPE VALID VALUE, SET AD ITEMTREE - ERROR");
+                }
+                else
+                {
+                    Game.PrintChat("Set ItemTree for AD - Finished");
+                }
+
+
+                Readini.GetSpells(setFile.FullName, ref cast2mob, ref cast2hero, ref cast4laneclear);
+
+                #endregion readini
             }
             #endregion
-
-            #region 스킬설정
-            Q = new Spell(SpellSlot.Q, GetSpellRange(Qdata));
-            W = new Spell(SpellSlot.W, GetSpellRange(Wdata));
-            E = new Spell(SpellSlot.E, GetSpellRange(Edata));
-            R = new Spell(SpellSlot.R, GetSpellRange(Rdata));
-            #endregion
-
 
             #region 현재 아이템 단계 설정 - 도중 리로드시 필요
 
@@ -770,6 +830,77 @@ namespace JeonJunglePlay
             #region 0.5초마다 발동 //  오류 없애줌
             if (Environment.TickCount - pastTime <= 500) return;
             pastTime = Environment.TickCount;
+            #endregion
+
+            #region InvadeEnemyJungle
+
+            if (!IsBlueTeam)
+            {
+                if (!JeonAutoJungleMenu.Item("Invade").GetValue<Boolean>())
+                {
+                    MonsterList.First(temp => temp.ID == bteam_Gromp.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == bteam_Blue.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == bteam_Wolf.ID).order = 0;
+
+                    MonsterList.First(temp => temp.ID == top_crab.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == PURPLE_MID.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == down_crab.ID).order = 0;
+
+                    MonsterList.First(temp => temp.ID == bteam_Razorbeak.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == bteam_Red.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == bteam_Krug.ID).order = 0;
+                }
+                else
+                {
+                    MonsterList.First(temp => temp.ID == bteam_Gromp.ID).order = 7;
+                    MonsterList.First(temp => temp.ID == bteam_Blue.ID).order = 8;
+                    MonsterList.First(temp => temp.ID == bteam_Wolf.ID).order = 9;
+
+                    MonsterList.First(temp => temp.ID == top_crab.ID).order = 10;
+                    MonsterList.First(temp => temp.ID == PURPLE_MID.ID).order = 11;
+                    MonsterList.First(temp => temp.ID == down_crab.ID).order = 12;
+
+                    MonsterList.First(temp => temp.ID == bteam_Razorbeak.ID).order = 13;
+                    MonsterList.First(temp => temp.ID == bteam_Red.ID).order = 14;
+                    MonsterList.First(temp => temp.ID == bteam_Krug.ID).order = 15;
+                }
+            }
+            else
+            {
+                if (!JeonAutoJungleMenu.Item("Invade").GetValue<Boolean>())
+                {
+                    MonsterList.First(temp => temp.ID == pteam_Razorbeak.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == pteam_Red.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == pteam_Krug.ID).order = 0;
+
+                    MonsterList.First(temp => temp.ID == top_crab.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == BLUE_MID.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == down_crab.ID).order = 0;
+
+                    MonsterList.First(temp => temp.ID == pteam_Gromp.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == pteam_Blue.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == pteam_Wolf.ID).order = 0;
+                }
+                else
+                {
+                    MonsterList.First(temp => temp.ID == pteam_Razorbeak.ID).order = 7;
+                    MonsterList.First(temp => temp.ID == pteam_Red.ID).order = 8;
+                    MonsterList.First(temp => temp.ID == pteam_Krug.ID).order = 9;
+
+
+                    MonsterList.First(temp => temp.ID == top_crab.ID).order = 10;
+                    MonsterList.First(temp => temp.ID == BLUE_MID.ID).order = 11;
+                    MonsterList.First(temp => temp.ID == down_crab.ID).order = 12;
+
+                    MonsterList.First(temp => temp.ID == pteam_Gromp.ID).order = 13;
+                    MonsterList.First(temp => temp.ID == pteam_Blue.ID).order = 14;
+                    MonsterList.First(temp => temp.ID == pteam_Wolf.ID).order = 15;
+                }
+            }
+
+            max = MonsterList.OrderByDescending(h => h.order).First().order;
+
+
             #endregion
 
             #region detect reload
@@ -1076,7 +1207,7 @@ namespace JeonJunglePlay
                     Where(tur => tur.IsEnemy && !tur.IsDead).First(); // 타겟과 가장 가까운터렛
 
                 if (turret.Distance(target.Position) > 755) // 터렛 사정거리 밖에있어야만 공격함.
-                    castspell(target);
+                    castspell_hero(target);
 
             }
         }
@@ -1131,35 +1262,83 @@ namespace JeonJunglePlay
             }
             else
             {
+                foreach (var spell in cast2mob)
+                {
+                    if (spell.IsReady())
+                        spell.CastOnUnit(mob1);
+
+                    if (spell.IsReady())
+                        spell.Cast();
+
+                    if (spell.IsReady())
+                        spell.Cast(mob1.Position);
+                }
+            }
+        }
+        public static void castspell_hero(Obj_AI_Base mob1)
+        {
+            afktime = 0;
+
+            if (Player.ChampionName.ToUpper() == "NUNU")
+            {
                 if (Q.IsReady())
                     Q.CastOnUnit(mob1);
-                if (W.IsReady())
-                    W.CastOnUnit(mob1);
                 if (E.IsReady())
                     E.CastOnUnit(mob1);
-                if (R.IsReady())
-                    R.CastOnUnit(mob1);
-
-                if (Q.IsReady())
-                    Q.Cast();
                 if (W.IsReady())
                     W.Cast();
-                if (E.IsReady())
-                    E.Cast();
-                if (R.IsReady())
-                    R.Cast();
-
+            }
+            else if (Player.ChampionName.ToUpper() == "CHOGATH")
+            {
                 if (Q.IsReady())
                     Q.Cast(mob1.Position);
                 if (W.IsReady())
                     W.Cast(mob1.Position);
+                if (R.IsReady() && R.GetDamage(mob1) >= mob1.Health)
+                    R.CastOnUnit(mob1);
+            }
+            else if (Player.ChampionName.ToUpper() == "WARWICK")
+            {
+                if (Q.IsReady())
+                    Q.CastOnUnit(mob1);
+                if (W.IsReady())
+                    W.Cast();
+                if (R.IsReady())
+                    R.CastOnUnit(mob1);
+            }
+            else if (Player.ChampionName.ToUpper() == "MASTERYI")
+            {
+                if (Q.IsReady())
+                    Q.CastOnUnit(mob1);
+                if (E.IsReady())
+                    E.Cast();
+                if (R.IsReady())
+                    R.Cast();
+            }
+            else if (Player.ChampionName.ToUpper() == "MAOKAI")
+            {
+                if (Q.IsReady())
+                    Q.Cast(mob1.Position);
                 if (E.IsReady())
                     E.Cast(mob1.Position);
-                if (R.IsReady())
-                    R.Cast(mob1.Position);
+                if (W.IsReady())
+                    W.CastOnUnit(mob1);
+            }
+            else
+            {
+                foreach(var spell in cast2hero)
+                {
+                    if (spell.IsReady())
+                        spell.CastOnUnit(mob1);
+
+                    if (spell.IsReady())
+                        spell.Cast();
+
+                    if (spell.IsReady())
+                        spell.Cast(mob1.Position);
+                }
             }
         }
-
         public static void castspell_laneclear(Obj_AI_Base mob1)
         {
             afktime = 0;
@@ -1213,26 +1392,17 @@ namespace JeonJunglePlay
             }
             else
             {
-                if (Q.IsReady())
-                    Q.CastOnUnit(mob1);
-                if (W.IsReady())
-                    W.CastOnUnit(mob1);
-                if (E.IsReady())
-                    E.CastOnUnit(mob1);
+                foreach (var spell in cast4laneclear)
+                {
+                    if (spell.IsReady())
+                        spell.CastOnUnit(mob1);
 
-                if (Q.IsReady())
-                    Q.Cast();
-                if (W.IsReady())
-                    W.Cast();
-                if (E.IsReady())
-                    E.Cast();
+                    if (spell.IsReady())
+                        spell.Cast();
 
-                if (Q.IsReady())
-                    Q.Cast(mob1.Position);
-                if (W.IsReady())
-                    W.Cast(mob1.Position);
-                if (E.IsReady())
-                    E.Cast(mob1.Position);
+                    if (spell.IsReady())
+                        spell.Cast(mob1.Position);
+                }
             }
         }
         public static bool CheckNasusQDamage(Obj_AI_Base target)
