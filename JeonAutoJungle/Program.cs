@@ -1166,18 +1166,7 @@ namespace JeonJunglePlay
             }
         }
 
-        public static void DoLaneClear()
-        {
-            var mob1 = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position)).First(t => t.IsEnemy);
-
-            //if (Player.ChampionName.ToUpper() == "NUNU" && Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
-                Player.IssueOrder(GameObjectOrder.MoveTo, mob1.ServerPosition.Extend(Player.ServerPosition, 10));
-
-
-            if (ObjectManager.Get<Obj_AI_Minion>().Any(t => t.IsMinion && Player.Distance(t.Position) <= 700))
-                castspell_laneclear(mob1);
-        }
-
+ 
         #region spell methods
         public static void DoSmite()
         {
@@ -1185,9 +1174,21 @@ namespace JeonJunglePlay
             if(mob1.IsValid)
                 smite.CastOnUnit(mob1);
         }
+        public static void DoLaneClear()
+        {
+            var mob1 = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position)).First(t => t.IsEnemy & !t.IsDead);
+
+            //if (Player.ChampionName.ToUpper() == "NUNU" && Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
+            Player.IssueOrder(GameObjectOrder.MoveTo, mob1.ServerPosition.Extend(Player.ServerPosition, 10));
+
+
+            if (ObjectManager.Get<Obj_AI_Minion>().Any(t => t.IsMinion && Player.Distance(t.Position) <= 700))
+                castspell_laneclear(mob1);
+        }
+
         public static void DoCast()
         {
-            var mob1 = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position)).First(t => t.IsEnemy);
+            var mob1 = ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position)).First(t => t.IsEnemy & !t.IsDead);
 
             //if (Player.ChampionName.ToUpper() == "NUNU" && Q.IsReady()) // 누누 Q버그수정 - Fix nunu Q bug
                 Player.IssueOrder(GameObjectOrder.MoveTo, mob1.ServerPosition.Extend(Player.ServerPosition, 10));
@@ -1199,7 +1200,7 @@ namespace JeonJunglePlay
 
         public static void DoCast_Hero()
         {
-            if (ObjectManager.Get<Obj_AI_Hero>().Any(t => t.IsEnemy && Player.Distance(t.Position) <= 700))
+            if (ObjectManager.Get<Obj_AI_Hero>().Any(t => t.IsEnemy & !t.IsDead && Player.Distance(t.Position) <= 700))
             {
                 var target = ObjectManager.Get<Obj_AI_Hero>().OrderBy(t => t.Distance(Player.Position)).
                     Where(tar => tar.IsEnemy && !tar.IsMe && !tar.IsDead).First(); // 플레이어와 가장 가까운타겟
@@ -1260,6 +1261,16 @@ namespace JeonJunglePlay
                 if (W.IsReady())
                     W.CastOnUnit(mob1);
             }
+            else if (Player.ChampionName.ToUpper() == "NASUS")
+            {
+                if (Q.IsReady() && CheckNasusQDamage(mob1))
+                    Q.Cast();
+                if (W.IsReady() && mob1.IsValid<Obj_AI_Hero>())
+                    W.CastOnUnit(mob1);
+                if (E.IsReady())
+                    E.Cast(mob1.Position);
+            }
+
             else
             {
                 foreach (var spell in cast2mob)
@@ -1324,6 +1335,18 @@ namespace JeonJunglePlay
                 if (W.IsReady())
                     W.CastOnUnit(mob1);
             }
+            else if (Player.ChampionName.ToUpper() == "NASUS")
+            {
+                if (Q.IsReady())
+                    Q.Cast();
+                if (W.IsReady() && mob1.IsValid<Obj_AI_Hero>())
+                    W.CastOnUnit(mob1);
+                if (E.IsReady())
+                    E.Cast(mob1.Position);
+                if (R.IsReady())
+                    R.Cast();
+            }
+
             else
             {
                 foreach(var spell in cast2hero)
@@ -1382,9 +1405,8 @@ namespace JeonJunglePlay
             }
             else if (Player.ChampionName.ToUpper() == "NASUS")
             {
-
                 if (Q.IsReady() && CheckNasusQDamage(mob1))
-                    Q.CastOnUnit(mob1);
+                    Q.Cast();
                 if (W.IsReady() && mob1.IsValid<Obj_AI_Hero>())
                     W.CastOnUnit(mob1);
                 if (E.IsReady())
