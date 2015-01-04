@@ -12,9 +12,9 @@ using SharpDX;
 using Color = System.Drawing.Color;
 #endregion
 
-namespace JeonCassiopeia
+namespace JeonChampions
 {
-    class Jproject_base : Cassiopea
+    class Jproject_base:Program
     {
         public static string menuName = "Jeon"+ObjectManager.Player.ChampionName;
         public static Menu baseMenu = new Menu(menuName, menuName, true);
@@ -28,6 +28,7 @@ namespace JeonCassiopeia
            
         public Jproject_base()
         {
+            set_menu();
             Drawing.OnEndScene += OnEndSence_base;
         }
 
@@ -37,11 +38,6 @@ namespace JeonCassiopeia
             var tsMenu = new Menu("TargetSelector", "TargetSelector"); //TargetSelector Menu
             baseMenu.AddSubMenu(tsMenu);
             TargetSelector.AddToMenu(tsMenu);
-
-            baseMenu.AddSubMenu(new Menu("<        Skills", "none"));
-            baseMenu.AddSubMenu(new Menu("<", "none1"));
-            addskillmenu(Qdata); addskillmenu(Wdata); addskillmenu(Edata); addskillmenu(Rdata);
-            baseMenu.AddSubMenu(new Menu("<", "none2"));
 
             var ComboMenu = new Menu("Combo", "Combo");
             baseMenu.AddSubMenu(ComboMenu);
@@ -65,6 +61,8 @@ namespace JeonCassiopeia
             MiscMenu.AddItem(new MenuItem("misc_w_range", "DrawRange_W").SetValue(new Circle(true, Color.Blue)));
             MiscMenu.AddItem(new MenuItem("misc_e_range", "DrawRange_E").SetValue(new Circle(true, Color.Green)));
             MiscMenu.AddItem(new MenuItem("misc_r_range", "DrawRange_R").SetValue(new Circle(true, Color.White)));
+
+
         }
 
 
@@ -72,17 +70,28 @@ namespace JeonCassiopeia
         public static void OnEndSence_base(EventArgs args)
         {
             if (baseMenu.Item("misc_q_range").GetValue<Circle>().Active)
-                Drawing.DrawCircle(ObjectManager.Player.Position, GetSpellRange(Qdata),
+                Drawing.DrawCircle(ObjectManager.Player.Position, GetSpellRange(Qdata,Q.IsChargedSpell),
             baseMenu.Item("misc_q_range").GetValue<Circle>().Color);
             if (baseMenu.Item("misc_w_range").GetValue<Circle>().Active)
-                Drawing.DrawCircle(ObjectManager.Player.Position, GetSpellRange(Wdata),
+                Drawing.DrawCircle(ObjectManager.Player.Position, GetSpellRange(Wdata, W.IsChargedSpell),
                     baseMenu.Item("misc_w_range").GetValue<Circle>().Color);
             if (baseMenu.Item("misc_e_range").GetValue<Circle>().Active)
-                Drawing.DrawCircle(ObjectManager.Player.Position, GetSpellRange(Edata),
+                Drawing.DrawCircle(ObjectManager.Player.Position, GetSpellRange(Edata,E.IsChargedSpell),
                     baseMenu.Item("misc_e_range").GetValue<Circle>().Color);
-            if (baseMenu.Item("misc_r_range").GetValue<Circle>().Active)
-                Drawing.DrawCircle(ObjectManager.Player.Position, GetSpellRange(Rdata),
+
+            if (Player.ChampionName == "Xerath" && R.Level > 0)
+                Drawing.DrawCircle(ObjectManager.Player.Position, 2000+(R.Level*1200),
                     baseMenu.Item("misc_r_range").GetValue<Circle>().Color);
+            else if (baseMenu.Item("misc_r_range").GetValue<Circle>().Active)
+                Drawing.DrawCircle(ObjectManager.Player.Position, GetSpellRange(Rdata, R.IsChargedSpell),
+                    baseMenu.Item("misc_r_range").GetValue<Circle>().Color);
+            
+            if (Player.ChampionName == "Xerath" && R.Level > 0)
+                Utility.DrawCircle(ObjectManager.Player.Position, 2000 + (R.Level * 1200),
+                    baseMenu.Item("misc_r_range").GetValue<Circle>().Color,1,20,true);
+            else if(R.Range > 1500)
+                Utility.DrawCircle(ObjectManager.Player.Position, GetSpellRange(Rdata, R.IsChargedSpell),
+                    baseMenu.Item("misc_r_range").GetValue<Circle>().Color,1,20,true);
         }
 
         private static void addskillmenu(SpellDataInst spell)
@@ -142,6 +151,29 @@ namespace JeonCassiopeia
                     targetSpell.SData.CastRangeDisplayOverride[0];
 
         }
+        
+        public static void Cast(Spell spell, Obj_AI_Base target, HitChance hitChance = HitChance.VeryHigh, bool aoe = false)
+        {
+            if (spell.IsReady())
+            {
+                spell.Cast(target, false, aoe);
+            }
+        }
 
+        public static void Cast(Spell spell, TargetSelector.DamageType damageType)
+        {
+            if (spell.IsReady())
+            {
+                Obj_AI_Hero target = TargetSelector.GetTarget(spell.Range, damageType);
+                if (target == null) return;
+                    spell.Cast(target);
+            }
+        }
+
+        public static void Cast(Spell spell)
+        {
+            if (spell.IsReady())
+                spell.Cast();
+        }
     }
 }

@@ -12,48 +12,23 @@ using SharpDX;
 using Color = System.Drawing.Color;
 #endregion
 
-namespace JeonCassiopeia
+namespace JeonChampions
 {
-    class Program
+    class Cassiopea:Program
     {
         /// <summary>
         /// Jeon Cassiopeia.
         /// Cassiopeia Posion Buff Name : CassiopeiaNoxiousBlast ,CassiopeiaMiasma
         /// </summary>
-        public const string cName = "Cassiopeia";
-        public static Obj_AI_Hero Player = ObjectManager.Player;
-        public static Jproject_base Cassiopeia;
-        public static baseMenuItem m_Items = new baseMenuItem();
-        public static Spell Q, W, E, R;
+        public static Jproject_base Cassiopeia = new Jproject_base();
 
-        public class baseMenuItem
-        {
-            public string COMBO_ACTIVE = "combo_active";
-            public string HARASS_ACTIVE = "harass_active";
-            public string COMBO_KEY = "combo_key";
-            public string HARASS_KEY = "harass_key";
-
-        }
-
-        private static void Main(string[] args)
+        public static void _Cassiopea()
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
         }
 
         public static void OnGameLoad(EventArgs args)
         {
-            #region check player
-            if (Jproject_base.Player.ChampionName == cName)
-                Jproject_base.set_menu();
-            else
-            {
-                Game.PrintChat("Jeon" + cName + ":This it not Support your champion"); 
-                return;
-            }
-            #endregion
-
-            Cassiopeia = new Jproject_base();
-
             Q = new Spell(SpellSlot.Q, Jproject_base.GetSpellRange(Jproject_base.Qdata));
             W = new Spell(SpellSlot.W, Jproject_base.GetSpellRange(Jproject_base.Wdata));
             E = new Spell(SpellSlot.E, Jproject_base.GetSpellRange(Jproject_base.Edata));
@@ -89,8 +64,6 @@ namespace JeonCassiopeia
         /// </summary>
         public static void harass()
         {
-
-
             var eTarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
             var eTime = Player.Distance(eTarget.Position) / Jproject_base.Edata.SData.MissileSpeed;
             var qPred = Q.GetPrediction(eTarget);
@@ -153,10 +126,6 @@ namespace JeonCassiopeia
                     if (W.CastIfHitchanceEquals(eTarget, eTarget.IsMoving ? HitChance.Medium : HitChance.Low))
                         W.Cast(qPred.CastPosition);
                 }
-                if (R.CanCast(rTarget) && R.IsReady())
-                {
-                    R.Cast(rTarget);
-                }
             }
             if (eTarget == null)
                 return;
@@ -166,8 +135,13 @@ namespace JeonCassiopeia
         public static void lasthit()
         {
 
-            var eTarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+            var eTarget = ObjectManager.Get<Obj_AI_Minion>();
 
+            foreach(var t in eTarget)
+            {
+                if (t.Health <= E.GetDamage(t))
+                    E.CastOnUnit(t);
+            }
 
         }
     

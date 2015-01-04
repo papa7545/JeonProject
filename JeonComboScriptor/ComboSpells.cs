@@ -275,11 +275,12 @@ namespace JeonComboScriptor
 
             if (Player.IsCharging)
             {
-
+                //spell.Cast(target);
             }
             else
             {
-
+                spell.StartCharging();
+                Game.PrintChat("Start");
             }
         }
     }
