@@ -805,6 +805,7 @@ namespace JeonJunglePlay
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
+
             setSmiteSlot();
 
             if (!JeonAutoJungleMenu.Item("isActive").GetValue<Boolean>() || smiteSlot == SpellSlot.Unknown)
@@ -912,79 +913,6 @@ namespace JeonJunglePlay
             }
             #endregion
 
-            #region 상점이용가능할때 // when you are in shop range or dead
-            #region 시작아이템 사기 // startup
-            if (Utility.InShop(Player) || Player.IsDead)
-            {
-                if (!(Items.HasItem(Convert.ToInt32(ItemId.Hunters_Machete)) ||
-                    Items.HasItem(Convert.ToInt32(ItemId.Rangers_Trailblazer)) ||
-                    Items.HasItem(Convert.ToInt32(ItemId.Rangers_Trailblazer_Enchantment_Devourer))))
-                {
-                    if (smiteSlot != SpellSlot.Unknown)
-                    {
-                        Player.BuyItem(ItemId.Hunters_Machete);
-                        Player.BuyItem(ItemId.Warding_Totem_Trinket);
-                    }
-                }
-            #endregion
-
-                //Game.PrintChat("Gold:" + Player.Gold);
-                //Game.PrintChat("NeedItem:" + buyThings.First().needItem.ToString());
-                //Game.PrintChat("BuyItem:" + buyThings.First().item.ToString());
-
-
-
-                #region 아이템트리 올리기 // item build up
-                if (buyThings.Any())
-                {
-                    if (Items.HasItem(Convert.ToInt32(buyThings.First().needItem)))
-                    {
-                        if (Player.Gold > buyThings.First().Price)
-                        {
-                            Player.BuyItem(buyThings.First().item);
-                            buyThings.Remove(buyThings.First());
-
-                        }
-                    }
-                }
-                #endregion
-
-                #region 포션 구매 - buy potions
-                if (Player.Gold > 35f && !IsOVER && !Player.InventoryItems.Any(t => t.Id == ItemId.Health_Potion) && Player.Level <= 6)
-                    Player.BuyItem(ItemId.Health_Potion);
-                if (Player.InventoryItems.Any(t => t.Id == ItemId.Health_Potion))
-                {
-                    if (Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).Stacks <= 2 && Player.Level <= 6)
-                        Player.BuyItem(ItemId.Health_Potion);
-
-                    if (Player.Level > 6)
-                        Player.SellItem(Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).Slot);
-                }
-                #endregion
-            }
-            #endregion
-
-            #region 자동포션사용 - auto use potions
-            if (Player.HealthPercentage() <= 60 && !Player.InShop())
-            {
-                ItemId item = ItemId.Health_Potion;
-                if (Player.InventoryItems.Any(t=>Convert.ToInt32(t.Id) == 2010))
-                    item = ItemId.Unknown;
-
-                if (Player.InventoryItems.Any(t => (t.Id == ItemId.Health_Potion || Convert.ToInt32(t.Id) == 2010)))
-                {
-                    if (!Player.HasBuff("ItemMiniRegenPotion") && item == ItemId.Unknown)
-                        Player.Spellbook.CastSpell(Player.InventoryItems.First(t => Convert.ToInt32(t.Id) == 2010).SpellSlot);
-
-                    if (!Player.HasBuff("Health Potion") && item == ItemId.Health_Potion)
-                        Player.Spellbook.CastSpell(Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).SpellSlot);
-
-                }
-            }
-
-
-            #endregion
-
             #region 오토 플레이 - auto play
             if (!IsOVER)
             {
@@ -1031,7 +959,8 @@ namespace JeonJunglePlay
                             }
 
                             else if (Player.Gold > buyThings.First().Price
-                                && JeonAutoJungleMenu.Item("autorecallitem").GetValue<Boolean>()) // HP LESS THAN 25%
+                                && JeonAutoJungleMenu.Item("autorecallitem").GetValue<Boolean>()
+                                && Player.InventoryItems.Length <8) // HP LESS THAN 25%
                             {
                                 Game.PrintChat("CAN BUY " + buyThings.First().item.ToString() + ". RECALL!");
                                 Player.Spellbook.CastSpell(SpellSlot.Recall);
@@ -1120,6 +1049,80 @@ namespace JeonJunglePlay
             }
 
             #endregion
+
+            #region 상점이용가능할때 // when you are in shop range or dead
+            #region 시작아이템 사기 // startup
+            if (Utility.InShop(Player) || Player.IsDead)
+            {
+                if (!(Items.HasItem(Convert.ToInt32(ItemId.Hunters_Machete)) ||
+                    Items.HasItem(Convert.ToInt32(ItemId.Rangers_Trailblazer)) ||
+                    Items.HasItem(Convert.ToInt32(ItemId.Rangers_Trailblazer_Enchantment_Devourer))))
+                {
+                    if (smiteSlot != SpellSlot.Unknown)
+                    {
+                        Player.BuyItem(ItemId.Hunters_Machete);
+                        Player.BuyItem(ItemId.Warding_Totem_Trinket);
+                    }
+                }
+            #endregion
+
+                //Game.PrintChat("Gold:" + Player.Gold);
+                //Game.PrintChat("NeedItem:" + buyThings.First().needItem.ToString());
+                //Game.PrintChat("BuyItem:" + buyThings.First().item.ToString());
+
+
+                #region 아이템트리 올리기 // item build up
+                if (buyThings.Any(t => t.item != ItemId.Unknown))
+                {
+                    if (Items.HasItem(Convert.ToInt32(buyThings.First().needItem)))
+                    {
+                        if (Player.Gold > buyThings.First().Price)
+                        {
+                            Player.BuyItem(buyThings.First().item);
+                            buyThings.Remove(buyThings.First());
+
+                        }
+                    }
+                }
+                #endregion
+
+                #region 포션 구매 - buy potions
+                if (Player.Gold > 35f && !IsOVER && !Player.InventoryItems.Any(t => t.Id == ItemId.Health_Potion) && Player.Level <= 6)
+                    Player.BuyItem(ItemId.Health_Potion);
+                if (Player.InventoryItems.Any(t => t.Id == ItemId.Health_Potion))
+                {
+                    if (Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).Stacks <= 2 && Player.Level <= 6)
+                        Player.BuyItem(ItemId.Health_Potion);
+
+                    if (Player.Level > 6 )
+                        Player.SellItem(Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).Slot);
+                }
+                #endregion
+            }
+            #endregion
+
+            #region 자동포션사용 - auto use potions
+            if (Player.HealthPercentage() <= 60 && !Player.InShop())
+            {
+                ItemId item = ItemId.Health_Potion;
+                if (Player.InventoryItems.Any(t=>Convert.ToInt32(t.Id) == 2010))
+                    item = ItemId.Unknown;
+
+                if (Player.InventoryItems.Any(t => (t.Id == ItemId.Health_Potion || Convert.ToInt32(t.Id) == 2010)))
+                {
+                    if (!Player.HasBuff("ItemMiniRegenPotion") && item == ItemId.Unknown)
+                        Player.Spellbook.CastSpell(Player.InventoryItems.First(t => Convert.ToInt32(t.Id) == 2010).SpellSlot);
+
+                    if (!Player.HasBuff("Health Potion") && item == ItemId.Health_Potion)
+                        Player.Spellbook.CastSpell(Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).SpellSlot);
+
+                }
+            }
+
+
+            #endregion
+
+
         }
 
         private static void OnCreate(GameObject sender, EventArgs args)
