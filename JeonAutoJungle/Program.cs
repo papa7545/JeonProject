@@ -1094,9 +1094,12 @@ namespace JeonJunglePlay
                     if (Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).Stacks <= 2 && Player.Level <= 6)
                         Player.BuyItem(ItemId.Health_Potion);
 
-                    if (Player.Level > 6 )
+                    if (Player.Level > 6)
                         Player.SellItem(Player.InventoryItems.First(t => t.Id == ItemId.Health_Potion).Slot);
                 }
+
+                if (Player.Level > 6 && Items.HasItem(2010))
+                    Player.SellItem(Player.InventoryItems.First(t => Convert.ToInt32(t.Id) == 2010).Slot);
                 #endregion
             }
             #endregion
