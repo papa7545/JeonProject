@@ -1332,7 +1332,7 @@ namespace JeonUtility
         {
 
             var minions = ObjectManager.Get<Obj_AI_Minion>()
-                .Where(minion => minion.IsValid && !minion.IsDead && minion.Name.StartsWith(TargetName));
+                .Where(minion => minion.IsValid && minion.IsEnemy && !minion.IsDead && minion.Name.StartsWith(TargetName));
             var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
 
             if (!objAiMinions.Any(m => m.Distance(BasePosition) < Range))
