@@ -84,8 +84,8 @@ namespace JeonUtility
                 {
                     VisibleCondition =
                     condition =>
-                          (int)(endtiem - Game.Time) > 0 && show && 
-                          !target.IsDead,
+                          (int)(endtiem - Game.Time) > 0 && show &&
+                          !target.IsDead && Jlib.getm_bool("tracker_ward"),
 
                     PositionUpdate = delegate
                     {
