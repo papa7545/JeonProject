@@ -1476,8 +1476,7 @@ namespace JeonJunglePlay
         public static readonly int[] SmiteBlue = { 3706, 3710, 3709, 3708, 3707 };
         private static readonly string[] MinionNames =
         {
-        "TT_Spiderboss", "TTNGolem", "TTNWolf", "TTNWraith",
-            "SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon", "SRU_BaronSpawn", "Sru_Crab"
+            "SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon", "SRU_BaronSpawn"
         };
 
         public static void setSmiteSlot()

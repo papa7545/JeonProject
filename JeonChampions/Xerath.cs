@@ -68,7 +68,7 @@ namespace JeonChampions
                 if (ObjectManager.Get<Obj_AI_Hero>().Any(t => t.Distance(Game.CursorPos) <= 100 && !t.IsDead && t.IsEnemy))
                 {
                     var target = ObjectManager.Get<Obj_AI_Hero>().First(t => t.Distance(Game.CursorPos) <= 100 && !t.IsDead && t.IsEnemy);
-                    if (Environment.TickCount - rTime >= 500)
+                    if (Environment.TickCount - rTime >= 100)
                     {
                         Jproject_base.Cast(R, target);
                         rTime = Environment.TickCount;

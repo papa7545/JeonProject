@@ -164,9 +164,15 @@ namespace JeonChampions
         {
             if (spell.IsReady())
             {
-                Obj_AI_Hero target = TargetSelector.GetTarget(spell.Range, damageType);
+                Obj_AI_Hero target = null;
+                if(Player.ChampionName == "TwistedFate" && spell.Slot == SpellSlot.Q)
+                    target = TargetSelector.GetTarget(1200, damageType);
+                else
+                    target = TargetSelector.GetTarget(spell.Range, damageType);
+
                 if (target == null) return;
-                    spell.Cast(target);
+
+                spell.Cast(target);
             }
         }
 

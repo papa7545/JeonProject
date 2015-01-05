@@ -12,13 +12,12 @@ using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
 #endregion
 
-namespace JeonTF
+namespace JeonChampions
 {
-    class Program
+    class TwistedFate:Program
     {
 
         public static Menu baseMenu;
-        public static Obj_AI_Hero Player = ObjectManager.Player;
 
 
         public static card cards= card.none;
@@ -33,22 +32,17 @@ namespace JeonTF
         public static int pastTime = 0;
         public static int delayi = 0;
         public static int x = 0;
+        public static bool textshow = false;
 
+        public static Render.Text text_notifier = new Render.Text("Find Weaken Champion!", Player, new Vector2(0, 50), (int)32, ColorBGRA.FromRgba(0xFF00FFBB))
+            {
+                VisibleCondition =  c => textshow,
+                OutLined = true
+            };
 
-
-
-
-        private static void Main(string[] args)
+        public static void _TF()
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
-        }
-
-        public enum test
-        {
-            show_inventory,
-            show_enemybuff,
-            show_allybuff,
-            show_mebuff
         }
 
 
@@ -56,15 +50,29 @@ namespace JeonTF
         {
             baseMenu = new Menu("JeonTF", "JeonTF",true);
             baseMenu.AddToMainMenu();
+            text_notifier.Add();
 
+            var menu_ts = new Menu("TargetSelector", "TargetSelector");
             var menu_q = new Menu("Q-Wild Cards", "Q-Wild Cards");
             var menu_autopicker = new Menu("W-Pick A Card", "W-Pick A Card");
             var menu_notifier = new Menu("Ult Notifier", "Ult Notifier");
             var menu_drawing = new Menu("drawing", "drawing");
 
+
+            Q = new Spell(SpellSlot.Q, 1200);
+            W = new Spell(SpellSlot.W, Jproject_base.GetSpellRange(Jproject_base.Wdata));
+            E = new Spell(SpellSlot.E, Jproject_base.GetSpellRange(Jproject_base.Edata));
+            R = new Spell(SpellSlot.R, Jproject_base.GetSpellRange(Jproject_base.Rdata));
+
+            Q.SetSkillshot(0.1f, 60, 1450,false, SkillshotType.SkillshotLine);
+
+
+            TargetSelector.AddToMenu(menu_ts);
+            baseMenu.AddSubMenu(menu_ts);
+
             baseMenu.AddSubMenu(menu_q);
             menu_q.AddItem(new MenuItem("TF_q_enable", "Enable").SetValue(true));
-            menu_q.AddItem(new MenuItem("TF_q_key", "Key:").SetValue(new KeyBind('T', KeyBindType.Press)));
+            menu_q.AddItem(new MenuItem("TF_q_key", "Key:").SetValue(new KeyBind(32, KeyBindType.Press)));
             
             baseMenu.AddSubMenu(menu_autopicker);
             menu_autopicker.AddItem(new MenuItem("TF_Cardpicker", "Pick").SetValue(true));
@@ -86,14 +94,9 @@ namespace JeonTF
             menu_drawing.AddItem(new MenuItem("TF_killable", "KillableMark(W+Q)").SetValue(true));
             menu_drawing.AddItem(new MenuItem("TF_damage", "Q+WDamage").SetValue(true));
 
-            if (Player.BaseSkinName == "TwistedFate")
-            {
-                Game.OnGameUpdate += Update;
-                Drawing.OnEndScene += OnDraw_EndScene;
-            }
-            else
-                Game.PrintChat("<font color ='#FF1010'>[Disable] You are not TwistedFate</font>");
             
+            Game.OnGameUpdate += Update;
+            Drawing.OnEndScene += OnDraw_EndScene;
         }
 
         public static void Update(EventArgs args)
@@ -108,12 +111,9 @@ namespace JeonTF
                 float Player_totalAP = Player_bAP + Player_aAP;
                 #endregion
                 #region wildcards
-                if (baseMenu.Item("TF_q_enable").GetValue<bool>() && baseMenu.Item("TF_q_key").GetValue<bool>())
+                if (baseMenu.Item("TF_q_enable").GetValue<bool>() && baseMenu.Item("TF_q_key").GetValue<KeyBind>().Active)
                 {
-                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsEnemy && !hero.IsDead && hero.IsValid && Vector3.Distance(Player.Position, hero.Position) <= 1450))
-                    {
-                        Player.Spellbook.CastSpell(SpellSlot.Q, hero);
-                    }
+                    Jproject_base.Cast(Q, TargetSelector.DamageType.Magical);
                 }
                 #endregion
                 #region pick a card
@@ -174,16 +174,29 @@ namespace JeonTF
                 }
                 #endregion
                 #region notifier
-                if (baseMenu.Item("TF_notifier").GetValue<bool>())
+                if (baseMenu.Item("TF_notifier").GetValue<bool>() && R.IsReady())
                 {
-                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly && !hero.IsMe && !hero.IsDead && hero.IsValid))
+                    if (ObjectManager.Get<Obj_AI_Hero>().Any(hero => hero.IsEnemy && !hero.IsDead && hero.IsVisible && Player.Distance(hero.Position) > 1450))
                     {
-                        if (hero.HealthPercentage() <= baseMenu.Item("TF_notifier_HP").GetValue<Slider>().Value)
+                        string str = "";
+                        foreach (var hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => 
+                            hero.IsEnemy && !hero.IsDead && hero.IsVisible && Player.Distance(hero.Position) > 1450))
                         {
-                            targetPing(hero.Position.To2D(), Packet.PingType.AssistMe);
+                            if (hero.HealthPercentage() <= (float)baseMenu.Item("TF_notifier_HP").GetValue<Slider>().Value)
+                            {
+                                str += hero.ChampionName+" ";
+                                textshow = true;
+                            }
                         }
+
+                        if (str == "")
+                            textshow = false;
+                        text_notifier.text = "Find Weaken Champion! :" + str;
+                        text_notifier.TextUpdate();
                     }
                 }
+                else
+                    textshow = false;
                 #endregion
         }
         public static void OnDraw_EndScene(EventArgs args)
@@ -209,11 +222,7 @@ namespace JeonTF
         #region 함수
         public static double getQDmg(Obj_AI_Base target, double AP, int s_level)
         {
-            double[] spell_basedamage = { 0, 60, 110, 160, 210, 260 };
-
-            double eDmg = AP * 0.65 + spell_basedamage[s_level];
-
-            return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, eDmg);
+            return Q.GetDamage(target);
         }
         public static double getWDmg(Obj_AI_Base target, double AP , double AD, int s_level,string name)
         {
@@ -285,12 +294,5 @@ namespace JeonTF
        
         #endregion
 
-        public static void targetPing(Vector2 Position, Packet.PingType ptype)
-        {
-            if (Environment.TickCount - pastTime < 2000)
-                return;
-            pastTime = Environment.TickCount;
-            Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y, 0, 0, ptype)).Process();
-        }
     }
 }
