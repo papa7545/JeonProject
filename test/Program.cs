@@ -34,6 +34,11 @@ namespace test
             Drawing.OnEndScene += OnDraw_EndScene;
             Drawing.OnDraw += OnDraw;
             Game.PrintChat("load test");
+
+
+            Spell Q = new Spell(SpellSlot.Q, 1000);
+            Q.StartCharging();
+               
         }
         private static void OnGameUpdate(EventArgs args)
         {
@@ -41,29 +46,11 @@ namespace test
         }
         private static void OnDraw_EndScene(EventArgs args)
         {
-
+            
         }
         private static void OnDraw(EventArgs args)
         {
-            Obj_AI_Hero target;
-            if (ObjectManager.Get<Obj_AI_Hero>().Any(t => t.Distance(Game.CursorPos) <= 200))
-                target = ObjectManager.Get<Obj_AI_Hero>().First(t => t.Distance(Game.CursorPos) <= 200);
 
-
-            var s = Player.Position.Normalized();
-
-            Game.PrintChat((s * Player.Position).ToString());
-
-            Utility.DrawCircle(Player.Position*s, 10, Color.Red);
-
-            Utility.DrawCircle(JVector.Front(Player, 100), 10, Color.Red);
-            Utility.DrawCircle(JVector.Back(Player, 100), 10, Color.DarkRed);
-            Utility.DrawCircle(JVector.Left(Player, 100), 10, Color.Blue);
-            Utility.DrawCircle(JVector.Right(Player, 100), 10, Color.White);
-
-            Utility.DrawCircle(JVector.ForCursor(Player, 300), 10, Color.White);
-            
-            
         }
 
 

@@ -43,14 +43,15 @@ namespace JeonUtility
             if (Environment.TickCount - pastTime < 2000)
                 return;
             pastTime = Environment.TickCount;
-            Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y, 0, 0, Packet.PingType.Danger)).Process();
+            //Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y, 0, 0, Packet.PingType.Danger)).Process();
         }
         public static void targetPing(Vector2 Position, Packet.PingType ptype)
         {
             if (Environment.TickCount - pastTime < 2000)
                 return;
             pastTime = Environment.TickCount;
-            Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y, 0, 0, ptype)).Process();
+            
+            //Packet.S2C.Ping.Encoded(new Packet.S2C.Ping.Struct(Position.X, Position.Y, 0, 0, ptype)).Process();
         }
         public static void testf(test a)
         {

@@ -42,7 +42,6 @@ namespace JeonComboScriptor
             SetSettingValue(targetSpell, "+EnemyMissHP(%)", "0.00", setFile.FullName); // LeeSin Q
             SetSettingValue(targetSpell, "+AP(%)Per100AP", "0.00", setFile.FullName); // NasusR, Amumu ...
             SetSettingValue(targetSpell, "IsNeedCalculate", "0", setFile.FullName);
-            
         }
         public static void SetMisc()
         {
