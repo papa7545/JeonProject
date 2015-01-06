@@ -806,6 +806,9 @@ namespace JeonJunglePlay
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
+            Game.PrintChat(GetNearest(Player.Position).Name);
+
+            return;
 
             setSmiteSlot();
 
@@ -1539,7 +1542,8 @@ namespace JeonJunglePlay
         {
             var minions =
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(minion => minion.IsValid && minion.IsEnemy && !minion.IsDead && MinionNames.Any(name => minion.Name.StartsWith(name)));
+                    .Where(minion => minion.IsValid && minion.IsEnemy && !minion.IsDead && MinionNames.Any(name => minion.Name.StartsWith(name)
+                        && Player.Distance(minion.Position) <= 1000));
             var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
             Obj_AI_Minion sMinion = objAiMinions.FirstOrDefault();
             double? nearest = null;
@@ -1559,7 +1563,8 @@ namespace JeonJunglePlay
         {
             var minions =
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(minion => minion.IsValid && MinionNames.Any(name => minion.Name.StartsWith(name)) && !MinionNames.Any(name => minion.Name.Contains("Mini")));
+                    .Where(minion => minion.IsValid && MinionNames.Any(name => minion.Name.StartsWith(name)) && !MinionNames.Any(name => minion.Name.Contains("Mini")
+                                                && Player.Distance(minion.Position) <= 1000));
             var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
             Obj_AI_Minion sMinion = objAiMinions.FirstOrDefault();
             double? nearest = null;
