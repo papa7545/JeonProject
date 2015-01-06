@@ -20,19 +20,17 @@ namespace JeonChampions
         /// Jeon Cassiopeia.
         /// Cassiopeia Posion Buff Name : CassiopeiaNoxiousBlast ,CassiopeiaMiasma
         /// </summary>
-        public static Jproject_base Cassiopeia = new Jproject_base();
+        /// 
+        public static Jproject_base Cassiopeia;
 
         public static void _Cassiopea()
-        {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
-        }
-
-        public static void OnGameLoad(EventArgs args)
         {
             Q = new Spell(SpellSlot.Q, Jproject_base.GetSpellRange(Jproject_base.Qdata));
             W = new Spell(SpellSlot.W, Jproject_base.GetSpellRange(Jproject_base.Wdata));
             E = new Spell(SpellSlot.E, Jproject_base.GetSpellRange(Jproject_base.Edata));
             R = new Spell(SpellSlot.R, Jproject_base.GetSpellRange(Jproject_base.Rdata));
+
+            Cassiopeia = new Jproject_base();
 
             Game.OnGameUpdate += OnGameUpdate;
         }

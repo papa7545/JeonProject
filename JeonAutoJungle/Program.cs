@@ -620,6 +620,7 @@ namespace JeonJunglePlay
             JeonAutoJungleMenu.AddItem(new MenuItem("autorecallitem", "Recall[for item]")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("evading", "Detect TurretAttack")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("Invade", "InvadeEnemyJungle?")).SetValue(true);
+            JeonAutoJungleMenu.AddItem(new MenuItem("k_dragon", "Kill Dragon on Lv").SetValue(new Slider(10, 1, 18)));
             JeonAutoJungleMenu.AddToMainMenu();
 
             setSmiteSlot();
@@ -910,6 +911,17 @@ namespace JeonJunglePlay
             {
                 Game.PrintChat("You did reload");
                 IsStart = false;
+            }
+            #endregion
+
+            #region check somethings about dragon
+            if (Player.Level > JeonAutoJungleMenu.Item("k_dragon").GetValue<Slider>().Value)
+            {
+                if (MonsterList.First(temp => temp.ID == down_crab.ID).order == 12)
+                {
+                    MonsterList.First(temp => temp.ID == down_crab.ID).order = 0;
+                    MonsterList.First(temp => temp.ID == Dragon.ID).order = 12;
+                }
             }
             #endregion
 

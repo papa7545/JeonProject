@@ -18,6 +18,7 @@ namespace JeonChampions
     {
         public static string menuName = "Jeon"+ObjectManager.Player.ChampionName;
         public static Menu baseMenu = new Menu(menuName, menuName, true);
+
         public static Menu qMenu, wMenu, eMenu, rMenu;
         public static SpellDataInst Qdata = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q);
         public static SpellDataInst Wdata = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W);

@@ -30,9 +30,14 @@ namespace JeonChampions
 
 
 
+
         static void Main(string[] args)
         {
-            if (SupportChamps.Contains(Jproject_base.Player.ChampionName))
+            CustomEvents.Game.OnGameLoad += OnLoad;
+        }
+        public static void OnLoad(EventArgs args)
+        {
+            if (SupportChamps.Contains(Player.ChampionName))
             {
                 if (Player.ChampionName == "Cassiopea")
                     Cassiopea._Cassiopea();
@@ -42,8 +47,7 @@ namespace JeonChampions
                     TwistedFate._TF();
             }
             else
-                Game.PrintChat("Jeon : There are not support your Champion("+Player.ChampionName+")");
-
+                Game.PrintChat("Jeon : There are not support your Champion(" + Player.ChampionName + ")");
         }
     }
 }

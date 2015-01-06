@@ -42,13 +42,7 @@ namespace JeonChampions
 
         public static void _TF()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
-        }
-
-
-        public static void OnGameLoad(EventArgs args) 
-        {
-            baseMenu = new Menu("JeonTF", "JeonTF",true);
+            baseMenu = new Menu("JeonTF", "JeonTF", true);
             baseMenu.AddToMainMenu();
             text_notifier.Add();
 
@@ -64,7 +58,7 @@ namespace JeonChampions
             E = new Spell(SpellSlot.E, Jproject_base.GetSpellRange(Jproject_base.Edata));
             R = new Spell(SpellSlot.R, Jproject_base.GetSpellRange(Jproject_base.Rdata));
 
-            Q.SetSkillshot(0.1f, 60, 1450,false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.1f, 60, 1450, false, SkillshotType.SkillshotLine);
 
 
             TargetSelector.AddToMenu(menu_ts);
@@ -73,7 +67,7 @@ namespace JeonChampions
             baseMenu.AddSubMenu(menu_q);
             menu_q.AddItem(new MenuItem("TF_q_enable", "Enable").SetValue(true));
             menu_q.AddItem(new MenuItem("TF_q_key", "Key:").SetValue(new KeyBind(32, KeyBindType.Press)));
-            
+
             baseMenu.AddSubMenu(menu_autopicker);
             menu_autopicker.AddItem(new MenuItem("TF_Cardpicker", "Pick").SetValue(true));
             menu_autopicker.AddItem(new MenuItem("TF_Goldkey", "GoldKey:").SetValue(new KeyBind('T', KeyBindType.Press)));
@@ -94,7 +88,7 @@ namespace JeonChampions
             menu_drawing.AddItem(new MenuItem("TF_killable", "KillableMark(W+Q)").SetValue(true));
             menu_drawing.AddItem(new MenuItem("TF_damage", "Q+WDamage").SetValue(true));
 
-            
+
             Game.OnGameUpdate += Update;
             Drawing.OnEndScene += OnDraw_EndScene;
         }

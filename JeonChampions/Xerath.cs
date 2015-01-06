@@ -25,11 +25,6 @@ namespace JeonChampions
 
         public static void _Xerath()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
-        }
-
-        public static void OnGameLoad(EventArgs args)
-        {
             Xeraths = new Jproject_base();
 
             Q = new Spell(SpellSlot.Q, 1500);
@@ -46,6 +41,7 @@ namespace JeonChampions
 
             Game.OnGameUpdate += OnGameUpdate;
         }
+
         public static void OnGameUpdate(EventArgs args)
         {
 

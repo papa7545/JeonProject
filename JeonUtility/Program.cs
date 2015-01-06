@@ -32,8 +32,6 @@ namespace JeonUtility
         public static Spell jumpspell;
 
 
-
-
         public static bool canw2j = false;
         public static bool rdyw2j = false;
         public static bool rdyward = false;
@@ -371,18 +369,18 @@ namespace JeonUtility
             float Player_totalAD = Player_baseAD + Player_addAD;
             float Player_totalAP = Player.FlatMagicDamageMod;
             #endregion
-
-                #region 오토이그나이트-AutoIgnite
-                if (Jlib.getm_bool("AutoIgnite") && igniteSlot != SpellSlot.Unknown &&
-                    Player.Level >= req_ignitelevel)
-                {
-                    float ignitedamage;
-                    bool IgniteReady = false;
-                    ignitedamage = setigniteDamage();
-                    foreach (var hero in ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(hero => hero != null && hero.IsValid && !hero.IsDead && Player.ServerPosition.Distance(hero.ServerPosition) < ignite.Range
+            
+            #region 오토이그나이트-AutoIgnite
+            if (Jlib.getm_bool("AutoIgnite") && igniteSlot != SpellSlot.Unknown &&
+                Player.Level >= req_ignitelevel)
+            {
+                float ignitedamage;
+                bool IgniteReady = false;
+                ignitedamage = setigniteDamage();
+                foreach (var hero in ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(hero => hero != null && hero.IsValid && !hero.IsDead && Player.ServerPosition.Distance(hero.ServerPosition) < ignite.Range
                         && !hero.IsMe && !hero.IsAlly && (hero.Health + hero.HPRegenRate * 2) <= ignitedamage))
-                    {
+                        {
 
                         if (Player.Spellbook.CanUseSpell(igniteSlot) == SpellState.Ready)
                         {
@@ -396,8 +394,8 @@ namespace JeonUtility
                     }
                 }
                 #endregion
-
-                #region 스펠트레커-Spelltracker
+            
+            #region 스펠트레커-Spelltracker
                 if (Jlib.getm_bool("tracker_enemyspells"))
                 {
                     foreach (var target in
@@ -441,8 +439,8 @@ namespace JeonUtility
                 }
 
                 #endregion
-
-                #region ward tracker
+            
+            #region ward tracker
                 foreach (var ward in ObjectManager.Get<Obj_AI_Base>().Where(t => wardnames.Any(a => a == t.Name) && t.IsEnemy))
                 {
                     if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Mana > 0 && ward.MaxHealth == 3)
@@ -507,8 +505,8 @@ namespace JeonUtility
                     }
                 }
             #endregion wardtracker
-
-                #region 점프와드- Jump2Ward (Jax,Kata,LeeSin)
+            
+            #region 점프와드- Jump2Ward (Jax,Kata,LeeSin)
                 if (Jlib.getm_bool("j2w_bool"))
                 {
                     List<String> champs = new List<String>();
@@ -550,8 +548,8 @@ namespace JeonUtility
                 }
 
                 #endregion
-
-                #region 스택 - Stacks
+            
+            #region 스택 - Stacks
                 if (Jlib.getm_bool("st_twitch") && Player.ChampionName == "Twitch")
                 {
                     Spell E = new Spell(SpellSlot.E, 1200);
@@ -612,8 +610,8 @@ namespace JeonUtility
                     }
                 }
                 #endregion
-
-                #region Items&spells
+            
+            #region Items&spells
                 //item
                 if (!Player.InShop())
                 {
@@ -760,8 +758,8 @@ namespace JeonUtility
                     }
                 }
                 #endregion
-
-                #region ultnotifier
+            
+            #region ultnotifier
                 //Karthus
                 if (Player.ChampionName == "Karthus")
                 {
@@ -883,8 +881,8 @@ namespace JeonUtility
                     }
                 }
                 #endregion
-
-                #region 정글타이머 - JungleTimer
+            
+            #region 정글타이머 - JungleTimer
 
                 if (Game.Time - pastTime >= 1)
                 {
@@ -917,8 +915,8 @@ namespace JeonUtility
                     }
                 }
                 #endregion
-
-                #region Status on hud
+            
+            #region Status on hud
                 if (Jlib.getm_bool("base_stat"))
                 {
                     /*
@@ -1035,8 +1033,8 @@ namespace JeonUtility
                     #endregion
                 }
                 #endregion
-
-                #region 오토스마이트-AutoSmite
+            
+            #region 오토스마이트-AutoSmite
                 if (Jlib.getm_bool("AutoSmite") && smiteSlot != SpellSlot.Unknown)
                 {
                     if ((baseMenu.Item("smite_holdkey").GetValue<KeyBind>().Active || baseMenu.Item("smite_enablekey").GetValue<KeyBind>().Active))
@@ -1330,7 +1328,6 @@ namespace JeonUtility
         #region 정글타이머함수 - JungleTimer
         public static bool CheckMonster(String TargetName, Vector3 BasePosition ,int Range = 1000)
         {
-
             var minions = ObjectManager.Get<Obj_AI_Minion>()
                 .Where(minion => minion.IsValid && minion.IsEnemy && !minion.IsDead && minion.Name.StartsWith(TargetName));
             var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
@@ -1421,8 +1418,7 @@ namespace JeonUtility
                 b+"[" + (a ? "ON" :"OFF") + "]");
         }
         #endregion
-
-
+        
     }
 }
 
