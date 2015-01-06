@@ -806,9 +806,6 @@ namespace JeonJunglePlay
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
-            Game.PrintChat(GetNearest(Player.Position).Name);
-
-            return;
 
             setSmiteSlot();
 
