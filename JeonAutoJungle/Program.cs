@@ -1563,7 +1563,7 @@ namespace JeonJunglePlay
         {
             var minions =
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(minion => minion.IsValid && MinionNames.Any(name => minion.Name.StartsWith(name)) && !MinionNames.Any(name => minion.Name.Contains("Mini")
+                    .Where(minion => minion.IsValid && minion.IsEnemy && !minion.IsDead && MinionNames.Any(name => minion.Name.StartsWith(name)) && !MinionNames.Any(name => minion.Name.Contains("Mini")
                                                 && Player.Distance(minion.Position) <= 1000));
             var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
             Obj_AI_Minion sMinion = objAiMinions.FirstOrDefault();
