@@ -245,7 +245,7 @@ namespace JeonUtility
             menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_charm", "Charm").SetValue(true));
             menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_taunt", "Taunt").SetValue(true));
             menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_snare", "Snare").SetValue(true));
-            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_silence", "Slience").SetValue(false));
+            menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_silence", "Silence").SetValue(false));
             menu_mikaels_cc.AddItem(new MenuItem("mikaels_cc_polymorph", "Polymorph").SetValue(true));
             #endregion
 
@@ -262,7 +262,7 @@ namespace JeonUtility
             menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_charm", "Charm").SetValue(true));
             menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_taunt", "Taunt").SetValue(true));
             menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_snare", "Snare").SetValue(true));
-            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_silence", "Slience").SetValue(false));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_silence", "Silence").SetValue(false));
             menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_polymorph", "Polymorph").SetValue(true));
             menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_suppression", "Suppression").SetValue(true));
             menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_zedutl", "ZedUtl").SetValue(true));
