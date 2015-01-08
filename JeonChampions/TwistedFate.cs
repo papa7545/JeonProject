@@ -197,16 +197,16 @@ namespace JeonChampions
         {
                 if (baseMenu.Item("TF_rRange").GetValue<bool>())
                 {
-                    Utility.DrawCircle(Player.Position, 5500, Color.White, 1, 20, true);
-                    Utility.DrawCircle(Player.Position, 5500, Color.White, 1, 20);
+                    J_DrawCircle(Player.Position, 5500, Color.White, 1, 20, true);
+                    J_DrawCircle(Player.Position, 5500, Color.White, 1);
                 }
                 if (baseMenu.Item("TF_qRange").GetValue<bool>())
                 {
-                    Utility.DrawCircle(Player.Position, 1200, Color.White, 1, 20);
+                    J_DrawCircle(Player.Position, 1200, Color.White, 1);
                 }
                 if (baseMenu.Item("TF_wRange").GetValue<bool>())
                 {
-                    Utility.DrawCircle(Player.Position, Player.AttackRange, Color.Red, 1, 20);
+                    J_DrawCircle(Player.Position, Player.AttackRange, Color.Red, 1);
                 }
                 if (baseMenu.Item("TF_killable").GetValue<bool>() || baseMenu.Item("TF_damage").GetValue<bool>())
                     drawtarget();
@@ -272,7 +272,7 @@ namespace JeonChampions
 
                    
                     if (target.Health <= dmg && baseMenu.Item("TF_killable").GetValue<bool>())
-                        Utility.DrawCircle(target.Position, 100, Color.Peru, 50);
+                        J_DrawCircle(target.Position, 100, Color.Peru, 50);
 
                     if (baseMenu.Item("TF_damage").GetValue<bool>())
                     {
@@ -287,6 +287,39 @@ namespace JeonChampions
         }
        
         #endregion
+        public static void J_DrawCircle(Vector3 center,
+            float radius,
+            Color color,
+            int thickness = 5,
+            int quality = 30,
+            bool onMinimap = false)
+        {
+            if (!onMinimap)
+            {
+                Render.Circle.DrawCircle(center, radius, color, thickness);
+                return;
+            }
 
+            var pointList = new List<Vector3>();
+            for (var i = 0; i < quality; i++)
+            {
+                var angle = i * Math.PI * 2 / quality;
+                pointList.Add(
+                    new Vector3(
+                        center.X + radius * (float)Math.Cos(angle), center.Y + radius * (float)Math.Sin(angle),
+                        center.Z));
+            }
+
+            for (var i = 0; i < pointList.Count; i++)
+            {
+                var a = pointList[i];
+                var b = pointList[i == pointList.Count - 1 ? 0 : i + 1];
+
+                var aonScreen = Drawing.WorldToMinimap(a);
+                var bonScreen = Drawing.WorldToMinimap(b);
+
+                Drawing.DrawLine(aonScreen.X, aonScreen.Y, bonScreen.X, bonScreen.Y, thickness, color);
+            }
+        }
     }
 }
