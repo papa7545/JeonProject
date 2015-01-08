@@ -406,7 +406,7 @@ namespace JeonUtility
             }
 
             #region wardtracker
-            foreach (var ward in wardlist.Where(t=> t.show))
+            foreach (var ward in wardlist.Where(t => t.show && Jlib.getm_bool("tracker_ward")))
             {
                 var ratio = (int)(ward.endtiem - Game.Time) / ward.time;
                 var bar_start = new Vector2(Drawing.WorldToScreen(ward.position).X - 20, Drawing.WorldToScreen(ward.position).Y);
