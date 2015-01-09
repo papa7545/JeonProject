@@ -58,6 +58,8 @@ namespace JeonUtility
                 text = DateTime.Now.ToString("t"),
             };
 
+        public static List<Render.Circle> towerRanges = new List<Render.Circle>();
+
 
         public static List<drawgrab> grabs = new List<drawgrab>();
 
@@ -344,6 +346,19 @@ namespace JeonUtility
 
             #endregion
 
+            #region 타워거리 - tower attack range
+            foreach (var t in ObjectManager.Get<Obj_AI_Turret>().Where(t => !t.IsDead  && t.IsEnemy &&
+                (t.Name.StartsWith("Turret_T1") || t.Name.StartsWith("Turret_T2"))))
+            {
+                towerRanges.Add(new Render.Circle(t, 875, Color.Blue, 5)
+                {
+                    VisibleCondition = c=> Jlib.getm_bool("draw_turret")
+                });
+                towerRanges.Last().Add();
+            }
+            #endregion
+
+
             Game.OnGameUpdate += OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += OnSpell;
             GameObject.OnDelete += OnDelete;
@@ -353,18 +368,9 @@ namespace JeonUtility
 
         private static void OnDraw_EndScene(EventArgs args)
         {
-
-            if (Jlib.getm_bool("draw_turret"))
-            {
-                foreach (var t in ObjectManager.Get<Obj_AI_Turret>().Where(t => !t.IsDead && t.IsEnemy))
-                {
-                    Drawing.DrawCircle(t.Position, 875, System.Drawing.Color.White);
-                }
-            }
-
+            #region grab
             foreach (var grab in grabs.Where(t => t.Start != Vector3.Zero))
             {
-
                 var start = grab.Start;
                 var end = grab.End;
                 var distance = start.Distance(end);
@@ -402,8 +408,8 @@ namespace JeonUtility
                 J_DrawCircle(grab.End, grab.width, Color.White);
 
                 Utility.DelayAction.Add(grab.time, () => { grabs.Remove(grab);});
-
             }
+            #endregion
 
             #region wardtracker
             foreach (var ward in wardlist.Where(t => t.show && Jlib.getm_bool("tracker_ward")))
@@ -924,10 +930,10 @@ namespace JeonUtility
                 }
                 if (Jlib.getm_bool("spell_cleanse"))
                 {
-                    foreach (var buff in Player.Buffs)
+                    if(Player.Buffs.Any(b=> 
+                        b.Type == BuffType.Stun || b.Type == BuffType.Flee || b.Type == BuffType.Fear
+                            || b.Name.Contains("exhaust") || b.Type == BuffType.Taunt))
                     {
-                        if (buff.Type == BuffType.Stun || buff.Type == BuffType.Flee || buff.Type == BuffType.Fear
-                            || buff.Name.Contains("exhaust"))
                             Utility.DelayAction.Add(Jlib.getm_value("spell_cleanse_delay"), 
                                 () => { Player.Spellbook.CastSpell(cleansespell.Slot); });
                     }
@@ -1091,7 +1097,7 @@ namespace JeonUtility
                 }
             }
             #endregion
-            
+
             #region Status on hud
             if (Jlib.getm_bool("base_stat"))
             {
@@ -1105,8 +1111,8 @@ namespace JeonUtility
                  */
 
 
-                int x = Jlib.getm_value("x%") * Drawing.Width/100;
-                int y = Jlib.getm_value("y%") * Drawing.Height/100;
+                int x = Jlib.getm_value("x%") * Drawing.Width / 100;
+                int y = Jlib.getm_value("y%") * Drawing.Height / 100;
                 int interval = 20;
                 int i = 0;
 
@@ -1141,7 +1147,7 @@ namespace JeonUtility
                     addText(y + (interval * i), Jlib.getm_bool("spell_hb"), string.Format("SpellCast(Barrier)"));
                     i++;
                 }
-                if (cleansespell.Slot!= SpellSlot.Unknown)
+                if (cleansespell.Slot != SpellSlot.Unknown)
                 {
                     addText(y + (interval * i), Jlib.getm_bool("spell_cleanse"), string.Format("SpellCast(Cleanse)"));
                     i++;
@@ -1409,6 +1415,10 @@ namespace JeonUtility
                     ward.show = false;
                     wardlist.Remove(ward);
                 }
+            }
+            if(towerRanges.Any(t => t.Position == sender.Position))
+            {
+                towerRanges.Remove(towerRanges.First(t => t.Position == sender.Position));
             }
         }
         #endregion
