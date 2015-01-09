@@ -28,7 +28,8 @@ namespace JeonJunglePlay
         public static int now = 1;
         public static int max = 20;
         public static int num = 0;
-        public static bool recall = false, IsOVER = false, IsAttackedByTurret = false, IsAttackStart = false;
+        public static bool recall = false, IsOVER = false, IsAttackedByTurret = false, IsAttackStart = false,
+            IsCastW = false;
 
         public static bool canBuyItems = true, IsBlueTeam, IsStart = true, IsFind = false;
 
@@ -621,6 +622,7 @@ namespace JeonJunglePlay
             JeonAutoJungleMenu.AddItem(new MenuItem("evading", "Detect TurretAttack")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("Invade", "InvadeEnemyJungle?")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("k_dragon", "Kill Dragon on Lv").SetValue(new Slider(10, 1, 18)));
+            JeonAutoJungleMenu.AddItem(new MenuItem("yi_W", "Cast MasterYi-W(%)").SetValue(new Slider(85, 0, 100)));
             JeonAutoJungleMenu.AddToMainMenu();
 
             setSmiteSlot();
@@ -926,7 +928,18 @@ namespace JeonJunglePlay
             #endregion
 
             #region 오토 플레이 - auto play
-            if (!IsOVER)
+            if (Player.HealthPercentage() <= JeonAutoJungleMenu.Item("yi_W").GetValue<Slider>().Value
+                && !Player.IsDead && !IsCastW && Player.ChampionName.ToUpper() == "MASTERYI" && W.IsReady())
+            {
+                Game.PrintChat("Yi - CastW");
+                IsCastW = true;
+                W.Cast();
+            }
+            else if (IsCastW)
+            {
+                Utility.DelayAction.Add(4000, () => { IsCastW = false; });
+            }
+            else if (!IsOVER)
             {
                 if (IsStart) // start
                 {
