@@ -15,9 +15,7 @@ namespace JeonUtility
     class Program
         {
 
-
-
-        #region variable declaration
+        #region Variable Declaration
         public static Menu baseMenu;
         public static Obj_AI_Hero Player = ObjectManager.Player;
 
@@ -46,17 +44,17 @@ namespace JeonUtility
         public static List<timer_clock> timerlist = new List<timer_clock>();
 
  
-        public static String[] DefSpellstr = { "barrier", "heal","boost"};
+        public static String[] DefSpellstr = { "barrier", "heal", "boost" };
 
         public static Render.Text text_notifier = new Render.Text("Can Ult to kill!", Player, new Vector2(0, 50), (int)32, ColorBGRA.FromRgba(0xFF00FFBB));
         public static Render.Text text_help = new Render.Text("Somebody Need Help!", Player, new Vector2(0, 50), (int)32, ColorBGRA.FromRgba(0xFF00FFBB));
         public static Render.Text text_smite = new Render.Text("AutoSmite!", Player, new Vector2(55, 50), (int)30, ColorBGRA.FromRgba(0xFF0000FF));
 
-        public static Render.Text clock = new Render.Text("", new Vector2(Drawing.Width -100, Drawing.Height * 8 / 100), (int)24, ColorBGRA.FromRgba(0xFFFFFFFF))
-            {
-                VisibleCondition = c => Jlib.getMenuBool("draw_clock"),
-                text = DateTime.Now.ToString("t"),
-            };
+        public static Render.Text clock = new Render.Text("", new Vector2(Drawing.Width -100, Drawing.Height * 8 / 100), 24, ColorBGRA.FromRgba(0xFFFFFFFF))
+        {
+            VisibleCondition = c => Jlib.getMenuBool("draw_clock"),
+            text = DateTime.Now.ToString("t"),
+        };
 
         public static List<Render.Circle> towerRanges = new List<Render.Circle>();
 
@@ -129,15 +127,14 @@ namespace JeonUtility
         private static void OnGameLoad(EventArgs args)
         {
 
+            #region Initialize
             string version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             Game.PrintChat("<font color ='#33FFFF'>JeonUtility v" + version + " </font>Loaded! ({0}x{1})", Drawing.Width, Drawing.Height);
             setSmiteSlot();
             setIgniteSlot();
             setdefSpell();
             clock.Add();
-
-
-
+            #endregion
 
             #region 메뉴 - Menu
             #region 메인메뉴 - Main Menu
@@ -316,7 +313,7 @@ namespace JeonUtility
 
             #endregion
 
-            #region 타이머 - timer
+            #region 타이머 - Timer
             timer_clock Baron = new timer_clock { Position = new Vector3(4910f, 10268f, -71.24f),name = "SRU_BaronSpawn",
                 respawntime = 420};
             timer_clock Dragon = new timer_clock { Position = new Vector3(9836f, 4408f, -71.24f), name = "SRU_Dragon" ,
@@ -347,7 +344,7 @@ namespace JeonUtility
 
             #endregion
 
-            #region 타워거리 - tower attack range
+            #region 타워거리 - Tower Attack Range
             foreach (var t in ObjectManager.Get<Obj_AI_Turret>().Where(t => !t.IsDead  && t.IsEnemy &&
                 (t.Name.StartsWith("Turret_T1") || t.Name.StartsWith("Turret_T2"))))
             {
@@ -359,12 +356,13 @@ namespace JeonUtility
             }
             #endregion
 
-
+            #region Events Initialize
             Game.OnGameUpdate += OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += OnSpell;
             GameObject.OnDelete += OnDelete;
             Drawing.OnEndScene += OnDraw_EndScene;
             //Drawing.OnDraw += OnDraw;
+            #endregion
         }
 
         private static void OnDraw_EndScene(EventArgs args)
@@ -461,8 +459,10 @@ namespace JeonUtility
             }
             #endregion wardtracker
         }
+
         private static void OnSpell(Obj_AI_Base Caster, GameObjectProcessSpellCastEventArgs args)
         {
+            #region Grab
             if (Caster.BaseSkinName == "Blitzcrank" || Caster.BaseSkinName == "Thresh")
             {
                 if (baseMenu.Item("draw_grab").GetValue<bool>())
@@ -491,10 +491,11 @@ namespace JeonUtility
                     }
                 }
             }
+            #endregion
         }
+
         private static void OnGameUpdate(EventArgs args)
         {
-
             #region Get Info
             float Player_baseAD = Player.BaseAttackDamage;
             float Player_addAD = Player.FlatPhysicalDamageMod;
@@ -1642,7 +1643,8 @@ namespace JeonUtility
                 b+"[" + (a ? "ON" :"OFF") + "]");
         }
         #endregion
-        
+
+        #region 원 그리기 함수 - Draw Circle
         public static void J_DrawCircle(Vector3 center,
             float radius,
             Color color,
@@ -1677,6 +1679,7 @@ namespace JeonUtility
                 Drawing.DrawLine(aonScreen.X, aonScreen.Y, bonScreen.X, bonScreen.Y, thickness, color);
             }
         }
+#endregion
     }
 }
 
