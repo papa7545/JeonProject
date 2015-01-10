@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 
 namespace JeonUtility
 {
-    class Jlib:Program
+    class Jlib : Program
     {
 
         public enum test
@@ -16,19 +16,14 @@ namespace JeonUtility
             show_mebuff
         }
 
-
-
-        public static bool getm_bool(String menu)
+        public static bool getMenuBool(String menu)
         {
-            bool result;
-            result = Program.baseMenu.Item(menu).GetValue<bool>();
-            return result;    
+            return Program.baseMenu.Item(menu).GetValue<bool>();    
         }
-        public static int getm_value(String menu)
+
+        public static int getMenuValue(String menu)
         {
-            int result;
-            result = Program.baseMenu.Item(menu).GetValue<Slider>().Value;
-            return result;
+            return Program.baseMenu.Item(menu).GetValue<Slider>().Value;
         }
     }
 }
