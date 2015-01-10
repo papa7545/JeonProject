@@ -20,21 +20,50 @@ namespace JeonJunglePlay
             var str = ObjectManager.Player.ChampionName;
             string[] supportnames = { "NUNU", "WARWICK", "MASTERYI", "CHOGATH", "MAOKAI", "NASUS" };
 
-            if (supportnames.Any(t => t == str.ToUpper()))
+            
+            Game.PrintChat("Your champion play on first time. - set ini file");
+
+            if(str.ToUpper() =="NUNU")
             {
-                Game.PrintChat("Your champion is supported!!");
-                return;
+                SetSettingValue("ItemTreeType(AP,AD,TANK,AS)", "Type", "AP", path);
+                SetSettingValue("SpellTree", "Value", "1, 3, 2, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3", path);
+            }
+            else if (str.ToUpper() == "WARWICK")
+            {
+                SetSettingValue("ItemTreeType(AP,AD,TANK,AS)", "Type", "AS", path);
+                SetSettingValue("SpellTree", "Value", "1, 2, 3, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3", path);
+            }
+            else if (str.ToUpper() == "MASTERYI")
+            {
+                SetSettingValue("ItemTreeType(AP,AD,TANK,AS)", "Type", "AD", path);
+                SetSettingValue("SpellTree", "Value", "1, 2, 3, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3", path);
+            }
+            else if (str.ToUpper() == "CHOGATH")
+            {
+                SetSettingValue("ItemTreeType(AP,AD,TANK,AS)", "Type", "AP", path);
+                SetSettingValue("SpellTree", "Value", "3, 2, 1, 3, 3, 4, 3, 1, 3, 1, 4, 2, 2, 2, 2, 4, 1, 1", path);
+            }
+            else if (str.ToUpper() == "MAOKAI")
+            {
+                SetSettingValue("ItemTreeType(AP,AD,TANK,AS)", "Type", "AP", path);
+                SetSettingValue("SpellTree", "Value", "1, 2, 3, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3", path);
+            }
+            else if (str.ToUpper() == "NASUS")
+            {
+                SetSettingValue("ItemTreeType(AP,AD,TANK,AS)", "Type", "TANK", path);
+                SetSettingValue("SpellTree", "Value", "1, 3, 3, 2, 3, 4, 3, 1, 3, 1, 4, 1, 1, 2, 2, 4, 2, 2", path);
             }
             else
-                Game.PrintChat("Your champion is not supported, Set Default Setting");
+            {
+                SetSettingValue("ItemTreeType(AP,AD,TANK,AS)", "Type", "AD", path);
+                SetSettingValue("SpellTree", "Value", "1, 3, 2, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3", path);
+
+                SetSettingValue("Cast(Q,W,E,R)", "Mob", "Q,W,E", path);
+                SetSettingValue("Cast(Q,W,E,R)", "Hero", "Q,W,E,R", path);
+                SetSettingValue("Cast(Q,W,E,R)", "LaneClear", "Q,W,E", path);
+            }
 
 
-            SetSettingValue("ItemTreeType(AP,AD,TANK,AS)", "Type", "AD", path);
-            SetSettingValue("SpellTree", "Value", "1, 3, 2, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3", path);
-
-            SetSettingValue("Cast(Q,W,E,R)", "Mob", "Q,W,E", path);
-            SetSettingValue("Cast(Q,W,E,R)", "Hero", "Q,W,E,R", path);
-            SetSettingValue("Cast(Q,W,E,R)", "LaneClear", "Q,W,E", path);
 
         }
         public static void GetSpelltree(string path)

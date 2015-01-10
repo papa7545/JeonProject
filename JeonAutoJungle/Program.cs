@@ -501,15 +501,15 @@ namespace JeonJunglePlay
             },
             new ItemToShop()
             {
-                Price = 775,
+                Price = 675,
                 needItem = ItemId.Boots_of_Speed,
-                item = ItemId.Ninja_Tabi,
+                item = ItemId.Ionian_Boots_of_Lucidity,
                 index = 5
             },
             new ItemToShop()
             {
                 Price = 400,
-                needItem = ItemId.Ninja_Tabi,
+                needItem = ItemId.Ionian_Boots_of_Lucidity,
                 item = ItemId.Ruby_Crystal,
                 index = 6
             },
@@ -622,6 +622,7 @@ namespace JeonJunglePlay
             JeonAutoJungleMenu.AddItem(new MenuItem("evading", "Detect TurretAttack")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("Invade", "InvadeEnemyJungle?")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("k_dragon", "Kill Dragon on Lv").SetValue(new Slider(10, 1, 18)));
+            
             JeonAutoJungleMenu.AddItem(new MenuItem("yi_W", "Cast MasterYi-W(%)").SetValue(new Slider(85, 0, 100)));
             JeonAutoJungleMenu.AddToMainMenu();
 
@@ -693,81 +694,49 @@ namespace JeonJunglePlay
 
             #endregion
 
-            #region 챔피언 스킬트리 설정
+            #region 챔피언 설정
             if (Player.ChampionName.ToUpper() == "NUNU")
             {
+                GetItemTree(setFile);
                 Game.PrintChat("NUNU BOT ACTIVE");
-                buyThings.Clear();
-                buyThings = buyThings_AP;
-                var myAutoLevel = new AutoLevel(new[] { 1, 3, 2, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3 });
+                Readini.GetSpelltree(setFile.FullName);
             }
             else if (Player.ChampionName.ToUpper() == "WARWICK")
             {
+                GetItemTree(setFile);
                 Game.PrintChat("WARWICK BOT ACTIVE");
-                buyThings.Clear();
-                buyThings = buyThings_AS;
-                var myAutoLevel = new AutoLevel(new[] { 1, 2, 3, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3 });
+                Readini.GetSpelltree(setFile.FullName);
             }
             else if (Player.ChampionName.ToUpper() == "MASTERYI")
             {
+                GetItemTree(setFile);
                 Game.PrintChat("MASTER YI BOT ACTIVE");
-                var myAutoLevel = new AutoLevel(new[] { 1, 2, 3, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3 });
+                Readini.GetSpelltree(setFile.FullName);
             }
             else if (Player.ChampionName.ToUpper() == "CHOGATH")
             {
-                buyThings.Clear();
-                buyThings = buyThings_AP;
+                GetItemTree(setFile);
                 Game.PrintChat("CHOGATH BOT ACTIVE");
-                var myAutoLevel = new AutoLevel(new[] { 3, 2, 1, 3, 3, 4, 3, 1, 3, 1, 4, 2, 2, 2, 2, 4, 1, 1 });
+                Readini.GetSpelltree(setFile.FullName);
             }
             else if (Player.ChampionName.ToUpper() == "MAOKAI")
             {
-                buyThings.Clear();
-                buyThings = buyThings_AP;
+                GetItemTree(setFile);
                 Game.PrintChat("MAOKAI BOT ACTIVE");
-                var myAutoLevel = new AutoLevel(new[] { 1, 2, 3, 1, 1, 4, 1, 3, 1, 3, 4, 2, 2, 2, 2, 4, 3, 3 });
+                Readini.GetSpelltree(setFile.FullName);
             }
             else if (Player.ChampionName.ToUpper() == "NASUS")
             {
-                buyThings.Clear();
-                buyThings = buyThings_TANK;
+                GetItemTree(setFile);
                 Game.PrintChat("NASUS BOT ACTIVE");
-                var myAutoLevel = new AutoLevel(new[] { 1, 3, 3, 2, 3, 4, 3, 1, 3, 1, 4, 1, 1, 2, 2, 4, 2, 2 });
+                Readini.GetSpelltree(setFile.FullName);
             }
             else
             {
                 #region Read ini
                 Game.PrintChat("Read ini file");
                 Readini.GetSpelltree(setFile.FullName);
-
-                if (Readini.GetItemTreetype(setFile.FullName) == "AP")
-                {
-                    buyThings.Clear();
-                    buyThings = buyThings_AP;
-                    Game.PrintChat("Set ItemTree for AP - Finished");
-                }
-                else if (Readini.GetItemTreetype(setFile.FullName) == "AS")
-                {
-                    buyThings.Clear();
-                    buyThings = buyThings_AS;
-                    Game.PrintChat("Set ItemTree for AS - Finished");
-                }
-                else if (Readini.GetItemTreetype(setFile.FullName) == "TANK")
-                {
-                    buyThings.Clear();
-                    buyThings = buyThings_TANK;
-                    Game.PrintChat("Set ItemTree for TANK - Finished");
-                }
-                else if (Readini.GetItemTreetype(setFile.FullName) == "X")
-                {
-                    Game.PrintChat("PLZ TYPE VALID VALUE, SET AD ITEMTREE - ERROR");
-                }
-                else
-                {
-                    Game.PrintChat("Set ItemTree for AD - Finished");
-                }
-
-
+                GetItemTree(setFile);
                 Readini.GetSpells(setFile.FullName, ref cast2mob, ref cast2hero, ref cast4laneclear);
 
                 #endregion readini
@@ -791,6 +760,7 @@ namespace JeonJunglePlay
                 }
             }
             #endregion
+
 
             gamestart = Game.Time; // 시작시간 설정
 
@@ -928,6 +898,7 @@ namespace JeonJunglePlay
             #endregion
 
             #region 오토 플레이 - auto play
+            
             if (Player.HealthPercentage() <= JeonAutoJungleMenu.Item("yi_W").GetValue<Slider>().Value
                 && !Player.IsDead && !IsCastW && Player.ChampionName.ToUpper() == "MASTERYI" && W.IsReady())
             {
@@ -1606,6 +1577,39 @@ namespace JeonJunglePlay
             }
         }
 
+        #endregion
+
+        #region GetItemTree
+        public static void GetItemTree(FileInfo setFile)
+        {
+
+            if (Readini.GetItemTreetype(setFile.FullName) == "AP")
+            {
+                buyThings.Clear();
+                buyThings = buyThings_AP;
+                Game.PrintChat("Set ItemTree for AP - Finished");
+            }
+            else if (Readini.GetItemTreetype(setFile.FullName) == "AS")
+            {
+                buyThings.Clear();
+                buyThings = buyThings_AS;
+                Game.PrintChat("Set ItemTree for AS - Finished");
+            }
+            else if (Readini.GetItemTreetype(setFile.FullName) == "TANK")
+            {
+                buyThings.Clear();
+                buyThings = buyThings_TANK;
+                Game.PrintChat("Set ItemTree for TANK - Finished");
+            }
+            else if (Readini.GetItemTreetype(setFile.FullName) == "X")
+            {
+                Game.PrintChat("PLZ TYPE VALID VALUE, SET AD ITEMTREE - ERROR");
+            }
+            else
+            {
+                Game.PrintChat("Set ItemTree for AD - Finished");
+            }
+        }
         #endregion
     }
 }
