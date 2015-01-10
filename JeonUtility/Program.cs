@@ -1,4 +1,4 @@
-﻿#region
+﻿#region using Statement
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -116,7 +116,7 @@ namespace JeonUtility
                 timer.Add();
             }
         }
-        #endregion wardtracker
+        #endregion
         #endregion
 
         private static void Main(string[] args)
@@ -137,6 +137,7 @@ namespace JeonUtility
             #endregion
 
             #region 메뉴 - Menu
+
             #region 메인메뉴 - Main Menu
             baseMenu = new Menu("JeonUtility", "JeonUtility", true);
             baseMenu.AddToMainMenu();
@@ -158,14 +159,14 @@ namespace JeonUtility
             #region 스마이트 메뉴 - menu for smite
             baseMenu.AddSubMenu(menu_smite);
             menu_smite.AddItem(new MenuItem("AutoSmite", "AutoSmite").SetValue(true));
-            menu_smite.AddItem(new MenuItem("smite_enablekey", "enableKey:").SetValue(new KeyBind('K', KeyBindType.Toggle)));// 32 - Space
+            menu_smite.AddItem(new MenuItem("smite_enablekey", "EnableKey:").SetValue(new KeyBind('K', KeyBindType.Toggle)));
             menu_smite.AddItem(new MenuItem("smite_holdkey", "HoldKey:").SetValue(new KeyBind(32, KeyBindType.Press)));// 32 - Space
             #endregion
 
             #region 점화 메뉴 - menu for ignite
             baseMenu.AddSubMenu(menu_ignite);
             menu_ignite.AddItem(new MenuItem("AutoIgnite", "AutoIgnite").SetValue(true));
-            menu_ignite.AddItem(new MenuItem("igniteLv", "Req Level :").SetValue(new Slider(1, 1, 18)));
+            menu_ignite.AddItem(new MenuItem("igniteLv", "Req Level To Use :").SetValue(new Slider(1, 1, 18)));
             #endregion
 
             #region 트래커 메뉴 - menu for tracker
@@ -1276,6 +1277,20 @@ namespace JeonUtility
                     {
                         setSmiteSlot();
                         Player.Spellbook.CastSpell(smiteSlot, mob);
+                    }
+                }
+            }
+            #endregion
+
+            #region Annie's Passive
+            if (Jlib.getMenuBool("draw_annie"))
+            {
+                foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.Team != Player.Team))
+                {
+                    if (enemy.ChampionName == "Annie" && enemy.HasBuff("pyromania_particle", true))
+                    {
+                        Drawing.DrawText(enemy.HPBarPosition.X + 20, enemy.HPBarPosition.Y + 180,
+                                         System.Drawing.Color.Red, "Stun Ready!");
                     }
                 }
             }
