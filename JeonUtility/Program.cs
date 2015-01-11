@@ -530,15 +530,18 @@ namespace JeonUtility
             #endregion
 
             #region ShacoQ
-            foreach (var sQ in shacoQ.Where(t => t.End != Vector3.Zero))
+            if (shacoQ.Any())
             {
-                J_DrawCircle(sQ.End, 50, Color.Red);
-
-                if (Game.Time > sQ.time)
+                foreach (var sQ in shacoQ.Where(t => t.End != Vector3.Zero))
                 {
-                    sQ.text.Remove();
-                    shacoQ.Remove(sQ);
-                    break;
+                    J_DrawCircle(sQ.End, 50, Color.Red);
+
+                    if (Game.Time > sQ.time)
+                    {
+                        sQ.text.Remove();
+                        shacoQ.Remove(sQ);
+                        break;
+                    }
                 }
             }
             #endregion
@@ -1518,8 +1521,6 @@ namespace JeonUtility
                 clock.Y = Drawing.Height * 8 / 100;
             }
             #endregion
-
-
 
         }
 
