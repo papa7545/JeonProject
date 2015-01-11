@@ -61,7 +61,7 @@ namespace JeonUtility
         public class drawgrab
         {
             public Obj_AI_Base Caster = null;
-            public int time = 0;
+            public float time = 0;
             public Vector3 Start = new Vector3(0, 0, 0);
             public Vector3 End = new Vector3(0, 0, 0);
             public float width = 0f;
@@ -71,7 +71,7 @@ namespace JeonUtility
         public class shacoDeceive
         {
             public Obj_AI_Base Caster = null;
-            public int time = 0;
+            public float time = 0;
             public Vector3 End = new Vector3(0, 0, 0);
             
             public Render.Text text { get; set; }
@@ -496,16 +496,16 @@ namespace JeonUtility
                 var line1_start = new Vector3(endX, endY,start.Z);
 
                 endX = start.X + grab.width * (float)cos;
-                endY = start.Y - grab.width  * (float)sin;
+                endY = start.Y - grab.width * (float)sin;
                 var line2_start = new Vector3(endX, endY, start.Z);
 
                 endX = end.X - grab.width * (float)cos;
                 endY = end.Y + grab.width * (float)sin;
-                var line1_end = new Vector3(endX, endY, start.Z);
+                var line1_end = new Vector3(endX, endY, end.Z);
 
                 endX = end.X + grab.width * (float)cos;
                 endY = end.Y - grab.width * (float)sin;
-                var line2_end = new Vector3(endX, endY, start.Z);
+                var line2_end = new Vector3(endX, endY, end.Z);
 
 
                 Drawing.DrawLine(Drawing.WorldToScreen(grab.Start), 
@@ -520,7 +520,11 @@ namespace JeonUtility
                 J_DrawCircle(grab.Start, grab.width, Color.White);
                 J_DrawCircle(grab.End, grab.width, Color.White);
 
-                Utility.DelayAction.Add(grab.time, () => { grabs.Remove(grab);});
+                if (Game.Time > grab.time)
+                {
+                    grabs.Remove(grab);
+                    break;
+                }
             }
             #endregion
 
@@ -528,7 +532,13 @@ namespace JeonUtility
             foreach (var sQ in shacoQ.Where(t => t.End != Vector3.Zero))
             {
                 J_DrawCircle(sQ.End, 50, Color.Red);
-                Utility.DelayAction.Add(sQ.time, () => { sQ.text.Remove(); shacoQ.Remove(sQ); });
+
+                if (Game.Time > sQ.time)
+                {
+                    sQ.text.Remove();
+                    shacoQ.Remove(sQ);
+                    break;
+                }
             }
             #endregion
 
@@ -541,11 +551,8 @@ namespace JeonUtility
                 var bar_out_start = new Vector2(bar_start.X - 1, bar_end.Y - 1);
                 var bar_out_end = new Vector2(bar_start.X + 42, bar_start.Y - 1);
 
-                if (ward.endtiem <= Game.Time)
-                {
-                    wardlist.Remove(ward);
-                    return;
-                }
+
+
 
                 Color color = Color.Pink;
 
@@ -568,6 +575,8 @@ namespace JeonUtility
                         break;
                 }
 
+
+
                 if (!ward.target.IsDead)
                 {
                     J_DrawCircle(ward.position, 60, color, 5, 5);
@@ -578,13 +587,25 @@ namespace JeonUtility
                         Drawing.DrawLine(bar_start, bar_end, 3, Color.White);
                     }
                 }
+                else
+                {
+                    ward.timer.Remove();
+                    wardlist.Remove(ward);
+                    break;
+                }
+                if (ward.endtiem <= Game.Time)
+                {
+                    ward.timer.Remove();
+                    wardlist.Remove(ward);
+                    break;
+                }
             }
             #endregion wardtracker
         }
         private static void OnSpell(Obj_AI_Base Caster, GameObjectProcessSpellCastEventArgs args)
         {
             #region Catch Grab Spell
-            if (Caster.IsEnemy && (Caster.BaseSkinName == "Blitzcrank" || Caster.BaseSkinName == "Thresh"))
+            if ((Caster.BaseSkinName == "Blitzcrank" || Caster.BaseSkinName == "Thresh"))
             {
                 if (baseMenu.Item("draw_grab").GetValue<bool>())
                 {
@@ -595,7 +616,7 @@ namespace JeonUtility
                             Caster = Caster,
                             Start = args.Start,
                             End = args.Start.Extend(args.End, 1100),
-                            time = (int)(1100f / 1900f * 1000f) + 500,
+                            time = Game.Time + 1f,
                             width = 70
                         });
                     }
@@ -606,7 +627,7 @@ namespace JeonUtility
                             Caster = Caster,
                             Start = args.Start,
                             End = args.Start.Extend(args.End, 1100),
-                            time = (int)(1050f / 1800f * 1000f) + 250,
+                            time = Game.Time + 1f,
                             width = 70
                         });
                     }
@@ -625,7 +646,7 @@ namespace JeonUtility
                 {
                     Caster = Caster,
                     End = pos,
-                    time = 3750
+                    time = Game.Time + 3.0f
                 });
             }
             #endregion
@@ -683,9 +704,8 @@ namespace JeonUtility
                 {
 
                     if (Player.Spellbook.CanUseSpell(igniteSlot) == SpellState.Ready)
-                    {
                         IgniteReady = true;
-                    }
+
                     if (IgniteReady)
                     {
                         setIgniteSlot();
@@ -741,7 +761,8 @@ namespace JeonUtility
             #endregion
             
             #region ward tracker
-            foreach (var ward in ObjectManager.Get<Obj_AI_Base>().Where(t => wardnames.Any(a => a == t.Name) && t.IsEnemy))
+            foreach (var ward in ObjectManager.Get<Obj_AI_Base>().Where(t => 
+                wardnames.Any(a => a == t.Name) && t.IsEnemy))
             {
                 if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Mana > 0 && ward.MaxHealth == 3)
                 {
@@ -832,6 +853,7 @@ namespace JeonUtility
                     {
                         temp.text_fake.Remove();
                         fakeList.Remove(temp);
+                        break;
                     }
 
                     foreach (var t in fakeList.Where(t => !t.target.IsDead))
@@ -891,28 +913,34 @@ namespace JeonUtility
             if (Jlib.getMenuBool("st_twitch") && Player.ChampionName == "Twitch")
             {
                 Spell E = new Spell(SpellSlot.E, 1200);
-                var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                if (target.IsValidTarget(E.Range))
+                if (ObjectManager.Get<Obj_AI_Hero>().Any(t => t.Distance(Player.Position) <= 1200 &&
+                    !t.IsDead && t.IsEnemy) && E.IsReady())
                 {
-                    foreach (var venoms in target.Buffs.Where(venoms => venoms.DisplayName == "TwitchDeadlyVenom"))
+                    var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                    if (target.IsValidTarget(E.Range))
                     {
-                        var damage = getTwitEDmg(target, venoms.Count, Player_addAD, Player_totalAP, E.Level);
-                        //Game.PrintChat("d:{0} hp:{1}",damage,target.Health);
-                        if (damage >= target.Health && E.IsReady())
-                            E.Cast();
-
-                        if (Jlib.getMenuBool("st_bool"))
+                        foreach (var venoms in target.Buffs.Where(venoms => venoms.DisplayName == "TwitchDeadlyVenom"))
                         {
-                            String t_damage = Convert.ToInt64(damage).ToString() + "(" + venoms.Count + ")";
-                            Drawing.DrawText(target.HPBarPosition.X, target.HPBarPosition.Y - 5, Color.Red, t_damage);
+                            var damage = getTwitEDmg(target, venoms.Count, Player_addAD, Player_totalAP, E.Level);
+                            //Game.PrintChat("d:{0} hp:{1}",damage,target.Health);
+                            if (damage >= target.Health && E.IsReady())
+                                E.Cast();
+
+                            if (Jlib.getMenuBool("st_bool"))
+                            {
+                                String t_damage = Convert.ToInt64(damage).ToString() + "(" + venoms.Count + ")";
+                                Drawing.DrawText(target.HPBarPosition.X, target.HPBarPosition.Y - 5, Color.Red, t_damage);
+                            }
                         }
                     }
                 }
             }
+
             if (Jlib.getMenuBool("st_kalista") && Player.ChampionName == "Kalista")
             {
                 Spell E = new Spell(SpellSlot.E, 900);
-                if (E.IsReady())
+                if (E.IsReady() && ObjectManager.Get<Obj_AI_Hero>().Any(t => t.Distance(Player.Position) <= 900 &&
+                        !t.IsDead && t.IsEnemy))
                 {
                     var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
                     if (target.IsValidTarget(E.Range))
@@ -929,13 +957,15 @@ namespace JeonUtility
                             }
                         }
                     }
+                }
 
-                    Obj_AI_Base mob = GetNearest(Player.ServerPosition);
+                Obj_AI_Base mob = GetNearest(Player.ServerPosition);
+                if (mob != null)
+                {
                     foreach (var venoms in mob.Buffs.Where(venoms => venoms.DisplayName == "KalistaExpungeMarker"))
                     {
                         var damage = getKaliDmg(mob, venoms.Count, Player_totalAD, E.Level);
-                        if (damage >= mob.Health && Vector3.Distance(mob.Position, Player.Position) <= 900
-                            && (mob.Name.Contains("SRU_Dragon") || mob.Name.Contains("SRU_Baron")))
+                        if (damage >= mob.Health && Vector3.Distance(mob.Position, Player.Position) <= 900)
                             E.Cast();
 
                         if (Jlib.getMenuBool("st_bool"))
@@ -1505,9 +1535,8 @@ namespace JeonUtility
         private static readonly string[] MinionNames =
         {
         "TT_Spiderboss", "TTNGolem", "TTNWolf", "TTNWraith",
-            "SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon", "SRU_Baron", "Sru_Crab"
+            "SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon", "SRU_Baron"
         };
-
 
         public static void setSmiteSlot()
         {
@@ -1545,7 +1574,7 @@ namespace JeonUtility
         {
 
             if (ObjectManager.Get<Obj_AI_Minion>().Any(t => MinionNames.Any(name => t.Name.StartsWith(name)) 
-                && !MinionNames.Any(name => t.Name.Contains("Mini")) && t.IsValid && !t.IsDead))
+                && !MinionNames.Any(name => t.Name.Contains("Mini")) && t.IsValid && !t.IsDead ))
             {
                 return ObjectManager.Get<Obj_AI_Minion>().OrderBy(t => Player.Distance(t.Position))
                         .First(minion => minion.IsValid && !minion.IsDead &&
