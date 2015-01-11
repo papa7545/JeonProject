@@ -835,22 +835,33 @@ namespace JeonUtility
                     (t.BaseSkinName == "Shaco" || t.BaseSkinName == "Leblanc") && !t.IsDead && t.IsEnemy))
                 {
                     foreach (var t in ObjectManager.Get<Obj_AI_Minion>().Where(t =>
-                        (t.BaseSkinName == "Shaco" || t.BaseSkinName == "Leblanc") && !t.IsDead && t.IsEnemy))
+                        (t.BaseSkinName == "Shaco" || t.BaseSkinName == "Leblanc") && !t.IsDead && t.IsEnemy && t.IsVisible))
                     {
-                        if (!fakeList.Any(s => s.id == t.NetworkId))
+                        if (!fakeList.Any(s => s.id == t.NetworkId) && t.BaseSkinName == "Leblanc")
                         {
                             fakeList.Add(new Fake()
                             {
                                 id = t.NetworkId,
                                 position = t.Position,
-                                target = t
+                                target = t,
+                                time = Game.Time+8.0f
+                            });
+                        }
+                        else if (!fakeList.Any(s => s.id == t.NetworkId) && t.BaseSkinName == "Shaco")
+                        {
+                            fakeList.Add(new Fake()
+                            {
+                                id = t.NetworkId,
+                                position = t.Position,
+                                target = t,
+                                time = Game.Time + 18.0f
                             });
                         }
                     }
                 }
                 if (fakeList.Any())
                 {
-                    foreach (var temp in fakeList.Where(t => t.target.IsDead))
+                    foreach (var temp in fakeList.Where(t => t.target.IsDead || Game.Time > t.time))
                     {
                         temp.text_fake.Remove();
                         fakeList.Remove(temp);
@@ -1654,17 +1665,6 @@ namespace JeonUtility
             if(towerRanges.Any(t => t.Position == sender.Position))
             {
                 towerRanges.Remove(towerRanges.First(t => t.Position == sender.Position));
-            }
-
-
-            if (fakeList.Any())
-            {
-                foreach (var temp in fakeList.Where(t => t.id == sender.NetworkId))
-                {
-                    temp.text_fake.Remove();
-                    fakeList.Remove(temp);
-                    break;
-                }
             }
         }
         #endregion
