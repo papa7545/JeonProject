@@ -161,6 +161,7 @@ namespace JeonUtility
             public int id;
             public Vector3 position;
             public bool show = true;
+            public float time = 0;
             public Obj_AI_Minion target;
 
             public Render.Text text_fake { get; set; }
@@ -1653,6 +1654,17 @@ namespace JeonUtility
             if(towerRanges.Any(t => t.Position == sender.Position))
             {
                 towerRanges.Remove(towerRanges.First(t => t.Position == sender.Position));
+            }
+
+
+            if (fakeList.Any())
+            {
+                foreach (var temp in fakeList.Where(t => t.id == sender.NetworkId))
+                {
+                    temp.text_fake.Remove();
+                    fakeList.Remove(temp);
+                    break;
+                }
             }
         }
         #endregion
