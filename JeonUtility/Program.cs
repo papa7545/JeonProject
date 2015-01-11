@@ -632,8 +632,6 @@ namespace JeonUtility
         }
         private static void OnGameUpdate(EventArgs args)
         {
-            if (GetNearest(Player.Position) != null)
-                Game.PrintChat(GetNearest(Player.Position).Name);
 
             #region get info
             float Player_baseAD = Player.BaseAttackDamage;
