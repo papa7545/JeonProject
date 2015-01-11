@@ -544,15 +544,21 @@ namespace JeonUtility
             #endregion
 
             #region wardtracker
-            foreach (var ward in wardlist.Where(t => t.show && Jlib.getMenuBool("tracker_ward")))
+            foreach (var ward in wardlist.Where(t => Jlib.getMenuBool("tracker_ward")))
             {
+                if (ward.endtiem <= Game.Time)
+                {
+                    ward.timer.Remove();
+                    wardlist.Remove(ward);
+                    break;
+                }
+
+
                 var ratio = (int)(ward.endtiem - Game.Time) / ward.time;
                 var bar_start = new Vector2(Drawing.WorldToScreen(ward.position).X - 20, Drawing.WorldToScreen(ward.position).Y);
                 var bar_end = new Vector2(bar_start.X + (40 * ratio), bar_start.Y);
                 var bar_out_start = new Vector2(bar_start.X - 1, bar_end.Y - 1);
                 var bar_out_end = new Vector2(bar_start.X + 42, bar_start.Y - 1);
-
-
 
 
                 Color color = Color.Pink;
@@ -594,12 +600,7 @@ namespace JeonUtility
                     wardlist.Remove(ward);
                     break;
                 }
-                if (ward.endtiem <= Game.Time)
-                {
-                    ward.timer.Remove();
-                    wardlist.Remove(ward);
-                    break;
-                }
+
             }
             #endregion wardtracker
         }
@@ -762,8 +763,8 @@ namespace JeonUtility
             #endregion
             
             #region ward tracker
-            foreach (var ward in ObjectManager.Get<Obj_AI_Base>().Where(t => 
-                wardnames.Any(a => a == t.Name) && t.IsEnemy))
+            foreach (var ward in ObjectManager.Get<Obj_AI_Base>().Where(t =>
+                    wardnames.Any(a => a == t.Name) && !t.IsDead && t.IsEnemy))
             {
                 if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Mana > 0 && ward.MaxHealth == 3)
                 {
@@ -801,7 +802,7 @@ namespace JeonUtility
                         target = ward
                     });
                 }
-                if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Name == "Cupcake Trap")
+                if (!wardlist.Any(w => w.id == ward.NetworkId) && ward.Name == "Cupcake Trap" && ward.SkinName != "JinxMine")
                 {
                     wardlist.Add(new Ward
                     {
@@ -826,6 +827,7 @@ namespace JeonUtility
                     });
                 }
             }
+            
             #endregion wardtracker
 
             #region fake tracker
