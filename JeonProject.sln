@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonAutoJungle", "JeonAutoJ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{2DC244DF-66CD-43AE-B20F-32F58021A89B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonChampions", "JeonChampions\JeonChampions.csproj", "{84D23069-3FE2-4D91-9BB8-7F8FCBF61779}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonOverlay", "JeonOverlay\JeonOverlay.csproj", "{2D7BCF68-2EC2-4EBF-9EDE-29775C727275}"
 EndProject
 Global
@@ -61,10 +59,6 @@ Global
 		{2DC244DF-66CD-43AE-B20F-32F58021A89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DC244DF-66CD-43AE-B20F-32F58021A89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DC244DF-66CD-43AE-B20F-32F58021A89B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{84D23069-3FE2-4D91-9BB8-7F8FCBF61779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84D23069-3FE2-4D91-9BB8-7F8FCBF61779}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84D23069-3FE2-4D91-9BB8-7F8FCBF61779}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84D23069-3FE2-4D91-9BB8-7F8FCBF61779}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D7BCF68-2EC2-4EBF-9EDE-29775C727275}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D7BCF68-2EC2-4EBF-9EDE-29775C727275}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D7BCF68-2EC2-4EBF-9EDE-29775C727275}.Release|Any CPU.ActiveCfg = Release|Any CPU
