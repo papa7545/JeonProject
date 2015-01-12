@@ -1133,7 +1133,6 @@ namespace JeonJunglePlay
                 if (m.SpellCaster.IsValid<Obj_AI_Turret>() && m.SpellCaster.IsEnemy &&
                     m.Target.IsValid<Obj_AI_Hero>() && m.Target.IsMe && JeonAutoJungleMenu.Item("evading").GetValue<Boolean>())
                 {
-                    Game.PrintChat("OOPS YOU ARE ATTACKED BY TURRET!");
                     Player.IssueOrder(GameObjectOrder.MoveTo, spawn);
                     IsAttackedByTurret = true;
                 }
@@ -1161,7 +1160,6 @@ namespace JeonJunglePlay
 
                     if (turrest.Contains(sender.Name) && JeonAutoJungleMenu.Item("evading").GetValue<Boolean>())
                     {
-                        Game.PrintChat("OOPS YOU ARE ATTACKED BY INHIBIT TURRET!");
                         Player.IssueOrder(GameObjectOrder.MoveTo, spawn);
                         IsAttackedByTurret = true;
                     }

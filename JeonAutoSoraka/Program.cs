@@ -69,7 +69,8 @@ namespace JeonAutoSoraka
 
         private static void Game_OnGameLoad(EventArgs args)
         {
-
+            if (!(Player.ChampionName.ToUpper() == "SORAKA"))
+                return;
 
             if (Player.Team.ToString() == "Chaos")
             {

@@ -120,6 +120,7 @@ namespace JeonOverlay
                     #endregion
                 }
             }
+            
             foreach (var T in Images)
             {
                 var x = (float)baseMenu.Item("X" + T.Layout).GetValue<Slider>().Value+Convert.ToSingle(baseMenu.Item("X_smooth" + T.Layout).GetValue<StringList>().SelectedValue);

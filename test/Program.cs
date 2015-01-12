@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows;
+using System.Windows.Forms;
 using System.Linq;
+using System.IO;
 using System.Runtime.Remoting.Messaging;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -35,9 +37,15 @@ namespace test
             Drawing.OnDraw += OnDraw;
             Game.PrintChat("load test");
 
+            OpenFileDialog pFileDlg = new OpenFileDialog();
+            pFileDlg.Filter = "Text Files(*.txt)|*.txt|All Files(*.*)|*.*";
+            pFileDlg.Title = "편집할 파일을 선택하여 주세요.";
+            if (pFileDlg.ShowDialog() == DialogResult.OK)
+            {
+                String strFullPathFile = pFileDlg.FileName;
+                // ToDo
+            }
 
-            Spell Q = new Spell(SpellSlot.Q, 1000);
-            Q.StartCharging();
                
         }
         private static void OnGameUpdate(EventArgs args)
