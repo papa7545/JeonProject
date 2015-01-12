@@ -1206,7 +1206,6 @@ namespace JeonJunglePlay
             {
                 i++;
             }
-            Game.PrintChat(i.ToString());
             return i;
         }
         #endregion
