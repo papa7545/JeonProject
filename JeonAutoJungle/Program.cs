@@ -621,7 +621,7 @@ namespace JeonJunglePlay
             JeonAutoJungleMenu.AddItem(new MenuItem("autorecallitem", "Recall[for item]")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("evading", "Detect TurretAttack")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("Invade", "InvadeEnemyJungle?")).SetValue(true);
-            JeonAutoJungleMenu.AddItem(new MenuItem("k_dragon", "Kill Dragon on Lv").SetValue(new Slider(10, 1, 18)));
+            JeonAutoJungleMenu.AddItem(new MenuItem("k_dragon", "Add Dragon to Route on Lv").SetValue(new Slider(10, 1, 18)));
             
             JeonAutoJungleMenu.AddItem(new MenuItem("yi_W", "Cast MasterYi-W(%)").SetValue(new Slider(85, 0, 100)));
             JeonAutoJungleMenu.AddToMainMenu();
@@ -1011,32 +1011,51 @@ namespace JeonJunglePlay
             {
                 if (!IsAttackStart)
                 {
-                    if (IsBlueTeam)
+                    if (!ObjectManager.Get<Obj_AI_Turret>().Any(t => t.Name == "Turret_T2_C_05_A") && IsBlueTeam)
                     {
-                        Player.IssueOrder(GameObjectOrder.MoveTo, BLUE_MID.Position);
-                        if (Player.Distance(BLUE_MID.Position) <= 100)
-                            IsAttackStart = true;
+                        IsAttackStart = true;
+                    }
+                    else if (!ObjectManager.Get<Obj_AI_Turret>().Any(t => t.Name == "Turret_T1_C_05_A") && !IsBlueTeam)
+                    {
+                        IsAttackStart = true;
                     }
                     else
                     {
-                        Player.IssueOrder(GameObjectOrder.MoveTo, PURPLE_MID.Position);
-                        if (Player.Distance(PURPLE_MID.Position) <= 100)
-                            IsAttackStart = true;
+                        if (IsBlueTeam)
+                        {
+
+                            Player.IssueOrder(GameObjectOrder.MoveTo, BLUE_MID.Position);
+                            if (Player.Distance(BLUE_MID.Position) <= 100)
+                                IsAttackStart = true;
+                        }
+                        else
+                        {
+                            Player.IssueOrder(GameObjectOrder.MoveTo, PURPLE_MID.Position);
+                            if (Player.Distance(PURPLE_MID.Position) <= 100)
+                                IsAttackStart = true;
+                        }
+
                     }
                 }
                 else
                 {
-                    if (IsOVER && !IsAttackedByTurret)
+                    var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(Player.Position)).First(t => t.IsEnemy);
+
+                    if (IsOVER && !IsAttackedByTurret )
                     {
                         DoCast_Hero();
                         DoLaneClear();
-                        Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
+                        if (turret.Distance(Player.Position) > 1200)
+                            Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
+                        else if ( GetMinions(turret) > 2)
+                            Player.IssueOrder(GameObjectOrder.AttackTo, enemy_spawn);
+                        else
+                            Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.Extend(spawn, 855));
+
                         afktime = 0;
                     }
 
-                    var turret = ObjectManager.Get<Obj_AI_Turret>().OrderBy(t => t.Distance(Player.Position)).First(t => t.IsEnemy);
-
-                    if (turret.Distance(Player.Position) > 755)
+                    if (turret.Distance(Player.Position) > 800)
                         IsAttackedByTurret = false;
 
                     if (Player.IsDead)
@@ -1133,7 +1152,12 @@ namespace JeonJunglePlay
                 if (m.SpellCaster.IsValid<Obj_AI_Turret>() && m.SpellCaster.IsEnemy &&
                     m.Target.IsValid<Obj_AI_Hero>() && m.Target.IsMe && JeonAutoJungleMenu.Item("evading").GetValue<Boolean>())
                 {
+<<<<<<< HEAD
                     Player.IssueOrder(GameObjectOrder.MoveTo, spawn);
+=======
+                    Game.PrintChat("OOPS YOU ARE ATTACKED BY TURRET!");
+                    Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.Extend(spawn,855));
+>>>>>>> origin/master
                     IsAttackedByTurret = true;
                 }
             }
@@ -1160,14 +1184,32 @@ namespace JeonJunglePlay
 
                     if (turrest.Contains(sender.Name) && JeonAutoJungleMenu.Item("evading").GetValue<Boolean>())
                     {
+<<<<<<< HEAD
                         Player.IssueOrder(GameObjectOrder.MoveTo, spawn);
+=======
+                        Game.PrintChat("OOPS YOU ARE ATTACKED BY INHIBIT TURRET!");
+                        Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.Extend(spawn, 855));
+>>>>>>> origin/master
                         IsAttackedByTurret = true;
                     }
                 }
             }
         }
 
- 
+
+
+        #region getminions around turret
+        public static int GetMinions(Obj_AI_Turret Turret)
+        {
+            int i = 0;
+            foreach(var minion in ObjectManager.Get<Obj_AI_Minion>().Where(t => t.Name.Contains("Minion") && t.Distance(Turret.Position) <= 855 && !t.IsEnemy))
+            {
+                i++;
+            }
+            Game.PrintChat(i.ToString());
+            return i;
+        }
+        #endregion
         #region spell methods
         public static void DoSmite()
         {
