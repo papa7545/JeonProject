@@ -215,7 +215,6 @@ namespace JeonUtility
                     condition =>
                           (int)(endtiem - Game.Time) > 0 && show &&
                           !target.IsDead && Jlib.getMenuBool("tracker_ward"),
-
                     PositionUpdate = delegate
                     {
                         Vector2 vec2 = Drawing.WorldToScreen(new Vector3(position.X, position.Y + 25, position.Z));
