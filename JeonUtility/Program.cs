@@ -379,7 +379,8 @@ namespace JeonUtility
             menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_silence", "Silence").SetValue(false));
             menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_polymorph", "Polymorph").SetValue(true));
             menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_suppression", "Suppression").SetValue(true));
-            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_zedutl", "ZedUtl").SetValue(true));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_zedult", "ZedUlt").SetValue(true));
+            menu_quicksilver_cc.AddItem(new MenuItem("qs_cc_fizzult", "FizzUlt").SetValue(true));
             #endregion
 
             var menu_spell = new Menu("Spell", "Spell");
@@ -1121,9 +1122,9 @@ namespace JeonUtility
                                     {
                                         if (bufflist.Any(b => b == buff.Type))
                                             Player.Spellbook.CastSpell(p_item.SpellSlot);
-                                        if (buff.DisplayName == "ZedUltExecute")
+                                        if (buff.DisplayName == "ZedUltExecute" && Jlib.getMenuBool("qs_cc_zedult"))
                                             Player.Spellbook.CastSpell(p_item.SpellSlot);
-                                        if (buff.DisplayName == "FizzChurnTheWatersCling")
+                                        if (buff.DisplayName == "FizzChurnTheWatersCling" && Jlib.getMenuBool("qs_cc_fizzult"))
                                             Player.Spellbook.CastSpell(p_item.SpellSlot);
                                     });
                                 }
