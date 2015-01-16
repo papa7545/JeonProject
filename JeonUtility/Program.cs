@@ -45,6 +45,7 @@ namespace JeonUtility
 
         public static String[] DefSpellstr = { "barrier", "heal","boost"};
 
+        public static Render.Text text_smite = new Render.Text("AutoSmite!", Player, new Vector2(55, 50), (int)30, ColorBGRA.FromRgba(0xFF0000FF));
 
         public static Render.Text clock = new Render.Text("", new Vector2(Drawing.Width -100, Drawing.Height * 8 / 100), (int)24, ColorBGRA.FromRgba(0xFFFFFFFF))
         {
