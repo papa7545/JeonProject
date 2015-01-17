@@ -81,11 +81,11 @@ namespace JeonHelperForDev
         }
         private static void OnWndProc(WndEventArgs args)
         {
-            if (args.Msg == 513)
-            {
-                var target = ObjectManager.Get<Obj_AI_Base>().First(v => v.Distance(Game.CursorPos) <= 200);
-                Console.WriteLine("Target:"+target.Name + " MANA OR LIFETIME:"+target.Mana);
-            }
+            //if (args.Msg == 513)
+            //{
+            //    var target = ObjectManager.Get<Obj_AI_Base>().First(v => v.Distance(Game.CursorPos) <= 200);
+            //    Console.WriteLine("Target:"+target.Name + " MANA OR LIFETIME:"+target.Mana);
+            //}
             if (baseMenu.Item("item_positions_click").GetValue<bool>() && args.Msg == 513)
             {
                 PositionInfo temp = new PositionInfo();

@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonUtility", "JeonUtility\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonComboScriptor", "JeonComboScriptor\JeonComboScriptor.csproj", "{695AC4E4-DA46-46E5-B8B8-CB900A9B1CB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonZilean", "JeonZilean\JeonZilean.csproj", "{184D02A5-752A-4995-B957-A17F7A41BD8D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jeon_MissileDB", "JeonMissileDB\Jeon_MissileDB.csproj", "{ACA872B9-AF5F-4A37-952A-C70F372C9C70}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JeonHelperForDev", "JeonHelperForDev\JeonHelperForDev.csproj", "{252A7C73-5D91-48E9-8536-98B9AC6B46FF}"
@@ -35,10 +33,6 @@ Global
 		{695AC4E4-DA46-46E5-B8B8-CB900A9B1CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{695AC4E4-DA46-46E5-B8B8-CB900A9B1CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{695AC4E4-DA46-46E5-B8B8-CB900A9B1CB8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{184D02A5-752A-4995-B957-A17F7A41BD8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{184D02A5-752A-4995-B957-A17F7A41BD8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{184D02A5-752A-4995-B957-A17F7A41BD8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{184D02A5-752A-4995-B957-A17F7A41BD8D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACA872B9-AF5F-4A37-952A-C70F372C9C70}.Release|Any CPU.ActiveCfg = Release|Any CPU

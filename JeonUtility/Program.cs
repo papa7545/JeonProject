@@ -858,24 +858,24 @@ namespace JeonUtility
             if (Jlib.getMenuBool("AutoIgnite") && igniteSlot != SpellSlot.Unknown &&
                 Player.Level >= req_ignitelevel)
             {
-                float ignitedamage;
-                bool IgniteReady = false;
-                ignitedamage = setigniteDamage();
+                float ignitedamage = setigniteDamage();
                 foreach (var hero in ObjectManager.Get<Obj_AI_Hero>()
                     .Where(hero => hero != null && hero.IsValid && !hero.IsDead && Player.ServerPosition.Distance(hero.ServerPosition) < ignite.Range
-                        && !hero.IsMe && !hero.IsAlly && (hero.Health + hero.HPRegenRate * 2) <= ignitedamage))
+                        && !hero.IsMe && !hero.IsAlly))
                 {
+                    var Q = new Spell(SpellSlot.Q, 700);
 
-                    if (Player.Spellbook.CanUseSpell(igniteSlot) == SpellState.Ready)
-                        IgniteReady = true;
+                    if (hero.Buffs.Any(c => c.Name == "timebombenemybuff") && Player.ChampionName == "Zilean")
+                        ignitedamage += (Q.GetDamage(hero) - hero.HPRegenRate * 2);
 
-                    if (IgniteReady)
+                    if (Player.Spellbook.CanUseSpell(igniteSlot) == SpellState.Ready && (hero.Health + hero.HPRegenRate * 2) <= ignitedamage)
                     {
                         setIgniteSlot();
                         Player.Spellbook.CastSpell(igniteSlot, hero);
                     }
                 }
             }
+
             #endregion
 
             #region 스펠트레커-Spelltracker
