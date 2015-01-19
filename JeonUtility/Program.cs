@@ -649,7 +649,7 @@ namespace JeonUtility
             #region waypoint
             if (Jlib.getMenuBool("tracker_waypoints"))
             {
-                foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsEnemy && hero.IsVisible && !hero.IsDead && hero.IsValid && hero.IsMoving
+                foreach (Obj_AI_Hero hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsEnemy && !hero.IsDead && hero.IsValid && hero.IsMoving
                     && hero.GetWaypoints().Any()))
                 {
                     List<Vector2> points = hero.GetWaypoints();
@@ -866,7 +866,11 @@ namespace JeonUtility
                     var Q = new Spell(SpellSlot.Q, 700);
 
                     if (hero.Buffs.Any(c => c.Name == "timebombenemybuff") && Player.ChampionName == "Zilean")
+                    {
+                        if (Q.GetDamage(hero) - hero.HPRegenRate * 2 >= hero.Health)
+                            return;
                         ignitedamage += (Q.GetDamage(hero) - hero.HPRegenRate * 2);
+                    }
 
                     if (Player.Spellbook.CanUseSpell(igniteSlot) == SpellState.Ready && (hero.Health + hero.HPRegenRate * 2) <= ignitedamage)
                     {
