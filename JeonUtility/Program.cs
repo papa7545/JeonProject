@@ -101,10 +101,8 @@ namespace JeonUtility
         {
             public Vector3 Position;
             public string name;
-            public bool show = false;
-            public bool minimap_show = true;
             public int respawntime = 100;
-            public int spawntime = 0;
+            public int spawntime = 115;
             public int Range = 1000;
             public Render.Text timer { get; set; }
             public Render.Text timer_minimap { get; set; }
@@ -116,15 +114,14 @@ namespace JeonUtility
                     , SharpDX.Color.White)
                 {
                     VisibleCondition =
-                    condition =>
-                          show,
+                    condition => baseMenu.Item("jt_active").GetValue<bool>(),
 
                     PositionUpdate = delegate
                     {
                         Vector2 vec2 = Drawing.WorldToScreen(Position);
                         return vec2;
                     },
-                    TextUpdate = () => Clockstring(spawntime),
+                    TextUpdate = () => Clockstring(this),
                     OutLined = true,
                     Centered = true
                 };
@@ -134,19 +131,17 @@ namespace JeonUtility
                     , SharpDX.Color.White)
                 {
                     VisibleCondition =
-                    condition =>
-                          show && minimap_show,
+                    condition => baseMenu.Item("jt_active_minimap").GetValue<bool>(),
 
                     PositionUpdate = delegate
                     {
                         Vector2 v2 = Drawing.WorldToMinimap(Position);
                         return v2;
                     },
-                    TextUpdate = () => Clockstring(spawntime),
+                    TextUpdate = () => Clockstring(this),
                     OutLined = true,
                     Centered = true
                 };
-                timer_minimap.Add();
 
                 timer.Add();
                 timer_minimap.Add();
@@ -160,7 +155,6 @@ namespace JeonUtility
         {
             public int id;
             public Vector3 position;
-            public bool show = true;
             public float time = 0;
             public Obj_AI_Minion target;
 
@@ -172,7 +166,7 @@ namespace JeonUtility
                     , SharpDX.Color.Red)
                 {
                     VisibleCondition =
-                    condition => show && Jlib.getMenuBool("tracker_fake") &&
+                    condition => Jlib.getMenuBool("tracker_fake") &&
                           !target.IsDead,
                     TextUpdate = () => "Fake!",
                     OutLined = true,
@@ -434,12 +428,12 @@ namespace JeonUtility
             #endregion
 
             #region 타이머 - Timer
-            timer_clock Baron = new timer_clock { Position = new Vector3(4910f, 10268f, -71.24f),name = "SRU_BaronSpawn",
-                respawntime = 420};
+            timer_clock Baron = new timer_clock { Position = new Vector3(4910f, 10268f, -71.24f),name = "SRU_Baron",
+                respawntime = 420 , spawntime = 1200};
             timer_clock Dragon = new timer_clock { Position = new Vector3(9836f, 4408f, -71.24f), name = "SRU_Dragon" ,
-                respawntime = 360};
+                respawntime = 360, spawntime = 150};
             timer_clock top_crab = new timer_clock { Position = new Vector3(4266f, 9634f, -67.87f), name = "Sru_Crab",
-                respawntime = 180,Range=3000};
+                respawntime = 180, spawntime = 115,Range=3000};
             timer_clock down_crab = new timer_clock { Position = new Vector3(10524f, 5116f, -62.81f), name = "Sru_Crab",
                 respawntime = 180,Range=3000};
 
@@ -679,7 +673,6 @@ namespace JeonUtility
 
         private static void OnSpell(Obj_AI_Base Caster, GameObjectProcessSpellCastEventArgs args)
         {
-
             #region Catch hard CC Spell
             if (baseMenu.Item("draw_grab").GetValue<bool>())
             {
@@ -798,28 +791,9 @@ namespace JeonUtility
                 foreach (var t in timerlist)
                 {
                     if (CheckMonster(t.name, t.Position, t.Range))
-                    {
                         t.spawntime = t.respawntime;
-                        t.show = false;
-                    }
                     else
-                    {
                         t.spawntime -= 1;
-
-                        if (t.show)
-                        {
-                            if (!baseMenu.Item("jt_active").GetValue<bool>())
-                                t.show = false;
-                        }
-                        else if (baseMenu.Item("jt_active").GetValue<bool>())
-                            t.show = true;
-                    }
-
-
-                    if (!baseMenu.Item("jt_active_minimap").GetValue<bool>())
-                        t.minimap_show = false;
-                    else
-                        t.minimap_show = true;
                 }
             }
             #endregion
@@ -1820,23 +1794,19 @@ namespace JeonUtility
         public static bool CheckMonster(String TargetName, Vector3 BasePosition ,int Range = 1000)
         {
             var minions = ObjectManager.Get<Obj_AI_Minion>()
-                .Where(minion => minion.IsValid && minion.IsEnemy && !minion.IsDead && minion.Name.StartsWith(TargetName));
-            var objAiMinions = minions as Obj_AI_Minion[] ?? minions.ToArray();
+                .Where(minion => !minion.IsMinion && !minion.IsDead && minion.Name.Contains(TargetName) && minion.Position.Distance(BasePosition) <= Range);
 
-            if (!objAiMinions.Any(m => m.Distance(BasePosition) < Range))
-            {
-                return false;
-            }
-            else
-            {
+
+            if (minions.Any())
                 return true;
-            }
+            else
+                return false;
         }
-        public static String Clockstring(int spawntime)
+        public static String Clockstring(timer_clock timer)
         {
-            var min = spawntime / 60;
-            var sec = spawntime - min * 60;
-            if (spawntime > 0)
+            var min = timer.spawntime / 60;
+            var sec = timer.spawntime - min * 60;
+            if (timer.spawntime > 0 && timer.spawntime != timer.respawntime)
             {
                 return String.Format("{0:00}:{1:00}", min, sec);
             }
