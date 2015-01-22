@@ -23,11 +23,11 @@ namespace JeonJunglePlay
         private static Vector3 enemy_spawn;
         public static Menu JeonAutoJungleMenu;
 
-        private static float gamestart, pastTime, afktime;
+        public static float gamestart=0,pastTime=0,pastTimeAFK,afktime=0;
         public static List<MonsterINFO> MonsterList = new List<MonsterINFO>();
-        public static int now = 1;
-        public static int max = 20;
-        public static int num = 0;
+        public static int now = 1, max = 20, num = 0;
+        public static float recallhp = 0;
+
         public static bool recall = false, IsOVER = false, IsAttackedByTurret = false, IsAttackStart = false,
             IsCastW = false;
 
@@ -622,8 +622,8 @@ namespace JeonJunglePlay
             JeonAutoJungleMenu.AddItem(new MenuItem("evading", "Detect TurretAttack")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("Invade", "InvadeEnemyJungle?")).SetValue(true);
             JeonAutoJungleMenu.AddItem(new MenuItem("k_dragon", "Add Dragon to Route on Lv").SetValue(new Slider(10, 1, 18)));
-            
-            JeonAutoJungleMenu.AddItem(new MenuItem("yi_W", "Cast MasterYi-W(%)").SetValue(new Slider(85, 0, 100)));
+            if(Player.ChampionName == "MasterYi")
+                JeonAutoJungleMenu.AddItem(new MenuItem("yi_W", "Cast MasterYi-W(%)").SetValue(new Slider(85, 0, 100)));
             JeonAutoJungleMenu.AddToMainMenu();
 
             setSmiteSlot();
@@ -761,7 +761,6 @@ namespace JeonJunglePlay
             }
             #endregion
 
-
             gamestart = Game.Time; // 시작시간 설정
 
             Game.OnGameUpdate += Game_OnGameUpdate;
@@ -778,17 +777,18 @@ namespace JeonJunglePlay
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
-
             setSmiteSlot();
+            if (Player.Spellbook.IsChanneling)
+                return;
+
 
             if (!JeonAutoJungleMenu.Item("isActive").GetValue<Boolean>() || smiteSlot == SpellSlot.Unknown)
                 return;
 
 
             #region detect afk
-            if (Game.Time - pastTime >= 1 && !Player.IsDead && !Player.IsRecalling() && !IsStart && !IsOVER)
+            if (Game.Time - pastTimeAFK >= 1 && !Player.IsDead && !Player.IsRecalling())
             {
-                pastTime = Game.Time;
                 afktime += 1;
                 if (afktime > 10) // 잠수 10초 경과
                 {
@@ -797,9 +797,13 @@ namespace JeonJunglePlay
                         new Vector3(4910f, 10268f, -71.24f));
                     else
                         Player.Spellbook.CastSpell(SpellSlot.Recall);
+
                     afktime = 0;
                 }
+
+                pastTimeAFK = Game.Time;
             }
+
             #endregion
 
             #region 0.5초마다 발동 //  오류 없애줌
@@ -898,19 +902,11 @@ namespace JeonJunglePlay
             #endregion
 
             #region 오토 플레이 - auto play
-            
-            if (Player.HealthPercentage() <= JeonAutoJungleMenu.Item("yi_W").GetValue<Slider>().Value
-                && !Player.IsDead && !IsCastW && Player.ChampionName.ToUpper() == "MASTERYI" && W.IsReady())
-            {
-                Game.PrintChat("Yi - CastW");
-                IsCastW = true;
-                W.Cast();
-            }
-            else if (IsCastW)
-            {
-                Utility.DelayAction.Add(4000, () => { IsCastW = false; });
-            }
-            else if (!IsOVER)
+
+            if (Player.IsMoving)
+                afktime = 0;
+
+            if (!IsOVER)
             {
                 if (IsStart) // start
                 {
@@ -940,7 +936,7 @@ namespace JeonJunglePlay
 
                     if (Player.Position.Distance(target.Position) >= 300)
                     {
-                        if (!recall && !Player.IsRecalling())
+                        if (!recall)
                         {
                             Player.IssueOrder(GameObjectOrder.MoveTo, target.Position);
                             afktime = 0;
@@ -952,15 +948,17 @@ namespace JeonJunglePlay
                                 Game.PrintChat("YOUR HP IS SO LOW. RECALL!");
                                 Player.Spellbook.CastSpell(SpellSlot.Recall);
                                 recall = true;
+                                recallhp = Player.Health;
                             }
 
                             else if (Player.Gold > buyThings.First().Price
                                 && JeonAutoJungleMenu.Item("autorecallitem").GetValue<Boolean>()
-                                && Player.InventoryItems.Length <8) // HP LESS THAN 25%
+                                && Player.InventoryItems.Length < 8) // HP LESS THAN 25%
                             {
                                 Game.PrintChat("CAN BUY " + buyThings.First().item.ToString() + ". RECALL!");
                                 Player.Spellbook.CastSpell(SpellSlot.Recall);
                                 recall = true;
+                                recallhp = Player.Health;
                             }
                         }
                     }
@@ -983,8 +981,10 @@ namespace JeonJunglePlay
                         }
                     }
                 }
+                if (Player.Health < recallhp || Player.InShop())
+                    recall = false;
             }
-            recall = Player.IsRecalling() && !Utility.InShop(Player) && Player.HealthPercentage() <= 90f;
+
             #endregion
 
             #region 스택이 넘는지 체크 - check ur stacks
@@ -1012,18 +1012,13 @@ namespace JeonJunglePlay
                 if (!IsAttackStart)
                 {
                     if (!ObjectManager.Get<Obj_AI_Turret>().Any(t => t.Name == "Turret_T2_C_05_A") && IsBlueTeam)
-                    {
                         IsAttackStart = true;
-                    }
                     else if (!ObjectManager.Get<Obj_AI_Turret>().Any(t => t.Name == "Turret_T1_C_05_A") && !IsBlueTeam)
-                    {
                         IsAttackStart = true;
-                    }
                     else
                     {
                         if (IsBlueTeam)
                         {
-
                             Player.IssueOrder(GameObjectOrder.MoveTo, BLUE_MID.Position);
                             if (Player.Distance(BLUE_MID.Position) <= 100)
                                 IsAttackStart = true;
@@ -1034,7 +1029,6 @@ namespace JeonJunglePlay
                             if (Player.Distance(PURPLE_MID.Position) <= 100)
                                 IsAttackStart = true;
                         }
-
                     }
                 }
                 else
@@ -1209,6 +1203,7 @@ namespace JeonJunglePlay
             return i;
         }
         #endregion
+
         #region spell methods
         public static void DoSmite()
         {
@@ -1256,7 +1251,6 @@ namespace JeonJunglePlay
         }
         public static void castspell(Obj_AI_Base mob1)
         {
-            afktime = 0;
 
             if (Player.ChampionName.ToUpper() == "NUNU")
             {
@@ -1289,6 +1283,8 @@ namespace JeonJunglePlay
             {
                 if (Q.IsReady())
                     Q.CastOnUnit(mob1);
+                if (W.IsReady() && Player.HealthPercentage() < JeonAutoJungleMenu.Item("yi_W").GetValue<Slider>().Value)
+                    W.Cast();
                 if (E.IsReady())
                     E.Cast();
                 if (R.IsReady())
@@ -1330,7 +1326,6 @@ namespace JeonJunglePlay
         }
         public static void castspell_hero(Obj_AI_Base mob1)
         {
-            afktime = 0;
 
             if (Player.ChampionName.ToUpper() == "NUNU")
             {
@@ -1363,6 +1358,8 @@ namespace JeonJunglePlay
             {
                 if (Q.IsReady())
                     Q.CastOnUnit(mob1);
+                if (W.IsReady() && Player.HealthPercentage() < JeonAutoJungleMenu.Item("yi_W").GetValue<Slider>().Value)
+                    W.Cast();
                 if (E.IsReady())
                     E.Cast();
                 if (R.IsReady())
@@ -1406,7 +1403,6 @@ namespace JeonJunglePlay
         }
         public static void castspell_laneclear(Obj_AI_Base mob1)
         {
-            afktime = 0;
 
             if (Player.ChampionName.ToUpper() == "NUNU")
             {
