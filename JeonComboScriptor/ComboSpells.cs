@@ -273,7 +273,7 @@ namespace JeonComboScriptor
         public static void CastChargedSpell(Spell spell,Obj_AI_Hero target)
         {
 
-            if (Player.IsCharging)
+            if (spell.IsCharging)
             {
                 //spell.Cast(target);
             }
