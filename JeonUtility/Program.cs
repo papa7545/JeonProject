@@ -46,7 +46,7 @@ namespace JeonUtility
         public static Render.Text text_smite = new Render.Text("AutoSmite!", Player, new Vector2(55, 50), (int)30, ColorBGRA.FromRgba(0xFF0000FF));
         public static Font timefont = new Font(Drawing.Direct3DDevice, new FontDescription { FaceName = "Calibri", Height = 24,  });
         public static Font cnamefont = new Font(Drawing.Direct3DDevice, new FontDescription { FaceName = "Calibri", Height = 32, });
-        public static Font minimapfont = new Font(Drawing.Direct3DDevice, new FontDescription { FaceName = "Calibri", Height = 12 });
+        public static Font minimapfont = new Font(Drawing.Direct3DDevice, new FontDescription { FaceName = "Calibri", Height = 14 });
 
         public static Render.Text clock = new Render.Text("", new Vector2(Drawing.Width - 100, Drawing.Height * 8 / 100), (int)24, ColorBGRA.FromRgba(0xFFFFFFFF))
         {
@@ -317,6 +317,8 @@ namespace JeonUtility
 
             #region 아이템사용 메뉴 - menu for UseItem&Spell
             baseMenu.AddSubMenu(menu_ins);
+
+            menu_ins.AddItem(new MenuItem("useitem", "Active").SetValue(true));
 
             var menu_Potion = new Menu("Potion", "Potion");
             menu_ins.AddSubMenu(menu_Potion);
@@ -1435,10 +1437,9 @@ namespace JeonUtility
             }
             #endregion
 
-
             #region Items&spells
             #region Item
-            if (!Player.InShop())
+            if (!Player.InShop() && Jlib.getMenuBool("useitem"))
             {
                 int tempItemid = 3157;
                 if (Jlib.getMenuBool("useitem_zhonya") && Items.HasItem(tempItemid) && Items.CanUseItem(tempItemid))
