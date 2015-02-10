@@ -171,7 +171,7 @@ namespace JeonJunglePlay
         {
             new ItemToShop()
             {
-                Price = 350,
+                Price = 450,
                 needItem = ItemId.Hunters_Machete,
                 item = ItemId.Rangers_Trailblazer,
                 index = 1
@@ -295,7 +295,7 @@ namespace JeonJunglePlay
         {
             new ItemToShop()
             {
-                Price = 350,
+                Price = 450,
                 needItem = ItemId.Hunters_Machete,
                 item = ItemId.Rangers_Trailblazer,
                 index = 1
@@ -384,7 +384,7 @@ namespace JeonJunglePlay
         {
             new ItemToShop()
             {
-                Price = 350,
+                Price = 450,
                 needItem = ItemId.Hunters_Machete,
                 item = ItemId.Rangers_Trailblazer,
                 index = 1
@@ -473,7 +473,7 @@ namespace JeonJunglePlay
         {
             new ItemToShop()
             {
-                Price = 350,
+                Price = 450,
                 needItem = ItemId.Hunters_Machete,
                 item = ItemId.Rangers_Trailblazer,
                 index = 1
