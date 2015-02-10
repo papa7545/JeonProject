@@ -981,7 +981,7 @@ namespace JeonJunglePlay
                         }
                     }
                 }
-                if (Player.Health < recallhp || Player.InShop())
+                if (Player.InShop())
                     recall = false;
             }
 
