@@ -100,26 +100,26 @@ namespace JeonComboScriptor
         }
         public static void GetSpellRange(ref SpellStatus targetSpell)
         {
-            if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride[0] <= 0)
+            if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride <= 0)
             {
-                if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRange[0] <= 0)
+                if (ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRange <= 0)
                 {
                     targetSpell.Range =
-                        (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius[0];
+                        (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius;
                 }
                 else
                 {
                     if (!targetSpell.IsCharging)
                         targetSpell.Range =
-                            (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRange[0];
+                            (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRange;
                     else
                         targetSpell.Range =
-                            (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius[0];
+                            (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRadius;
                 }
             }
             else
                 targetSpell.Range =
-                    (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride[0];
+                    (int)ObjectManager.Player.Spellbook.GetSpell(targetSpell.slot).SData.CastRangeDisplayOverride;
         }
         private static SpellSlot GetSpellSlotByString(String temp)
         {

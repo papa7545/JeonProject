@@ -763,7 +763,7 @@ namespace JeonJunglePlay
 
             gamestart = Game.Time; // 시작시간 설정
 
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
             GameObject.OnCreate += OnCreate;
             Obj_AI_Base.OnProcessSpellCast += OnSpell;
 
@@ -1476,26 +1476,26 @@ namespace JeonJunglePlay
 
         public static float GetSpellRange(SpellDataInst targetSpell, bool IsChargedSkill = false)
         {
-            if (targetSpell.SData.CastRangeDisplayOverride[0] <= 0)
+            if (targetSpell.SData.CastRangeDisplayOverride <= 0)
             {
-                if (targetSpell.SData.CastRange[0] <= 0)
+                if (targetSpell.SData.CastRange <= 0)
                 {
                     return
-                        targetSpell.SData.CastRadius[0];
+                        targetSpell.SData.CastRadius;
                 }
                 else
                 {
                     if (!IsChargedSkill)
                         return
-                            targetSpell.SData.CastRange[0];
+                            targetSpell.SData.CastRange;
                     else
                         return
-                            targetSpell.SData.CastRadius[0];
+                            targetSpell.SData.CastRadius;
                 }
             }
             else
                 return
-                    targetSpell.SData.CastRangeDisplayOverride[0];
+                    targetSpell.SData.CastRangeDisplayOverride;
         }
         #endregion spell methods
 

@@ -92,7 +92,7 @@ namespace JeonComboScriptor
                     if(temp.IsChargedSpell)
                     {
                         temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
-                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)Q.ChargingTime);
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange, (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius, (float)Q.ChargingTime);
                     }
 
                     c_Spells.Add(temp);
@@ -113,7 +113,7 @@ namespace JeonComboScriptor
                     if (temp.IsChargedSpell)
                     {
                         temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
-                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)W.ChargingTime);
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange, (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius, (float)W.ChargingTime);
                     }
                     c_Spells.Add(temp);
                 }
@@ -133,7 +133,7 @@ namespace JeonComboScriptor
                     if (temp.IsChargedSpell)
                     {
                         temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
-                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)E.ChargingTime);
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange, (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius, (float)E.ChargingTime);
                     }
 
                     c_Spells.Add(temp);
@@ -155,7 +155,7 @@ namespace JeonComboScriptor
                     if (temp.IsChargedSpell)
                     {
                         temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
-                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)R.ChargingTime);
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange, (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius, (float)R.ChargingTime);
                     }
 
                     c_Spells.Add(temp);
@@ -176,7 +176,7 @@ namespace JeonComboScriptor
                     if (temp.IsChargedSpell)
                     {
                         temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
-                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)Q2.ChargingTime);
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange, (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius, (float)Q2.ChargingTime);
                     }
 
                     c_Spells.Add(temp);
@@ -197,7 +197,7 @@ namespace JeonComboScriptor
                     if (temp.IsChargedSpell)
                     {
                         temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
-                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)W2.ChargingTime);
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange, (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius, (float)W2.ChargingTime);
                     }
 
                     c_Spells.Add(temp);
@@ -218,7 +218,7 @@ namespace JeonComboScriptor
                     if (temp.IsChargedSpell)
                     {
                         temp.SetCharged(Player.Spellbook.GetSpell(temp.Slot).SData.Name, Player.Spellbook.GetSpell(temp.Slot).SData.Name,
-                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange[0], (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius[0], (float)E2.ChargingTime);
+                            (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRange, (int)Player.Spellbook.GetSpell(temp.Slot).SData.CastRadius, (float)E2.ChargingTime);
                     }
 
                     c_Spells.Add(temp);

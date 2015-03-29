@@ -74,7 +74,7 @@ namespace JeonHelperForDev
 
             var menu_ts = new Menu("TargetSelector", "TargetSelector");
             TargetSelector.AddToMenu(menu_ts);
-            Game.OnGameUpdate += OnGameUpdate;
+            Game.OnUpdate += OnGameUpdate;
             Drawing.OnEndScene += Drawing_OnDraw;
             Game.OnWndProc += OnWndProc;
 
@@ -196,9 +196,9 @@ namespace JeonHelperForDev
             Game.PrintChat("<font color ='#FF2222'>_______Spell Info_____________________");
             Game.PrintChat(slot.ToString() + "-Name:{0}", spell.Name);
             Game.PrintChat(slot.ToString() + "-Level:{0} -CastName: {1}", spell.Level, data.Name);
-            Game.PrintChat(slot.ToString() + "-Cooldown:{0}  -CastRange: {1}", spell.Cooldown, data.CastRange[3]);
-            Game.PrintChat(slot.ToString() + "-MissileSpeed:{0} -CastRadius: {1}", data.MissileSpeed, data.CastRadius[3]);
-            Game.PrintChat(slot.ToString() + "-MissileWith:{0} -CastDisplayRange: {1}", data.LineWidth, data.CastRangeDisplayOverride[3]);
+            Game.PrintChat(slot.ToString() + "-Cooldown:{0}  -CastRange: {1}", spell.Cooldown, data.CastRange);
+            Game.PrintChat(slot.ToString() + "-MissileSpeed:{0} -CastRadius: {1}", data.MissileSpeed, data.CastRadius);
+            Game.PrintChat(slot.ToString() + "-MissileWith:{0} -CastDisplayRange: {1}", data.LineWidth, data.CastRangeDisplayOverride);
             Game.PrintChat(slot.ToString() + "-SpellCastTime:{0} -SpellCastTotaltime: {1} , {2}", data.SpellCastTime, data.SpellTotalTime, data.CastFrame);
             Game.PrintChat("<font color ='#FF2222'>____________________________________");
         }

@@ -134,7 +134,7 @@ namespace JeonComboScriptor
 
 
 
-            Game.OnGameUpdate += OnGameUpdate;
+            Game.OnUpdate += OnGameUpdate;
             Drawing.OnEndScene += OnDraw_EndScene;
             Game.OnWndProc += OnWndProc;
         }

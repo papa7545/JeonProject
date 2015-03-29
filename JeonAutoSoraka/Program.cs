@@ -189,8 +189,8 @@ namespace JeonAutoSoraka
             menu.AddToMainMenu();
             nextItem = buyThings[0];
             followtime = Game.Time;
-            Game.OnGameProcessPacket += Game_OnGameProcessPacket;
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnProcessPacket += Game_OnGameProcessPacket;
+            Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnEndScene += OnDraw_EndScene;
         }
 

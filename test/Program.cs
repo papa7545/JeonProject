@@ -28,9 +28,8 @@ namespace test
         }
         private static void OnGameLoad(EventArgs args)
         {
-            Game.OnGameUpdate += OnGameUpdate;
+            Game.OnUpdate += OnGameUpdate;
 
-            Game.OnGameUpdate += OnGameUpdate;
             GameObject.OnCreate += OnCreate;
             GameObject.OnDelete += OnDelete;
             Drawing.OnEndScene += OnDraw_EndScene;

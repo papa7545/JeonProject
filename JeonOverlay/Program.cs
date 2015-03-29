@@ -64,7 +64,7 @@ namespace JeonOverlay
             string version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             Game.PrintChat("<font color ='#33FFFF'>JeonOverlay v" + version + " </font>Loaded!");
 
-            Game.OnGameUpdate += Game_OnGameUpdate;
+            Game.OnUpdate += Game_OnGameUpdate;
         }
         public static void Game_OnGameUpdate(EventArgs args)
         {

@@ -439,7 +439,7 @@ namespace JeonUtility
             #endregion
 
             #region Events Initialize
-            Game.OnGameUpdate += OnGameUpdate;
+            Game.OnUpdate += OnGameUpdate;
             Obj_AI_Hero.OnProcessSpellCast += OnSpell;
             GameObject.OnDelete += OnDelete;
             GameObject.OnCreate += OnCreate;
@@ -558,11 +558,7 @@ namespace JeonUtility
             timer_clock pteam_Wolf = new timer_clock { Position = new Vector3(10958f, 8286f, 62.46f), name = "SRU_Murkwolf" };
 
             #endregion
-
-
         }
-
-
 
         private static void OnDraw_EndScene(EventArgs args)
         {
@@ -920,8 +916,6 @@ namespace JeonUtility
                 }
             }
             #endregion
-
-
 
             #region get info
             float Player_baseAD = Player.BaseAttackDamage;
@@ -1718,8 +1712,6 @@ namespace JeonUtility
             }
             else
                 return null;
-
-
         }
         public static double setSmiteDamage()
         {
